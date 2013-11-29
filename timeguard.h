@@ -15,8 +15,12 @@ public:
   explicit TimeGuard(QWidget *parent = 0);
   ~TimeGuard();
   
+private slots:
+  void on_getUserNameButton_clicked();
+
 private:
   Ui::TimeGuard *ui;
+  QString getUserName();
 };
 
 #endif // TIMEGUARD_H
