@@ -17,12 +17,11 @@ TimeGuard::~TimeGuard()
 
 QString TimeGuard::getUserName()
 {
-//  DWORD ULEN = UNLEN+1;
-//  TCHAR username[UNLEN+1];
-//  GetUserName(username, &ULEN);
-//  QString name = QString::fromWCharArray(username);
+  DWORD ULEN = UNLEN+1;
+  TCHAR username[UNLEN+1];
+  GetUserName(username, &ULEN);
 
-  return QString(getenv("USERNAME"));
+  return QString(QString::fromWCharArray(username));
 }
 
 void TimeGuard::on_getUserNameButton_clicked()
