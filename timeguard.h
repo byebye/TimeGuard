@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "FileManager.h"
+#include "User.h"
 
 namespace Ui {
   class TimeGuard;
@@ -23,6 +24,7 @@ private slots:
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
+  User *user;
   QString const username;
 
   QString getUsername();
