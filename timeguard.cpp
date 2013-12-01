@@ -9,7 +9,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
 {
   ui->setupUi(this);
   ui->userNameLabel->setText(getUserName());
-  ui->timeRemainingLCD->setTime(1, 1);
+  ui->timeRemainingLCD->setTime(0, 0, 5);
   ui->timeRemainingLCD->startCounter();
 }
 
