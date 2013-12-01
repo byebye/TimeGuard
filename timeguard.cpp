@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "TimeGuard.h"
 #include "ui_timeguard.h"
 
@@ -12,7 +13,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
 
 
   ui->timerLCD->setTime(user->getAvaiableTime());
-  connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(saveLogOffTime()));
+  connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
 }
 
 TimeGuard::~TimeGuard()
@@ -22,9 +23,13 @@ TimeGuard::~TimeGuard()
   delete user;
 }
 
-void TimeGuard::saveLogOffTime()
+void TimeGuard::userTimeout()
 {
-
+  QMessageBox::information(NULL,
+                           "Koniec czasu!",
+                           "Czas się skończył!",
+                           QMessageBox::Ok);
+  user->logOff();
 }
 
 void TimeGuard::on_logOffButton_clicked()

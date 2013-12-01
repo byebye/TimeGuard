@@ -47,7 +47,6 @@ void Timer::setDisplay()
   {
     timer->stop();
     emit timeout();
-    QMessageBox::information(NULL, "Koniec czasu!", "Czas się skończył!", QMessageBox::Ok);
   }
   else
     startCounter();

@@ -19,7 +19,7 @@ public:
   
 private slots:
   void on_logOffButton_clicked();
-  void saveLogOffTime();
+  void userTimeout();
 
 private:
   Ui::TimeGuard *ui;

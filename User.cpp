@@ -41,6 +41,7 @@ void User::saveAvaiableTime()
 
 void User::logOff()
 {
+  saveLogOffTime();
 //  ExitWindowsEx(EWX_FORCE, 0);
 }
 
