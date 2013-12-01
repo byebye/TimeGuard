@@ -11,6 +11,8 @@ TimeGuard::TimeGuard(QWidget *parent) :
   ui->userNameLabel->setText(getUserName());
   ui->timeRemainingLCD->setTime(0, 0, 5);
   ui->timeRemainingLCD->startCounter();
+  fileManager = new FileManager();
+  fileManager->saveToFile(getUserName());
 }
 
 TimeGuard::~TimeGuard()

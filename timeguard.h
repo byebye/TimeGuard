@@ -2,6 +2,7 @@
 #define TIMEGUARD_H
 
 #include <QMainWindow>
+#include "file_manager.h"
 
 namespace Ui {
   class TimeGuard;
@@ -20,6 +21,8 @@ private slots:
 
 private:
   Ui::TimeGuard *ui;
+  FileManager *fileManager;
+
   QString getUserName();
   void startTimer();
 };
