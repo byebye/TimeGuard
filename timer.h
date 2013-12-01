@@ -5,11 +5,11 @@
 #include <QTimer>
 #include <QTime>
 
-class countdownTimer : public QLCDNumber
+class Timer : public QLCDNumber
 {
 Q_OBJECT
 public:
-  countdownTimer(QWidget *parentWidget);
+  Timer(QWidget *parentWidget);
   QTimer *timer;
   QTime *timeRemaining;
   void setTime(int hours, int minutes);

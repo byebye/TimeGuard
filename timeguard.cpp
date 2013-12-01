@@ -2,14 +2,13 @@
 #include "ui_timeguard.h"
 #include "windows.h"
 #include "lmcons.h"
-#include "countdownTimer.h"
 
 TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::TimeGuard)
 {
   ui->setupUi(this);
-  ui->loggedUsername->setPlainText(getUserName());
+  ui->userNameLabel->setText(getUserName());
   ui->timeRemainingLCD->setTime(1, 1);
   ui->timeRemainingLCD->startCounter();
 }

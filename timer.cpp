@@ -1,11 +1,11 @@
-#include "countdownTimer.h"
+#include "timer.h"
 
-countdownTimer::countdownTimer(QWidget *parentWidget)
+Timer::Timer(QWidget *parentWidget)
 {
   setParent(parentWidget);
 }
 
-void countdownTimer::setTime(int hours, int minutes)
+void Timer::setTime(int hours, int minutes)
 {
   timer = new QTimer();
   timeRemaining = new QTime(hours, minutes, 0);
@@ -13,12 +13,12 @@ void countdownTimer::setTime(int hours, int minutes)
   setDigitCount(8);
 }
 
-void countdownTimer::startCounter()
+void Timer::startCounter()
 {
   timer->start(1000);
 }
 
-void countdownTimer::setDisplay()
+void Timer::setDisplay()
 {
   *timeRemaining = timeRemaining->addSecs(-1);
   display(timeRemaining->toString("hh:mm:ss"));
