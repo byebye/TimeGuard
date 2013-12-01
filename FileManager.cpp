@@ -1,9 +1,10 @@
 #include "FileManager.h"
-#include <QFile>
 #include <QDir>
 #include <QTextStream>
 
-FileManager::FileManager() : settingsDir("settings/"), statsDir("stats/")
+FileManager::FileManager() :
+  settingsDir("settings/"), statsDir("stats/"),
+  settingsExt(".set"), statsExt(".sts")
 {
   if(!QDir(settingsDir).exists())
     QDir().mkdir(settingsDir);
@@ -11,22 +12,45 @@ FileManager::FileManager() : settingsDir("settings/"), statsDir("stats/")
     QDir().mkdir(statsDir);
 }
 
-QString FileManager::readFromFile(QString filename)
+QString FileManager::readStats(QString filename)
 {
-  QFile file(settingsDir + filename + ".set");
-  if(!file.open(QIODevice::ReadOnly))
-    return NULL;
-  QTextStream fileStream(&file);
-  if(!fileStream.atEnd())
-    return fileStream.readLine();
-  else
-    return NULL;
+  return readFromFile(filename, statsDir, statsExt);
 }
 
-bool FileManager::saveToFile(QString filename, QString data)
+QString FileManager::readSettings(QString filename)
 {
-  QFile file(statsDir + filename + ".sts");
-  if(!file.open(QIODevice::ReadWrite | QIODevice::Append))
+  return readFromFile(filename, settingsDir, settingsExt);
+}
+
+QString FileManager::readFromFile(QString filename, QString dir, QString ext)
+{
+  QFile file(dir + filename + ext);
+  if(!file.open(QIODevice::ReadOnly))
+    return NULL;
+
+  QTextStream fileStream(&file);
+  QString fileString;
+  while(!fileStream.atEnd())
+    fileString += fileStream.readLine();
+  return fileString;
+}
+
+bool FileManager::saveStats(QString filename, QString data)
+{
+  return saveToFile(filename, data, statsDir, statsExt);
+}
+
+bool FileManager::saveSettings(QString filename, QString data)
+{
+  return saveToFile(filename, data, settingsDir, settingsExt, 0);
+}
+
+bool FileManager::saveToFile(QString filename, QString data,
+                             QString dir, QString ext,
+                             QIODevice::OpenMode appendFlag)
+{
+  QFile file(dir + filename + ext);
+  if(!file.open(QIODevice::ReadWrite | appendFlag))
     return false;
   QTextStream fileStream(&file);
   fileStream << data << endl;

@@ -24,26 +24,26 @@ int User::getSaveTimePeriod()
 
 void User::saveLogInTime()
 {
-  fileManager->saveToFile(name,
+  fileManager->saveStats(name,
                          "login: " + QTime::currentTime().toString("hh:mm:ss"));
 }
 
 void User::saveLogOffTime()
 {
-  fileManager->saveToFile(name,
+  fileManager->saveStats(name,
                         "logoff: " + QTime::currentTime().toString("hh:mm:ss"));
 }
 
 void User::readAvaiableTime()
 {
-  QString timeString = fileManager->readFromFile(name);
+  QString timeString = fileManager->readSettings(name);
   avaiableTime = new QTime(QTime::fromString(timeString));
 }
 
 void User::saveAvaiableTime()
 {
   *avaiableTime = avaiableTime->addSecs(-saveTimePeriod);
-  fileManager->saveToFile(name, avaiableTime->toString());
+  fileManager->saveSettings(name, avaiableTime->toString());
 }
 
 void User::logOff()
