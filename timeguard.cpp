@@ -5,13 +5,17 @@
 
 TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
-  ui(new Ui::TimeGuard)
+  ui(new Ui::TimeGuard),
+  username(getUsername())
 {
   ui->setupUi(this);
-  ui->userNameLabel->setText(getUserName());
+  ui->userNameLabel->setText(username);
+
   fileManager = new FileManager();
-  fileManager->saveToFile(getUserName(), QTime::currentTime().toString("hh:mm:ss"));
-  QString avaiableTime = fileManager->readFromFile(getUserName());
+  fileManager->saveToFile(username,
+                          "login" + QTime::currentTime().toString("hh:mm:ss"));
+
+  QString avaiableTime = fileManager->readFromFile(username);
   ui->timerLCD->setTime(avaiableTime);
 }
 
@@ -20,7 +24,7 @@ TimeGuard::~TimeGuard()
   delete ui;
 }
 
-QString TimeGuard::getUserName()
+QString TimeGuard::getUsername()
 {
   DWORD ULEN = UNLEN+1;
   TCHAR username[UNLEN+1];

@@ -3,32 +3,32 @@
 #include <QDir>
 #include <QTextStream>
 
-FileManager::FileManager() : settingsDir("settings/")
+FileManager::FileManager() : settingsDir("settings/"), statsDir("stats/")
 {
   if(!QDir(settingsDir).exists())
     QDir().mkdir(settingsDir);
+  if(!QDir(statsDir).exists())
+    QDir().mkdir(statsDir);
 }
 
-QString FileManager::readFromFile(QString userName)
+QString FileManager::readFromFile(QString filename)
 {
-  QFile settingsFile(settingsDir + userName + ".set");
-  if(!settingsFile.open(QIODevice::ReadOnly))
+  QFile file(settingsDir + filename + ".set");
+  if(!file.open(QIODevice::ReadOnly))
     return NULL;
-  QTextStream textStream(&settingsFile);
-  if(!textStream.atEnd())
-    return textStream.readLine();
+  QTextStream fileStream(&file);
+  if(!fileStream.atEnd())
+    return fileStream.readLine();
   else
     return NULL;
 }
 
-bool FileManager::saveToFile(QString userName, QString data)
+bool FileManager::saveToFile(QString filename, QString data)
 {
-  QFile settingsFile(settingsDir + userName + ".set");
-  if(!settingsFile.open(QIODevice::ReadWrite | QIODevice::Append))
+  QFile file(statsDir + filename + ".sts");
+  if(!file.open(QIODevice::ReadWrite | QIODevice::Append))
     return false;
-  QTextStream textStream(&settingsFile);
-  textStream << data << endl;
-
-  settingsFile.close();
+  QTextStream fileStream(&file);
+  fileStream << data << endl;
   return true;
 }

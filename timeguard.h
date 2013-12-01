@@ -22,8 +22,9 @@ private slots:
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
+  QString const username;
 
-  QString getUserName();
+  QString getUsername();
   void startTimer();
 };
 

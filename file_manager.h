@@ -13,6 +13,7 @@ public:
 
 private:
   QString const settingsDir;
+  QString const statsDir;
 };
 
 #endif // FILE_MANAGER_H
