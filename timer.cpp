@@ -1,4 +1,4 @@
-#include "timer.h"
+#include "Timer.h"
 #include "QMessageBox"
 
 Timer::Timer(QWidget *parentWidget)

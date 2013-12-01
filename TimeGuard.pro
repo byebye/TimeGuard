@@ -13,13 +13,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        timeguard.cpp \
-    timer.cpp \
-    file_manager.cpp
+    FileManager.cpp \
+    Timer.cpp \
+    TimeGuard.cpp
 
-HEADERS  += timeguard.h \
-    timer.h \
-    file_manager.h
+HEADERS  += \
+    FileManager.h \
+    Timer.h \
+    TimeGuard.h
 
 FORMS    += timeguard.ui
 

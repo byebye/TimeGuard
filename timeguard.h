@@ -2,7 +2,7 @@
 #define TIMEGUARD_H
 
 #include <QMainWindow>
-#include "file_manager.h"
+#include "FileManager.h"
 
 namespace Ui {
   class TimeGuard;

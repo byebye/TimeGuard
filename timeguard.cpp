@@ -1,4 +1,4 @@
-#include "timeguard.h"
+#include "TimeGuard.h"
 #include "ui_timeguard.h"
 #include "windows.h"
 #include "lmcons.h"
