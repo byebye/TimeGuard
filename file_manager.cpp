@@ -9,22 +9,26 @@ FileManager::FileManager() : settingsDir("settings/")
     QDir().mkdir(settingsDir);
 }
 
-bool FileManager::readFromFile(QString userName)
+QString FileManager::readFromFile(QString userName)
 {
   QFile settingsFile(settingsDir + userName + ".set");
-  if(!settingsFile.open(QIODevice::ReadWrite))
-  {
-    return false;
-  }
-  return true;
+  if(!settingsFile.open(QIODevice::ReadOnly))
+    return NULL;
+  QTextStream textStream(&settingsFile);
+  if(!textStream.atEnd())
+    return textStream.readLine();
+  else
+    return NULL;
 }
 
 bool FileManager::saveToFile(QString userName, QString data)
 {
   QFile settingsFile(settingsDir + userName + ".set");
-  if(!settingsFile.open(QIODevice::ReadWrite))
+  if(!settingsFile.open(QIODevice::ReadWrite | QIODevice::Append))
     return false;
   QTextStream textStream(&settingsFile);
-  textStream << data << '\n';
+  textStream << data << endl;
+
+  settingsFile.close();
   return true;
 }

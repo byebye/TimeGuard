@@ -8,7 +8,7 @@ class FileManager
 public:
   FileManager();
 
-  bool readFromFile(QString userName);
+  QString readFromFile(QString userName);
   bool saveToFile(QString userName, QString data);
 
 private:

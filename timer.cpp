@@ -6,13 +6,25 @@ Timer::Timer(QWidget *parentWidget)
   setParent(parentWidget);
 }
 
-void Timer::setTime(int hours, int minutes, int seconds)
+void Timer::setTimer()
 {
   timer = new QTimer();
   timer->setInterval(1000);
-  timeRemaining = new QTime(hours, minutes, seconds);
   connect(timer, SIGNAL(timeout()), this, SLOT(setDisplay()));
   setDigitCount(8);
+  startCounter();
+}
+
+void Timer::setTime(int hours, int minutes, int seconds)
+{
+  timeRemaining = new QTime(hours, minutes, seconds);
+  setTimer();
+}
+
+void Timer::setTime(QString stringTime)
+{
+  timeRemaining = new QTime(QTime::fromString(stringTime, "hh:mm:ss"));
+  setTimer();
 }
 
 void Timer::startCounter()
