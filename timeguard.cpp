@@ -9,10 +9,10 @@ TimeGuard::TimeGuard(QWidget *parent) :
 {
   ui->setupUi(this);
   ui->userNameLabel->setText(getUserName());
-  ui->timeRemainingLCD->setTime(0, 0, 5);
-  ui->timeRemainingLCD->startCounter();
+  ui->timerLCD->setTime(0, 0, 5);
+  ui->timerLCD->startCounter();
   fileManager = new FileManager();
-  fileManager->saveToFile(getUserName());
+  fileManager->saveToFile(getUserName(), QTime::currentTime().toString("hh:mm:ss"));
 }
 
 TimeGuard::~TimeGuard()

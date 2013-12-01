@@ -1,6 +1,7 @@
 #include "file_manager.h"
 #include <QFile>
 #include <QDir>
+#include <QTextStream>
 
 FileManager::FileManager() : settingsDir("settings/")
 {
@@ -18,11 +19,12 @@ bool FileManager::readFromFile(QString userName)
   return true;
 }
 
-bool FileManager::saveToFile(QString userName)
+bool FileManager::saveToFile(QString userName, QString data)
 {
-
   QFile settingsFile(settingsDir + userName + ".set");
   if(!settingsFile.open(QIODevice::ReadWrite))
     return false;
+  QTextStream textStream(&settingsFile);
+  textStream << data << '\n';
   return true;
 }

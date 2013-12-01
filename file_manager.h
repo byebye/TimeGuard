@@ -9,7 +9,7 @@ public:
   FileManager();
 
   bool readFromFile(QString userName);
-  bool saveToFile(QString userName);
+  bool saveToFile(QString userName, QString data);
 
 private:
   QString const settingsDir;

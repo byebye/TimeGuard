@@ -46,7 +46,7 @@
      <string>Użytkownik:</string>
     </property>
    </widget>
-   <widget class="Timer" name="timeRemainingLCD">
+   <widget class="Timer" name="timerLCD">
     <property name="geometry">
      <rect>
       <x>260</x>
