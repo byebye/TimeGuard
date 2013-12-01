@@ -36,7 +36,7 @@ void User::readAvaiableTime()
 
 void User::saveAvaiableTime()
 {
-
+  fileManager->saveToFile(name, avaiableTime->toString());
 }
 
 void User::logOff()

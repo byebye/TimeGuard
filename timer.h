@@ -8,12 +8,10 @@
 
 class Timer : public QLCDNumber
 {
-Q_OBJECT
+  Q_OBJECT
 public:
   Timer(QWidget *parentWidget);
   ~Timer();
-  QTimer *timer;
-  QTime *timeRemaining;
 
   void setTime(int hours, int minutes, int seconds = 0);
   void setTime(QTime avaiableTime);
@@ -22,7 +20,13 @@ public slots:
   void setDisplay();
 signals:
   void timeout();
+  void saveTimeMoment();
 private:
+  QTimer *timer;
+  QTime *timeRemaining;
+  int saveTimePeriod;
+  int secondsElapsedCounter;
+
   void setTimer();
 };
 

@@ -1,5 +1,6 @@
 #include "Timer.h"
 #include "QMessageBox"
+#include <iostream>
 
 Timer::Timer(QWidget *parentWidget)
 {
@@ -14,6 +15,8 @@ Timer::~Timer()
 
 void Timer::setTimer()
 {
+  saveTimePeriod = 5;
+  secondsElapsedCounter = 0;
   timer = new QTimer();
   timer->setInterval(1000);
   connect(timer, SIGNAL(timeout()), this, SLOT(setDisplay()));
@@ -40,6 +43,12 @@ void Timer::startCounter()
 
 void Timer::setDisplay()
 {
+  if(++secondsElapsedCounter % saveTimePeriod == 0)
+  {
+    std::cout << "SAVE!" << std::endl;
+    emit saveTimeMoment();
+  }
+
   *timeRemaining = timeRemaining->addSecs(-1);
   QString timeString = timeRemaining->toString("hh:mm:ss");
   display(timeString);

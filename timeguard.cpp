@@ -8,12 +8,13 @@ TimeGuard::TimeGuard(QWidget *parent) :
 {
   fileManager = new FileManager();
   user = new User(this, fileManager);
+
   ui->setupUi(this);
   ui->userNameLabel->setText(user->getName());
 
-
   ui->timerLCD->setTime(user->getAvaiableTime());
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
+  connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveAvaiableTime()));
 }
 
 TimeGuard::~TimeGuard()

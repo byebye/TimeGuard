@@ -19,6 +19,7 @@ public:
 signals:
   
 public slots:
+  void saveAvaiableTime();
   
 private:
   FileManager *fileManager;
@@ -27,7 +28,6 @@ private:
 
   QString getSystemUsername();
   void readAvaiableTime();
-  void saveAvaiableTime();
   void saveLogInTime();
   void saveLogOffTime();
 };
