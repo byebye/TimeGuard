@@ -20,4 +20,3 @@ HEADERS  += timeguard.h
 FORMS    += timeguard.ui
 
 LIBS += advapi32.lib
-

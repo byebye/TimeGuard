@@ -20,11 +20,15 @@ QString TimeGuard::getUserName()
   DWORD ULEN = UNLEN+1;
   TCHAR username[UNLEN+1];
   GetUserName(username, &ULEN);
-
   return QString(QString::fromWCharArray(username));
 }
 
 void TimeGuard::on_getUserNameButton_clicked()
 {
   ui->loggedUsername->setPlainText(getUserName());
+}
+
+void TimeGuard::on_logOffButton_clicked()
+{
+  ExitWindowsEx(EWX_FORCE, 0);
 }
