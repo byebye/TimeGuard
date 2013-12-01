@@ -15,7 +15,7 @@ public:
   QTime *timeRemaining;
 
   void setTime(int hours, int minutes, int seconds = 0);
-  void setTime(QString stringTime);
+  void setTime(QTime avaiableTime);
   void startCounter();
 public slots:
   void setDisplay();

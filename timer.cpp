@@ -21,9 +21,9 @@ void Timer::setTime(int hours, int minutes, int seconds)
   setTimer();
 }
 
-void Timer::setTime(QString stringTime)
+void Timer::setTime(QTime avaiableTime)
 {
-  timeRemaining = new QTime(QTime::fromString(stringTime, "hh:mm:ss"));
+  timeRemaining = new QTime(avaiableTime);
   setTimer();
 }
 

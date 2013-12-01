@@ -2,15 +2,36 @@
 #include "windows.h"
 #include "lmcons.h"
 
-User::User(QObject *parent) :
+User::User(QObject *parent, FileManager *fileManager) :
   QObject(parent),
+  fileManager(fileManager),
   name(getSystemUsername())
 {
+  fileManager->saveToFile(name,
+                         "login: " + QTime::currentTime().toString("hh:mm:ss"));
+  readAvaiableTime();
+}
+
+void User::saveLogOffTime()
+{
+  fileManager->saveToFile(name,
+                        "logoff: " + QTime::currentTime().toString("hh:mm:ss"));
+}
+
+void User::readAvaiableTime()
+{
+  QString timeString = fileManager->readFromFile(name);
+  avaiableTime = new QTime(QTime::fromString(timeString));
+}
+
+void User::saveAvaiableTime()
+{
+
 }
 
 void User::logOff()
 {
-  ExitWindowsEx(EWX_FORCE, 0);
+//  ExitWindowsEx(EWX_FORCE, 0);
 }
 
 QString User::getSystemUsername()
@@ -24,4 +45,9 @@ QString User::getSystemUsername()
 QString User::getName()
 {
   return name;
+}
+
+QTime User::getAvaiableTime()
+{
+  return *avaiableTime;
 }
