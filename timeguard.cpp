@@ -1,21 +1,20 @@
 #include "TimeGuard.h"
 #include "ui_timeguard.h"
-#include "windows.h"
-#include "lmcons.h"
 
 TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
-  ui(new Ui::TimeGuard),
-  username(getUsername())
+  ui(new Ui::TimeGuard)
 {
+  user = new User(this);
+
   ui->setupUi(this);
-  ui->userNameLabel->setText(username);
+  ui->userNameLabel->setText(user->getName());
 
   fileManager = new FileManager();
-  fileManager->saveToFile(username,
+  fileManager->saveToFile(user->getName(),
                          "login: " + QTime::currentTime().toString("hh:mm:ss"));
 
-  QString avaiableTime = fileManager->readFromFile(username);
+  QString avaiableTime = fileManager->readFromFile(user->getName());
   ui->timerLCD->setTime(avaiableTime);
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(saveLogOffTime()));
 }
@@ -27,20 +26,12 @@ TimeGuard::~TimeGuard()
 
 void TimeGuard::saveLogOffTime()
 {
-  fileManager->saveToFile(username,
+  fileManager->saveToFile(user->getName(),
                         "logoff: " + QTime::currentTime().toString("hh:mm:ss"));
-}
-
-QString TimeGuard::getUsername()
-{
-  DWORD ULEN = UNLEN+1;
-  TCHAR username[UNLEN+1];
-  GetUserName(username, &ULEN);
-  return QString(QString::fromWCharArray(username));
 }
 
 void TimeGuard::on_logOffButton_clicked()
 {
-  ExitWindowsEx(EWX_FORCE, 0);
+  user->logOff();
 }
 

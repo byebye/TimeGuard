@@ -25,9 +25,7 @@ private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
   User *user;
-  QString const username;
 
-  QString getUsername();
   void startTimer();
 };
 
