@@ -27,6 +27,7 @@ private:
   QString getSystemUsername();
   void readAvaiableTime();
   void saveAvaiableTime();
+  void saveLogInTime();
   void saveLogOffTime();
 };
 

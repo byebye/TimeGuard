@@ -7,9 +7,14 @@ User::User(QObject *parent, FileManager *fileManager) :
   fileManager(fileManager),
   name(getSystemUsername())
 {
+  saveLogInTime();
+  readAvaiableTime();
+}
+
+void User::saveLogInTime()
+{
   fileManager->saveToFile(name,
                          "login: " + QTime::currentTime().toString("hh:mm:ss"));
-  readAvaiableTime();
 }
 
 void User::saveLogOffTime()
