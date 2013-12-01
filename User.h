@@ -16,6 +16,7 @@ public:
 
   QString getName();
   QTime getAvaiableTime();
+  int getSaveTimePeriod();
 signals:
   
 public slots:
@@ -25,6 +26,7 @@ private:
   FileManager *fileManager;
   QString const name;
   QTime *avaiableTime;
+  int const saveTimePeriod;
 
   QString getSystemUsername();
   void readAvaiableTime();

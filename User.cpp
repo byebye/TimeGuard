@@ -5,7 +5,8 @@
 User::User(QObject *parent, FileManager *fileManager) :
   QObject(parent),
   fileManager(fileManager),
-  name(getSystemUsername())
+  name(getSystemUsername()),
+  saveTimePeriod(10)
 {
   saveLogInTime();
   readAvaiableTime();
@@ -14,6 +15,11 @@ User::User(QObject *parent, FileManager *fileManager) :
 User::~User()
 {
   delete avaiableTime;
+}
+
+int User::getSaveTimePeriod()
+{
+  return saveTimePeriod;
 }
 
 void User::saveLogInTime()
@@ -36,6 +42,7 @@ void User::readAvaiableTime()
 
 void User::saveAvaiableTime()
 {
+  *avaiableTime = avaiableTime->addSecs(-saveTimePeriod);
   fileManager->saveToFile(name, avaiableTime->toString());
 }
 

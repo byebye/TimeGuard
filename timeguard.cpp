@@ -12,7 +12,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   ui->setupUi(this);
   ui->userNameLabel->setText(user->getName());
 
-  ui->timerLCD->setTime(user->getAvaiableTime());
+  ui->timerLCD->setTime(user->getAvaiableTime(), user->getSaveTimePeriod());
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveAvaiableTime()));
 }
