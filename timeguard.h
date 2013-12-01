@@ -16,13 +16,12 @@ public:
   ~TimeGuard();
   
 private slots:
-  void on_getUserNameButton_clicked();
-
   void on_logOffButton_clicked();
 
 private:
   Ui::TimeGuard *ui;
   QString getUserName();
+  void startTimer();
 };
 
 #endif // TIMEGUARD_H
