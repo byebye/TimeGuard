@@ -19,7 +19,8 @@ public:
   void startCounter();
 public slots:
   void setDisplay();
-
+signals:
+  void timeout();
 private:
   void setTimer();
 };

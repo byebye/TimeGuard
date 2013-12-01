@@ -13,15 +13,22 @@ TimeGuard::TimeGuard(QWidget *parent) :
 
   fileManager = new FileManager();
   fileManager->saveToFile(username,
-                          "login" + QTime::currentTime().toString("hh:mm:ss"));
+                         "login: " + QTime::currentTime().toString("hh:mm:ss"));
 
   QString avaiableTime = fileManager->readFromFile(username);
   ui->timerLCD->setTime(avaiableTime);
+  connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(saveLogOffTime()));
 }
 
 TimeGuard::~TimeGuard()
 {
   delete ui;
+}
+
+void TimeGuard::saveLogOffTime()
+{
+  fileManager->saveToFile(username,
+                        "logoff: " + QTime::currentTime().toString("hh:mm:ss"));
 }
 
 QString TimeGuard::getUsername()

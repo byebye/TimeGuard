@@ -40,6 +40,7 @@ void Timer::setDisplay()
   if(timeString == "00:00:00")
   {
     timer->stop();
+    emit timeout();
     QMessageBox::information(NULL, "Koniec czasu!", "Czas się skończył!", QMessageBox::Ok);
   }
   else
