@@ -11,6 +11,7 @@ class Timer : public QLCDNumber
 Q_OBJECT
 public:
   Timer(QWidget *parentWidget);
+  ~Timer();
   QTimer *timer;
   QTime *timeRemaining;
 

@@ -6,6 +6,12 @@ Timer::Timer(QWidget *parentWidget)
   setParent(parentWidget);
 }
 
+Timer::~Timer()
+{
+  delete timer;
+  delete timeRemaining;
+}
+
 void Timer::setTimer()
 {
   timer = new QTimer();

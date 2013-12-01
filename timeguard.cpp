@@ -18,6 +18,8 @@ TimeGuard::TimeGuard(QWidget *parent) :
 TimeGuard::~TimeGuard()
 {
   delete ui;
+  delete fileManager;
+  delete user;
 }
 
 void TimeGuard::saveLogOffTime()

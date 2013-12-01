@@ -10,6 +10,7 @@ class User : public QObject
   Q_OBJECT
 public:
   explicit User(QObject *parent = 0, FileManager *fileManager = 0);
+  ~User();
   void logOff();
   bool lengthenTime();
 

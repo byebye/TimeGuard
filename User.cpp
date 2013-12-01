@@ -11,6 +11,11 @@ User::User(QObject *parent, FileManager *fileManager) :
   readAvaiableTime();
 }
 
+User::~User()
+{
+  delete avaiableTime;
+}
+
 void User::saveLogInTime()
 {
   fileManager->saveToFile(name,
