@@ -6,6 +6,12 @@ TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::TimeGuard)
 {
+  programIcon = QIcon("images/timeguard.png");
+  this->setWindowIcon(programIcon);
+
+  trayIcon = new QSystemTrayIcon(programIcon, this);
+  trayIcon->setVisible(true);
+
   fileManager = new FileManager();
   user = new User(this, fileManager);
 
@@ -22,6 +28,7 @@ TimeGuard::~TimeGuard()
   delete ui;
   delete fileManager;
   delete user;
+  delete trayIcon;
 }
 
 void TimeGuard::userTimeout()

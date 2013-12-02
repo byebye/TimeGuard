@@ -2,6 +2,8 @@
 #define TIMEGUARD_H
 
 #include <QMainWindow>
+#include <QIcon>
+#include <QSystemTrayIcon>
 #include "FileManager.h"
 #include "User.h"
 
@@ -16,15 +18,15 @@ class TimeGuard : public QMainWindow
 public:
   explicit TimeGuard(QWidget *parent = 0);
   ~TimeGuard();
-  
 private slots:
   void on_logOffButton_clicked();
   void userTimeout();
-
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
   User *user;
+  QIcon programIcon;
+  QSystemTrayIcon *trayIcon;
 
   void startTimer();
 };
