@@ -15,6 +15,7 @@ public:
 
   void setTime(QTime avaiableTime, int saveTimePeriod);
   void startCounter();
+  QString getTimeRemaining();
 public slots:
   void setDisplay();
 signals:

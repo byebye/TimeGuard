@@ -25,6 +25,11 @@ void Timer::setTime(QTime avaiableTime, int saveTimePeriod)
   startCounter();
 }
 
+QString Timer::getTimeRemaining()
+{
+  return timeRemaining->toString("hh:mm:ss");
+}
+
 void Timer::startCounter()
 {
   timer->start(1000);

@@ -22,6 +22,7 @@ public:
 private slots:
   void on_logOffButton_clicked();
   void userTimeout();
+  void trayActivated(QSystemTrayIcon::ActivationReason reason);
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -31,6 +32,7 @@ private:
   QSystemTrayIcon *trayIcon;
 
   void startTimer();
+  void setTrayIcon();
 };
 
 #endif // TIMEGUARD_H
