@@ -13,7 +13,8 @@ TimeGuard::TimeGuard(QWidget *parent) :
   trayIcon->setVisible(true);
 
   fileManager = new FileManager();
-  user = new User(this, fileManager);
+  logger = new Logger(this, fileManager);
+  user = new User(this, fileManager, logger);
 
   ui->setupUi(this);
   ui->userNameLabel->setText(user->getName());
@@ -27,6 +28,7 @@ TimeGuard::~TimeGuard()
 {
   delete ui;
   delete fileManager;
+  delete logger;
   delete user;
   delete trayIcon;
 }

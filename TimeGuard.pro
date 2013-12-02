@@ -16,13 +16,15 @@ SOURCES += main.cpp\
     FileManager.cpp \
     Timer.cpp \
     TimeGuard.cpp \
-    User.cpp
+    User.cpp \
+    Logger.cpp
 
 HEADERS  += \
     FileManager.h \
     Timer.h \
     TimeGuard.h \
-    User.h
+    User.h \
+    Logger.h
 
 FORMS    += timeguard.ui
 

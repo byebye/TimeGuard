@@ -4,12 +4,14 @@
 #include <QObject>
 #include <QTime>
 #include "FileManager.h"
+#include "Logger.h"
 
 class User : public QObject
 {
   Q_OBJECT
 public:
-  explicit User(QObject *parent = 0, FileManager *fileManager = 0);
+  explicit User(QObject *parent = 0, FileManager *fileManager = 0,
+                Logger *logger = 0);
   ~User();
   void logOff();
   bool lengthenTime();
@@ -24,6 +26,7 @@ public slots:
   
 private:
   FileManager *fileManager;
+  Logger *logger;
   QString const name;
   QTime *avaiableTime;
   int const saveTimePeriod;

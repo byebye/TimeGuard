@@ -1,6 +1,7 @@
 #include "FileManager.h"
 #include <QDir>
 #include <QTextStream>
+#include <QDebug>
 
 FileManager::FileManager() :
   settingsDir("settings/"), statsDir("stats/"),
@@ -26,7 +27,10 @@ QString FileManager::readFromFile(QString filename, QString dir, QString ext)
 {
   QFile file(dir + filename + ext);
   if(!file.open(QIODevice::ReadOnly))
+  {
+    qDebug() << "Unable to open" << file.fileName() << endl;
     return NULL;
+  }
 
   QTextStream fileStream(&file);
   QString fileString;
@@ -51,7 +55,10 @@ bool FileManager::saveToFile(QString filename, QString data,
 {
   QFile file(dir + filename + ext);
   if(!file.open(QIODevice::ReadWrite | appendFlag))
+  {
+    qDebug() << "Unable to open" << file.fileName() << endl;
     return false;
+  }
   QTextStream fileStream(&file);
   fileStream << data << endl;
   return true;

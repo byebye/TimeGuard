@@ -5,6 +5,7 @@
 #include <QIcon>
 #include <QSystemTrayIcon>
 #include "FileManager.h"
+#include "Logger.h"
 #include "User.h"
 
 namespace Ui {
@@ -24,6 +25,7 @@ private slots:
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
+  Logger *logger;
   User *user;
   QIcon programIcon;
   QSystemTrayIcon *trayIcon;

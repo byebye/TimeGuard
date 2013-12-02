@@ -2,9 +2,10 @@
 #include "windows.h"
 #include "lmcons.h"
 
-User::User(QObject *parent, FileManager *fileManager) :
+User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
   QObject(parent),
   fileManager(fileManager),
+  logger(logger),
   name(getSystemUsername()),
   saveTimePeriod(10)
 {
@@ -24,14 +25,12 @@ int User::getSaveTimePeriod()
 
 void User::saveLogInTime()
 {
-  fileManager->saveStats(name,
-                         "login: " + QTime::currentTime().toString("hh:mm:ss"));
+  logger->logIn(name);
 }
 
 void User::saveLogOffTime()
 {
-  fileManager->saveStats(name,
-                        "logoff: " + QTime::currentTime().toString("hh:mm:ss"));
+  logger->logOff(name);
 }
 
 void User::readAvaiableTime()
