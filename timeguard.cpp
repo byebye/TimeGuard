@@ -15,6 +15,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   ui->setupUi(this);
   ui->userNameLabel->setText(user->getName());
 
+
   ui->timerLCD->setTime(user->getAvaiableTime(), user->getSaveTimePeriod());
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveAvaiableTime()));
@@ -51,7 +52,8 @@ void TimeGuard::setTrayIcon()
   trayContextMenu = new QMenu(this);
   trayContextMenu->addAction("Akcja 1");
   trayContextMenu->addAction("Akcja 2");
-  trayIcon->setContextMenu(trayContextMenu );
+  trayIcon->setContextMenu(trayContextMenu);
+
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
           this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
 }
@@ -67,6 +69,27 @@ void TimeGuard::trayActivated(QSystemTrayIcon::ActivationReason reason)
     case QSystemTrayIcon::DoubleClick:
       isHidden() ? show() : hide();
       break;
+  }
+}
+
+void TimeGuard::closeEvent(QCloseEvent *event)
+{
+  static bool msgShown = false;
+  if(isHidden())
+  {
+    event->accept();
+  }
+  else
+  {
+    event->ignore();
+    hide();
+    if(!msgShown)
+    {
+      trayIcon->showMessage("Aplikacja wciąż działa",
+                          QString("Program został zminimalizowany do traya. ") +
+                          "Naciśnij na ikonkę, by przywrócić okno programu");
+      msgShown = true;
+    }
   }
 }
 

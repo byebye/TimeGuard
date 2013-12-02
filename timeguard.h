@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QIcon>
 #include <QSystemTrayIcon>
+#include <QCloseEvent>
 #include "FileManager.h"
 #include "Logger.h"
 #include "User.h"
@@ -34,6 +35,7 @@ private:
 
   void startTimer();
   void setTrayIcon();
+  void closeEvent(QCloseEvent *event);
 };
 
 #endif // TIMEGUARD_H
