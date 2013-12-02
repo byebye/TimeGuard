@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QIcon>
+#include <QAction>
 #include <QSystemTrayIcon>
 #include <QCloseEvent>
 #include "FileManager.h"
@@ -24,6 +25,7 @@ private slots:
   void on_logOffButton_clicked();
   void userTimeout();
   void trayActivated(QSystemTrayIcon::ActivationReason reason);
+  void quit();
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -32,10 +34,14 @@ private:
   QIcon programIcon;
   QSystemTrayIcon *trayIcon;
   QMenu *trayContextMenu;
+  QAction *quitAct;
+  bool closeFromTrayMenu;
 
   void startTimer();
   void setTrayIcon();
   void closeEvent(QCloseEvent *event);
+  void createActions();
+  void addActions();
 };
 
 #endif // TIMEGUARD_H

@@ -8,13 +8,14 @@ TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::TimeGuard)
 {
+  closeFromTrayMenu = false;
+
   fileManager = new FileManager();
   logger = new Logger(this, fileManager);
   user = new User(this, fileManager, logger);
 
   ui->setupUi(this);
   ui->userNameLabel->setText(user->getName());
-
 
   ui->timerLCD->setTime(user->getAvaiableTime(), user->getSaveTimePeriod());
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
@@ -50,8 +51,9 @@ void TimeGuard::setTrayIcon()
   trayIcon->setVisible(true);
 
   trayContextMenu = new QMenu(this);
-  trayContextMenu->addAction("Akcja 1");
-  trayContextMenu->addAction("Akcja 2");
+  trayContextMenu->setStyleSheet("width: 125px");
+  createActions();
+  addActions();
   trayIcon->setContextMenu(trayContextMenu);
 
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
@@ -75,21 +77,17 @@ void TimeGuard::trayActivated(QSystemTrayIcon::ActivationReason reason)
 void TimeGuard::closeEvent(QCloseEvent *event)
 {
   static bool msgShown = false;
-  if(isHidden())
-  {
+  if(closeFromTrayMenu)
     event->accept();
-  }
-  else
+
+  event->ignore();
+  hide();
+  if(!msgShown)
   {
-    event->ignore();
-    hide();
-    if(!msgShown)
-    {
-      trayIcon->showMessage("Aplikacja wciąż działa",
-                          QString("Program został zminimalizowany do traya. ") +
-                          "Naciśnij na ikonkę, by przywrócić okno programu");
-      msgShown = true;
-    }
+    trayIcon->showMessage("Aplikacja wciąż działa",
+                        QString("Program został zminimalizowany do traya. ") +
+                        "Naciśnij na ikonkę, by przywrócić okno programu");
+    msgShown = true;
   }
 }
 
@@ -98,3 +96,19 @@ void TimeGuard::on_logOffButton_clicked()
   user->logOff();
 }
 
+void TimeGuard::createActions()
+{
+  quitAct = new QAction(tr("&Exit"), this);
+  connect(quitAct, SIGNAL(triggered()), this, SLOT(quit()));
+}
+
+void TimeGuard::addActions()
+{
+  trayContextMenu->addAction(quitAct);
+}
+
+void TimeGuard::quit()
+{
+  closeFromTrayMenu = true;
+  close();
+}
