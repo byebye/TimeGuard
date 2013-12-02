@@ -30,6 +30,7 @@ private:
   User *user;
   QIcon programIcon;
   QSystemTrayIcon *trayIcon;
+  QMenu *trayContextMenu;
 
   void startTimer();
   void setTrayIcon();

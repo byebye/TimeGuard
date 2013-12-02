@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include <QMenu>
+#include <QDebug>
 #include "TimeGuard.h"
 #include "ui_timeguard.h"
 
@@ -30,6 +31,7 @@ TimeGuard::~TimeGuard()
   delete logger;
   delete user;
   delete trayIcon;
+  delete trayContextMenu;
 }
 
 void TimeGuard::userTimeout()
@@ -46,27 +48,24 @@ void TimeGuard::setTrayIcon()
   trayIcon = new QSystemTrayIcon(programIcon, this);
   trayIcon->setVisible(true);
 
+  trayContextMenu = new QMenu(this);
+  trayContextMenu->addAction("Akcja 1");
+  trayContextMenu->addAction("Akcja 2");
+  trayIcon->setContextMenu(trayContextMenu );
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
           this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
-
-  QMenu contextMenu("Tray menu");
-  contextMenu.addAction("Nic 1");
-  contextMenu.addAction("Nic 2");
-//  connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-//          contextMenu, SLOT(show()));
-  trayIcon->setContextMenu(&contextMenu);
-  trayIcon->show();
 }
 
 void TimeGuard::trayActivated(QSystemTrayIcon::ActivationReason reason)
 {
   switch(reason)
   {
+    case QSystemTrayIcon::Context:
+      trayIcon->contextMenu()->exec();
+      break;
     case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::DoubleClick:
-      this->isHidden() ? this->show() : this->hide();
-      break;
-    case QSystemTrayIcon::Context:
+      isHidden() ? show() : hide();
       break;
   }
 }
