@@ -42,3 +42,16 @@ void AdminLoginDialog::showPasswordRejectedDialog()
                         "Hasło niepoprawne!",
                         QMessageBox::Ok);
 }
+
+void AdminLoginDialog::on_showCharsCheckBox_stateChanged(int state)
+{
+  switch(state)
+  {
+    case Qt::Unchecked:
+      ui->adminPasswordEdit->setEchoMode(QLineEdit::Password);
+      break;
+    case Qt::Checked:
+      ui->adminPasswordEdit->setEchoMode(QLineEdit::Normal);
+      break;
+  }
+}
