@@ -79,15 +79,17 @@ void TimeGuard::closeEvent(QCloseEvent *event)
   static bool msgShown = false;
   if(closeFromTrayMenu)
     event->accept();
-
-  event->ignore();
-  hide();
-  if(!msgShown)
+  else
   {
-    trayIcon->showMessage("Aplikacja wciąż działa",
-                        QString("Program został zminimalizowany do traya. ") +
-                        "Naciśnij na ikonkę, by przywrócić okno programu");
-    msgShown = true;
+    event->ignore();
+    hide();
+    if(!msgShown)
+    {
+      trayIcon->showMessage("Aplikacja wciąż działa",
+                          QString("Program został zminimalizowany do traya. ") +
+                          "Naciśnij na ikonkę, by przywrócić okno programu");
+      msgShown = true;
+    }
   }
 }
 
