@@ -25,6 +25,8 @@ TimeGuard::TimeGuard(QWidget *parent) :
   programIcon = QIcon("images/timeguard.png");
   this->setWindowIcon(programIcon);
   setTrayIcon();
+
+  adminLoginDialog = new AdminLoginDialog(this);
 }
 
 TimeGuard::~TimeGuard()
@@ -79,7 +81,11 @@ void TimeGuard::closeEvent(QCloseEvent *event)
 {
   static bool msgShown = false;
   if(closeFromTrayMenu)
-    event->accept();
+  {
+    adminLoginDialog->show();
+//    event->accept();
+    event->ignore();
+  }
   else
   {
     event->ignore();
@@ -103,6 +109,7 @@ void TimeGuard::createActions()
 {
   quitAct = new QAction(tr("&Exit"), this);
   connect(quitAct, SIGNAL(triggered()), this, SLOT(quit()));
+
   lengthenAct = new QAction(tr("&Lengthen time"), this);
   connect(lengthenAct, SIGNAL(triggered()), this, SLOT(showLengthenTimeWindow()));
 }

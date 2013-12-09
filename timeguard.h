@@ -40,7 +40,7 @@ private:
   QAction *lengthenAct;
   bool closeFromTrayMenu;
   bool isAdmin;
-  AdminLoginDialog *logAsAdminDialog;
+  AdminLoginDialog *adminLoginDialog;
 
   void startTimer();
   void setTrayIcon();
