@@ -17,15 +17,18 @@ SOURCES += main.cpp\
     Timer.cpp \
     TimeGuard.cpp \
     User.cpp \
-    Logger.cpp
+    Logger.cpp \
+    AdminLoginDialog.cpp
 
 HEADERS  += \
     FileManager.h \
     Timer.h \
     TimeGuard.h \
     User.h \
-    Logger.h
+    Logger.h \
+    AdminLoginDialog.h
 
-FORMS    += timeguard.ui
+FORMS    += timeguard.ui \
+    AdminLoginDialog.ui
 
 LIBS += advapi32.lib

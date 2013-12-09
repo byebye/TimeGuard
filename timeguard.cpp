@@ -8,6 +8,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::TimeGuard)
 {
+  isAdmin = false;
   closeFromTrayMenu = false;
 
   fileManager = new FileManager();
@@ -102,10 +103,13 @@ void TimeGuard::createActions()
 {
   quitAct = new QAction(tr("&Exit"), this);
   connect(quitAct, SIGNAL(triggered()), this, SLOT(quit()));
+  lengthenAct = new QAction(tr("&Lengthen time"), this);
+  connect(lengthenAct, SIGNAL(triggered()), this, SLOT(showLengthenTimeWindow()));
 }
 
 void TimeGuard::addActions()
 {
+  trayContextMenu->addAction(lengthenAct);
   trayContextMenu->addAction(quitAct);
 }
 
@@ -113,4 +117,12 @@ void TimeGuard::quit()
 {
   closeFromTrayMenu = true;
   close();
+}
+
+void TimeGuard::showLengthenTimeWindow()
+{
+  QMessageBox::information(this,
+                           "Przedłużanie czasu",
+                           "Podaj czas o jaki przedłużyć limit",
+                           QMessageBox::Ok, QMessageBox::Cancel);
 }

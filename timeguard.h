@@ -9,6 +9,7 @@
 #include "FileManager.h"
 #include "Logger.h"
 #include "User.h"
+#include "AdminLoginDialog.h"
 
 namespace Ui {
   class TimeGuard;
@@ -26,6 +27,7 @@ private slots:
   void userTimeout();
   void trayActivated(QSystemTrayIcon::ActivationReason reason);
   void quit();
+  void showLengthenTimeWindow();
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -35,7 +37,10 @@ private:
   QSystemTrayIcon *trayIcon;
   QMenu *trayContextMenu;
   QAction *quitAct;
+  QAction *lengthenAct;
   bool closeFromTrayMenu;
+  bool isAdmin;
+  AdminLoginDialog *logAsAdminDialog;
 
   void startTimer();
   void setTrayIcon();
