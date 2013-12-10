@@ -18,15 +18,15 @@ public:
   
 private slots:
   void on_buttonBox_clicked(QAbstractButton *button);
-
-  void on_showCharsCheckBox_stateChanged(int arg1);
-
+  void on_showCharsCheckBox_stateChanged(int state);
 private:
   Ui::AdminLoginDialog *ui;
 
   bool isPasswordCorrect(QString password);
   void showPasswordAcceptedDialog();
   void showPasswordRejectedDialog();
+  void accept();
+  void close();
 };
 
 #endif // ADMINLOGINDIALOG_H

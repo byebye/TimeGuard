@@ -14,12 +14,28 @@ AdminLoginDialog::~AdminLoginDialog()
   delete ui;
 }
 
-void AdminLoginDialog::on_buttonBox_clicked(QAbstractButton *button)
+void AdminLoginDialog::accept()
 {
   if(isPasswordCorrect(ui->adminPasswordEdit->text()))
+  {
     showPasswordAcceptedDialog();
+    close();
+  }
   else
     showPasswordRejectedDialog();
+}
+
+void AdminLoginDialog::on_buttonBox_clicked(QAbstractButton *button)
+{
+  if(ui->buttonBox->standardButton(button) == QDialogButtonBox::Cancel)
+    close();
+}
+
+void AdminLoginDialog::close()
+{
+  ui->adminPasswordEdit->clear();
+  ui->adminPasswordEdit->setEchoMode(QLineEdit::Password);
+  QDialog::close();
 }
 
 bool AdminLoginDialog::isPasswordCorrect(QString password)
