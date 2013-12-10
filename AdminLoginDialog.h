@@ -19,6 +19,8 @@ public:
 private slots:
   void on_buttonBox_clicked(QAbstractButton *button);
   void on_showCharsCheckBox_stateChanged(int state);
+signals:
+  void passwordAccepted();
 private:
   Ui::AdminLoginDialog *ui;
 

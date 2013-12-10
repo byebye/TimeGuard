@@ -8,7 +8,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::TimeGuard)
 {
-  isAdmin = false;
+  loggedAsAdmin = false;
   closeFromTrayMenu = false;
 
   fileManager = new FileManager();
@@ -27,6 +27,8 @@ TimeGuard::TimeGuard(QWidget *parent) :
   setTrayIcon();
 
   adminLoginDialog = new AdminLoginDialog(this);
+  connect(adminLoginDialog, SIGNAL(passwordAccepted()),
+          this, SLOT(adminSuccesfullyLogged()));
 }
 
 TimeGuard::~TimeGuard()
@@ -63,6 +65,11 @@ void TimeGuard::setTrayIcon()
           this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
 }
 
+void TimeGuard::adminSuccesfullyLogged()
+{
+  loggedAsAdmin = true;
+}
+
 void TimeGuard::trayActivated(QSystemTrayIcon::ActivationReason reason)
 {
   switch(reason)
@@ -82,9 +89,8 @@ void TimeGuard::closeEvent(QCloseEvent *event)
   static bool msgShown = false;
   if(closeFromTrayMenu)
   {
-    adminLoginDialog->show();
-//    event->accept();
-    event->ignore();
+    adminLoginDialog->exec();
+    loggedAsAdmin ? event->accept() : event->ignore();
   }
   else
   {

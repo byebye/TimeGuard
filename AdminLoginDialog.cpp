@@ -18,6 +18,7 @@ void AdminLoginDialog::accept()
 {
   if(isPasswordCorrect(ui->adminPasswordEdit->text()))
   {
+    emit passwordAccepted();
     showPasswordAcceptedDialog();
     close();
   }

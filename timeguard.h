@@ -28,6 +28,7 @@ private slots:
   void trayActivated(QSystemTrayIcon::ActivationReason reason);
   void quit();
   void showLengthenTimeWindow();
+  void adminSuccesfullyLogged();
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -39,7 +40,7 @@ private:
   QAction *quitAct;
   QAction *lengthenAct;
   bool closeFromTrayMenu;
-  bool isAdmin;
+  bool loggedAsAdmin;
   AdminLoginDialog *adminLoginDialog;
 
   void startTimer();
