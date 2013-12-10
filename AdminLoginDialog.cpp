@@ -1,17 +1,24 @@
 #include "AdminLoginDialog.h"
 #include "ui_AdminLoginDialog.h"
 #include <QMessageBox>
+#include <QDebug>
 
 AdminLoginDialog::AdminLoginDialog(QWidget *parent) :
   QDialog(parent),
   ui(new Ui::AdminLoginDialog)
 {
   ui->setupUi(this);
+
+  hasher = new QCryptographicHash(QCryptographicHash::Sha1);
+  passwordFile = new QFile("passwd.txt");
+  readCurrentPassword();
 }
 
 AdminLoginDialog::~AdminLoginDialog()
 {
   delete ui;
+  delete hasher;
+  delete passwordFile;
 }
 
 void AdminLoginDialog::accept()
@@ -41,7 +48,9 @@ void AdminLoginDialog::close()
 
 bool AdminLoginDialog::isPasswordCorrect(QString password)
 {
-  return password == "admin1";
+  hasher->reset();
+  hasher->addData(password.toUtf8());
+  return QString(hasher->result().toHex()) == currentPassword;
 }
 
 void AdminLoginDialog::showPasswordAcceptedDialog()
@@ -71,4 +80,12 @@ void AdminLoginDialog::on_showCharsCheckBox_stateChanged(int state)
       ui->adminPasswordEdit->setEchoMode(QLineEdit::Normal);
       break;
   }
+}
+
+void AdminLoginDialog::readCurrentPassword()
+{
+  if(passwordFile->open(QFile::ReadOnly))
+    currentPassword = passwordFile->readLine();
+  else
+    qDebug() << "Błąd przy wczytywaniu hasła!" << endl;
 }

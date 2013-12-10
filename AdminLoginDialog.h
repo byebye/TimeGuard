@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QAbstractButton>
+#include <QFile>
+#include <QCryptographicHash>
 
 namespace Ui {
   class AdminLoginDialog;
@@ -23,12 +25,16 @@ signals:
   void passwordAccepted();
 private:
   Ui::AdminLoginDialog *ui;
+  QCryptographicHash *hasher;
+  QFile *passwordFile;
+  QString currentPassword;
 
   bool isPasswordCorrect(QString password);
   void showPasswordAcceptedDialog();
   void showPasswordRejectedDialog();
   void accept();
   void close();
+  void readCurrentPassword();
 };
 
 #endif // ADMINLOGINDIALOG_H
