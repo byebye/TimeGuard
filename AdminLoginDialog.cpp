@@ -87,5 +87,8 @@ void AdminLoginDialog::readCurrentPassword()
   if(passwordFile->open(QFile::ReadOnly))
     currentPassword = passwordFile->readLine();
   else
+  {
+    currentPassword = "";
     qDebug() << "Błąd przy wczytywaniu hasła!" << endl;
+  }
 }
