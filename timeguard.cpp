@@ -178,6 +178,9 @@ void TimeGuard::changeAdminPassword()
                             "",
                             "Hasło zmienione!",
                             QMessageBox::Ok);
+      ui->currentPasswordField->clear();
+      ui->newPasswordField->clear();
+      ui->newPaswordRepeatField->clear();
     }
     else
       QMessageBox::critical(this,
