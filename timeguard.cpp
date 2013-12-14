@@ -39,9 +39,13 @@ TimeGuard::~TimeGuard()
   delete ui;
   delete fileManager;
   delete logger;
+  delete admin;
   delete user;
   delete trayIcon;
   delete trayContextMenu;
+  delete quitAct;
+  delete lengthenAct;
+  delete adminLoginDialog;
 }
 
 void TimeGuard::userTimeout()

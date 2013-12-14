@@ -16,6 +16,8 @@ User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
 User::~User()
 {
   delete avaiableTime;
+  fileManager = NULL;
+  logger = NULL;
 }
 
 int User::getSaveTimePeriod()

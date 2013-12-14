@@ -26,7 +26,7 @@ QString FileManager::readSettings(QString filename)
 QString FileManager::readFromFile(QString filename, QString dir, QString ext)
 {
   QFile file(dir + filename + ext);
-  if(!file.open(QIODevice::ReadOnly))
+  if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     qDebug() << "Unable to open" << file.fileName() << endl;
     return NULL;
@@ -51,7 +51,7 @@ bool FileManager::saveToFile(QString filename, QString data,
                              QIODevice::OpenMode appendFlag)
 {
   QFile file(dir + filename + ext);
-  if(!file.open(QIODevice::ReadWrite | appendFlag))
+  if(!file.open(QIODevice::ReadWrite | QIODevice::Text | appendFlag))
   {
     qDebug() << "Unable to open" << file.fileName() << endl;
     return false;
