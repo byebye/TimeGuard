@@ -31,6 +31,8 @@ private slots:
   void adminSuccesfullyLogged();
   void on_tabWidget_currentChanged(int index);
   void on_adminLogoffButton_clicked();
+  void on_changePasswordButton_clicked();
+
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -51,6 +53,7 @@ private:
   void createActions();
   void addActions();
   void logoffAdmin();
+  void changeAdminPassword();
 };
 
 #endif // TIMEGUARD_H

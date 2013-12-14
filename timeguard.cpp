@@ -8,7 +8,6 @@ TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::TimeGuard)
 {
-  loggedAsAdmin = false;
   closeFromTrayMenu = false;
 
   fileManager = new FileManager();
@@ -163,7 +162,17 @@ void TimeGuard::logoffAdmin()
   ui->tabWidget->setCurrentIndex(0);
 }
 
+void TimeGuard::changeAdminPassword()
+{
+
+}
+
 void TimeGuard::on_adminLogoffButton_clicked()
 {
   logoffAdmin();
+}
+
+void TimeGuard::on_changePasswordButton_clicked()
+{
+  changeAdminPassword();
 }

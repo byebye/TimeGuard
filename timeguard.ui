@@ -942,7 +942,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="userTab">
      <attribute name="title">
@@ -958,13 +958,102 @@
        </rect>
       </property>
      </widget>
-     <zorder>logBrowser</zorder>
-     <zorder>timerLCD</zorder>
     </widget>
     <widget class="QWidget" name="adminTab">
      <attribute name="title">
       <string>Admin</string>
      </attribute>
+     <widget class="QPushButton" name="changePasswordButton">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>10</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Zmień hasło</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="currentPassword">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>10</y>
+        <width>120</width>
+        <height>23</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="newPassword">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>40</y>
+        <width>120</width>
+        <height>23</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="newPaswordRepeat">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>70</y>
+        <width>120</width>
+        <height>23</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="currentPasswordLabel">
+      <property name="geometry">
+       <rect>
+        <x>177</x>
+        <y>10</y>
+        <width>70</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Obecne hasło:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="newPasswordLabel">
+      <property name="geometry">
+       <rect>
+        <x>187</x>
+        <y>40</y>
+        <width>60</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Nowe hasło:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="newPasswordRepeatLabel">
+      <property name="geometry">
+       <rect>
+        <x>174</x>
+        <y>70</y>
+        <width>73</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Powtórz hasło:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="adminLoggedNotification">
