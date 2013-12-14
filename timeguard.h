@@ -30,7 +30,7 @@ private slots:
   void showLengthenTimeWindow();
   void adminSuccesfullyLogged();
   void on_tabWidget_currentChanged(int index);
-
+  void on_adminLogoffButton_clicked();
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -50,6 +50,7 @@ private:
   void closeEvent(QCloseEvent *event);
   void createActions();
   void addActions();
+  void logoffAdmin();
 };
 
 #endif // TIMEGUARD_H

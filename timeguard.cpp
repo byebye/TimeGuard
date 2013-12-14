@@ -16,6 +16,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   user = new User(this, fileManager, logger);
 
   ui->setupUi(this);
+  logoffAdmin();
   ui->userNameLabel->setText(user->getName());
   ui->logBrowser->setPlainText(fileManager->readStats(user->getName()));
   ui->tabWidget->setCurrentIndex(0);
@@ -67,11 +68,6 @@ void TimeGuard::setTrayIcon()
           this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
 }
 
-void TimeGuard::adminSuccesfullyLogged()
-{
-  loggedAsAdmin = true;
-}
-
 void TimeGuard::trayActivated(QSystemTrayIcon::ActivationReason reason)
 {
   switch(reason)
@@ -91,7 +87,7 @@ void TimeGuard::closeEvent(QCloseEvent *event)
   static bool msgShown = false;
   if(closeFromTrayMenu)
   {
-    adminLoginDialog->exec();
+    if(!loggedAsAdmin) adminLoginDialog->exec();
     loggedAsAdmin ? event->accept() : event->ignore();
   }
   else
@@ -150,4 +146,24 @@ void TimeGuard::on_tabWidget_currentChanged(int tabIndex)
     if(!loggedAsAdmin)
       ui->tabWidget->setCurrentIndex(0);
   }
+}
+
+void TimeGuard::adminSuccesfullyLogged()
+{
+  loggedAsAdmin = true;
+  ui->adminLoggedNotification->show();
+  ui->adminLogoffButton->show();
+}
+
+void TimeGuard::logoffAdmin()
+{
+  loggedAsAdmin = false;
+  ui->adminLoggedNotification->hide();
+  ui->adminLogoffButton->hide();
+  ui->tabWidget->setCurrentIndex(0);
+}
+
+void TimeGuard::on_adminLogoffButton_clicked()
+{
+  logoffAdmin();
 }
