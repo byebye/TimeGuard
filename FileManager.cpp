@@ -33,10 +33,7 @@ QString FileManager::readFromFile(QString filename, QString dir, QString ext)
   }
 
   QTextStream fileStream(&file);
-  QString fileString;
-  while(!fileStream.atEnd())
-    fileString += fileStream.readLine();
-  return fileString;
+  return fileStream.readAll();
 }
 
 bool FileManager::saveStats(QString filename, QString data)

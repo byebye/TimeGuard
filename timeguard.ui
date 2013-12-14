@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>305</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>220</y>
+      <x>320</x>
+      <y>230</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -49,7 +49,7 @@
    <widget class="Timer" name="timerLCD">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>250</x>
       <y>0</y>
       <width>141</width>
       <height>41</height>
@@ -491,7 +491,7 @@
      <rect>
       <x>75</x>
       <y>10</y>
-      <width>181</width>
+      <width>171</width>
       <height>25</height>
      </rect>
     </property>
@@ -921,6 +921,16 @@
     </property>
     <property name="text">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;NN&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="logBrowser">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>381</width>
+      <height>181</height>
+     </rect>
     </property>
    </widget>
   </widget>
