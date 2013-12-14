@@ -30,13 +30,13 @@
     <property name="geometry">
      <rect>
       <x>315</x>
-      <y>315</y>
+      <y>320</y>
       <width>75</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Wyloguj</string>
+     <string>Log Off</string>
     </property>
     <property name="flat">
      <bool>false</bool>
@@ -52,7 +52,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>Użytkownik:</string>
+     <string>User:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="Timer" name="timerLCD">
@@ -942,7 +945,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="userTab">
      <attribute name="title">
@@ -966,14 +969,14 @@
      <widget class="QPushButton" name="changePasswordButton">
       <property name="geometry">
        <rect>
-        <x>295</x>
+        <x>270</x>
         <y>100</y>
-        <width>75</width>
+        <width>100</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>Zmień hasło</string>
+       <string>Change Password</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="currentPasswordField">
@@ -1018,14 +1021,14 @@
      <widget class="QLabel" name="currentPasswordLabel">
       <property name="geometry">
        <rect>
-        <x>177</x>
+        <x>153</x>
         <y>10</y>
-        <width>70</width>
+        <width>95</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>Obecne hasło:</string>
+       <string>Current password:</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1034,14 +1037,14 @@
      <widget class="QLabel" name="newPasswordLabel">
       <property name="geometry">
        <rect>
-        <x>187</x>
+        <x>153</x>
         <y>40</y>
-        <width>60</width>
+        <width>95</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>Nowe hasło:</string>
+       <string>New password:</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1050,14 +1053,14 @@
      <widget class="QLabel" name="newPasswordRepeatLabel">
       <property name="geometry">
        <rect>
-        <x>174</x>
+        <x>153</x>
         <y>70</y>
-        <width>73</width>
+        <width>95</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>Powtórz hasło:</string>
+       <string>Repeat password:</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1093,10 +1096,13 @@
      <number>0</number>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600; text-decoration: underline; color:#55aa00;&quot;&gt;Zalogowany jako admin&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600; text-decoration: underline; color:#55aa00;&quot;&gt;Logged as Admin&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="textFormat">
      <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="adminLogoffButton">
@@ -1109,7 +1115,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Wyloguj</string>
+     <string>Log Off</string>
     </property>
     <property name="autoRepeat">
      <bool>false</bool>

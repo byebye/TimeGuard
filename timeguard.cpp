@@ -137,8 +137,8 @@ void TimeGuard::quit()
 void TimeGuard::showLengthenTimeWindow()
 {
   QMessageBox::information(this,
-                           "Przedłużanie czasu",
-                           "Podaj czas o jaki przedłużyć limit",
+                           tr("Lengthening time"),
+                           tr("Time to lengthen the limit: "),
                            QMessageBox::Ok, QMessageBox::Cancel);
 }
 
@@ -177,14 +177,14 @@ void TimeGuard::changeAdminPassword()
       if(admin->isPasswordCorrect(newPasword))
         QMessageBox::critical(this,
                               "",
-                              "Hasło identyczne z obecnym! Wybierz inne hasło.",
+                              tr("New password identical as the current! Use another one."),
                               QMessageBox::Ok);
       else
       {
         admin->changePassword(newPasword);
         QMessageBox::information(this,
                             "",
-                            "Hasło zmienione!",
+                            tr("Password has been changed!"),
                             QMessageBox::Ok);
         ui->currentPasswordField->clear();
         ui->newPasswordField->clear();
@@ -194,14 +194,14 @@ void TimeGuard::changeAdminPassword()
     else
       QMessageBox::critical(this,
                             "",
-                            "Hasła się nie zgadzają!",
+                            tr("Passwords don't match!"),
                             QMessageBox::Ok);
   }
   else
   {
     QMessageBox::critical(this,
                           "",
-                          "Hasło niepoprawne!",
+                          tr("Password incorrect!"),
                           QMessageBox::Ok);
   }
 }

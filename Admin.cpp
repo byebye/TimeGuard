@@ -30,7 +30,7 @@ void Admin::readCurrentPassword()
   else
   {
     passwordHash = "";
-    qDebug() << "Błąd przy wczytywaniu hasła!";
+    qDebug() << "Error while reading the password from file!";
   }
   if(passwordHash == "")
     changePassword("");

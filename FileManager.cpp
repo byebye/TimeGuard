@@ -53,7 +53,7 @@ bool FileManager::saveToFile(QString filename, QString data,
   QFile file(dir + filename + ext);
   if(!file.open(QIODevice::ReadWrite | QIODevice::Text | appendFlag))
   {
-    qDebug() << "Unable to open" << file.fileName() << endl;
+    qDebug() << "Unable to open" << file.fileName();
     return false;
   }
   QTextStream fileStream(&file);

@@ -45,7 +45,7 @@ void AdminLoginDialog::showPasswordAcceptedDialog()
 {
   QMessageBox::information(this,
                            "",
-                           "Hasło poprawne - witaj Adminie!",
+                           tr("Password correct - welcome Admin!"),
                            QMessageBox::Ok);
 }
 
@@ -53,7 +53,7 @@ void AdminLoginDialog::showPasswordRejectedDialog()
 {
   QMessageBox::critical(this,
                         "",
-                        "Hasło niepoprawne!",
+                        tr("Password incorrect!"),
                         QMessageBox::Ok);
 }
 
