@@ -12,6 +12,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
 
   fileManager = new FileManager();
   logger = new Logger(this, fileManager);
+  admin = new Admin(this);
   user = new User(this, fileManager, logger);
 
   ui->setupUi(this);
@@ -28,7 +29,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   this->setWindowIcon(programIcon);
   setTrayIcon();
 
-  adminLoginDialog = new AdminLoginDialog(this);
+  adminLoginDialog = new AdminLoginDialog(this, admin);
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
           this, SLOT(adminSuccesfullyLogged()));
 }

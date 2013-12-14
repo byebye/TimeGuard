@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     TimeGuard.cpp \
     User.cpp \
     Logger.cpp \
-    AdminLoginDialog.cpp
+    AdminLoginDialog.cpp \
+    Admin.cpp
 
 HEADERS  += \
     FileManager.h \
@@ -26,7 +27,8 @@ HEADERS  += \
     TimeGuard.h \
     User.h \
     Logger.h \
-    AdminLoginDialog.h
+    AdminLoginDialog.h \
+    Admin.h
 
 FORMS    += timeguard.ui \
     AdminLoginDialog.ui

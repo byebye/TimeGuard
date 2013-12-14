@@ -37,6 +37,7 @@ private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
   Logger *logger;
+  Admin *admin;
   User *user;
   QIcon programIcon;
   QSystemTrayIcon *trayIcon;
