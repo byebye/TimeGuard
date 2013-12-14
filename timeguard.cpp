@@ -18,6 +18,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   ui->setupUi(this);
   ui->userNameLabel->setText(user->getName());
   ui->logBrowser->setPlainText(fileManager->readStats(user->getName()));
+  ui->tabWidget->setCurrentIndex(0);
 
   ui->timerLCD->setTime(user->getAvaiableTime(), user->getSaveTimePeriod());
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
@@ -139,4 +140,14 @@ void TimeGuard::showLengthenTimeWindow()
                            "Przedłużanie czasu",
                            "Podaj czas o jaki przedłużyć limit",
                            QMessageBox::Ok, QMessageBox::Cancel);
+}
+
+void TimeGuard::on_tabWidget_currentChanged(int tabIndex)
+{
+  if(tabIndex == 1 && !loggedAsAdmin)
+  {
+    adminLoginDialog->exec();
+    if(!loggedAsAdmin)
+      ui->tabWidget->setCurrentIndex(0);
+  }
 }

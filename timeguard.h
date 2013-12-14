@@ -29,6 +29,8 @@ private slots:
   void quit();
   void showLengthenTimeWindow();
   void adminSuccesfullyLogged();
+  void on_tabWidget_currentChanged(int index);
+
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;

@@ -7,11 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>305</height>
+    <height>400</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>TimeGuard</string>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="logOffButton">
@@ -21,7 +30,7 @@
     <property name="geometry">
      <rect>
       <x>315</x>
-      <y>230</y>
+      <y>315</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -929,11 +938,11 @@
       <x>10</x>
       <y>40</y>
       <width>380</width>
-      <height>190</height>
+      <height>271</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="userTab">
      <attribute name="title">
@@ -945,7 +954,7 @@
         <x>2</x>
         <y>2</y>
         <width>250</width>
-        <height>160</height>
+        <height>240</height>
        </rect>
       </property>
      </widget>
