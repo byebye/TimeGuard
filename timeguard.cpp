@@ -165,7 +165,29 @@ void TimeGuard::logoffAdmin()
 
 void TimeGuard::changeAdminPassword()
 {
-
+  if(admin->isPasswordCorrect(ui->currentPasswordField->text()))
+  {
+    if(ui->newPasswordField->text() == ui->newPaswordRepeatField->text())
+    {
+      admin->changePassword(ui->newPasswordField->text());
+      QMessageBox::information(this,
+                            "",
+                            "Hasło zmienione!",
+                            QMessageBox::Ok);
+    }
+    else
+      QMessageBox::critical(this,
+                            "",
+                            "Hasła się nie zgadzają!",
+                            QMessageBox::Ok);
+  }
+  else
+  {
+    QMessageBox::critical(this,
+                          "",
+                          "Hasło niepoprawne!",
+                          QMessageBox::Ok);
+  }
 }
 
 void TimeGuard::on_adminLogoffButton_clicked()

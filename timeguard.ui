@@ -976,7 +976,7 @@
        <string>Zmień hasło</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="currentPassword">
+     <widget class="QLineEdit" name="currentPasswordField">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -986,7 +986,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="newPassword">
+     <widget class="QLineEdit" name="newPasswordField">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -996,7 +996,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="newPaswordRepeat">
+     <widget class="QLineEdit" name="newPaswordRepeatField">
       <property name="geometry">
        <rect>
         <x>250</x>

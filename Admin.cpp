@@ -23,19 +23,22 @@ bool Admin::isPasswordCorrect(QString password)
 
 void Admin::readCurrentPassword()
 {
-  if(passwordFile->open(QFile::ReadOnly))
+  if(passwordFile->open(QFile::ReadWrite | QFile::Truncate))
     passwordHash = passwordFile->readLine();
   else
   {
-    passwordHash = hashPassword("");
+    passwordHash = "";
     qDebug() << "Błąd przy wczytywaniu hasła!" << endl;
   }
+  if(passwordHash == "")
+    changePassword("");
 }
 
 void Admin::changePassword(QString newPassword)
 {
+  passwordHash = hashPassword(newPassword);
   QTextStream fileStream(passwordFile);
-  fileStream << hashPassword(newPassword);
+  fileStream << passwordHash;
 }
 
 QString Admin::hashPassword(QString password)

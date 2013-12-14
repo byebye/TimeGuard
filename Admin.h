@@ -13,6 +13,7 @@ public:
   explicit Admin(QObject *parent = 0);
   ~Admin();
   bool isPasswordCorrect(QString password);
+  void changePassword(QString newPassword);
 signals:
   
 public slots:
@@ -23,7 +24,6 @@ private:
   QString passwordHash;
   
   void readCurrentPassword();
-  void changePassword(QString newPassword);
   QString hashPassword(QString password);
 };
 
