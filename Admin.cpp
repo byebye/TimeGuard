@@ -1,5 +1,6 @@
 #include "Admin.h"
 #include <QTextStream>
+#include <QDataStream>
 #include <QDebug>
 
 Admin::Admin(QObject *parent) :
@@ -18,27 +19,32 @@ Admin::~Admin()
 
 bool Admin::isPasswordCorrect(QString password)
 {
+  qDebug() << passwordHash << endl << hashPassword(password);
   return hashPassword(password) == passwordHash;
 }
 
 void Admin::readCurrentPassword()
 {
-  if(passwordFile->open(QFile::ReadWrite | QFile::Truncate))
-    passwordHash = passwordFile->readLine();
+  if(passwordFile->open(QFile::ReadWrite | QFile::Text))
+    passwordHash = QTextStream(passwordFile).readLine();
   else
   {
     passwordHash = "";
-    qDebug() << "Błąd przy wczytywaniu hasła!" << endl;
+    qDebug() << "Błąd przy wczytywaniu hasła!";
   }
   if(passwordHash == "")
     changePassword("");
+  qDebug() << "Password read |" << passwordHash << "|";
 }
 
 void Admin::changePassword(QString newPassword)
 {
   passwordHash = hashPassword(newPassword);
   QTextStream fileStream(passwordFile);
-  fileStream << passwordHash;
+  fileStream.seek(0);
+  fileStream << passwordHash << '\n';
+  passwordFile->flush();
+  qDebug() << "Password changed to |" << passwordHash << "|";
 }
 
 QString Admin::hashPassword(QString password)
