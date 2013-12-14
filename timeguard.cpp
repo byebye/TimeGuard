@@ -171,16 +171,25 @@ void TimeGuard::changeAdminPassword()
 {
   if(admin->isPasswordCorrect(ui->currentPasswordField->text()))
   {
-    if(ui->newPasswordField->text() == ui->newPaswordRepeatField->text())
+    QString newPasword = ui->newPasswordField->text();
+    if(newPasword == ui->newPaswordRepeatField->text())
     {
-      admin->changePassword(ui->newPasswordField->text());
-      QMessageBox::information(this,
+      if(admin->isPasswordCorrect(newPasword))
+        QMessageBox::critical(this,
+                              "",
+                              "Hasło identyczne z obecnym! Wybierz inne hasło.",
+                              QMessageBox::Ok);
+      else
+      {
+        admin->changePassword(newPasword);
+        QMessageBox::information(this,
                             "",
                             "Hasło zmienione!",
                             QMessageBox::Ok);
-      ui->currentPasswordField->clear();
-      ui->newPasswordField->clear();
-      ui->newPaswordRepeatField->clear();
+        ui->currentPasswordField->clear();
+        ui->newPasswordField->clear();
+        ui->newPaswordRepeatField->clear();
+      }
     }
     else
       QMessageBox::critical(this,
