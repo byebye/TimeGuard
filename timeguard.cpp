@@ -34,8 +34,6 @@ TimeGuard::TimeGuard(QWidget *parent) :
   adminLoginDialog = new AdminLoginDialog(this, admin);
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
           this, SLOT(adminSuccesfullyLogged()));
-
-  getUsersList();
 }
 
 TimeGuard::~TimeGuard()
@@ -153,6 +151,8 @@ void TimeGuard::on_tabWidget_currentChanged(int tabIndex)
     adminLoginDialog->exec();
     if(!loggedAsAdmin)
       ui->tabWidget->setCurrentIndex(0);
+    else
+      addUsersToChooseUserBox();
   }
 }
 
@@ -257,6 +257,13 @@ void TimeGuard::saveTimeLimit(const QTime &time)
 {
   QString username = ui->chooseUserBox->currentText();
 //  fileManager->saveSettings()
+}
+
+void TimeGuard::addUsersToChooseUserBox()
+{
+  QStringList usersList = getUsersList();
+  for(QString username : usersList)
+    ui->chooseUserBox->addItem(username);
 }
 
 void TimeGuard::on_saveTimeLimitButton_clicked()

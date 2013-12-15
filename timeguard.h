@@ -58,6 +58,7 @@ private:
   void changeAdminPassword();
   void saveTimeLimit(const QTime &time);
   QStringList getUsersList();
+  void addUsersToChooseUserBox();
 };
 
 #endif // TIMEGUARD_H
