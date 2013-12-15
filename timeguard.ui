@@ -945,7 +945,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="userTab">
      <attribute name="title">
@@ -1066,6 +1066,49 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
+     <widget class="QTimeEdit" name="timeEdit">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>40</y>
+        <width>80</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="chooseUserBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>120</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="saveTimeLimitButton">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>70</y>
+        <width>70</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save limit</string>
+      </property>
+     </widget>
+     <zorder>timeEdit</zorder>
+     <zorder>changePasswordButton</zorder>
+     <zorder>currentPasswordField</zorder>
+     <zorder>newPasswordField</zorder>
+     <zorder>newPaswordRepeatField</zorder>
+     <zorder>currentPasswordLabel</zorder>
+     <zorder>newPasswordLabel</zorder>
+     <zorder>newPasswordRepeatLabel</zorder>
+     <zorder>chooseUserBox</zorder>
+     <zorder>saveTimeLimitButton</zorder>
     </widget>
    </widget>
    <widget class="QLabel" name="adminLoggedNotification">
@@ -1084,7 +1127,7 @@
      </font>
     </property>
     <property name="frameShape">
-     <enum>QFrame::Box</enum>
+     <enum>QFrame::StyledPanel</enum>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Plain</enum>

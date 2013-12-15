@@ -215,3 +215,18 @@ void TimeGuard::on_changePasswordButton_clicked()
 {
   changeAdminPassword();
 }
+
+void TimeGuard::on_timeEdit_timeChanged(const QTime &time)
+{
+  saveTimeLimit(time);
+}
+
+void TimeGuard::saveTimeLimit(const QTime &time)
+{
+
+}
+
+void TimeGuard::on_saveTimeLimitButton_clicked()
+{
+
+}

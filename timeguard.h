@@ -33,6 +33,10 @@ private slots:
   void on_adminLogoffButton_clicked();
   void on_changePasswordButton_clicked();
 
+  void on_timeEdit_timeChanged(const QTime &time);
+
+  void on_saveTimeLimitButton_clicked();
+
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -55,6 +59,7 @@ private:
   void addActions();
   void logoffAdmin();
   void changeAdminPassword();
+  void saveTimeLimit(const QTime &time);
 };
 
 #endif // TIMEGUARD_H
