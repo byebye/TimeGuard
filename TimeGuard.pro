@@ -13,24 +13,24 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    FileManager.cpp \
-    Timer.cpp \
-    TimeGuard.cpp \
-    User.cpp \
-    Logger.cpp \
-    AdminLoginDialog.cpp \
-    Admin.cpp
+    admin.cpp \
+    adminlogindialog.cpp \
+    filemanager.cpp \
+    logger.cpp \
+    timeguard.cpp \
+    timer.cpp \
+    user.cpp
 
 HEADERS  += \
-    FileManager.h \
-    Timer.h \
-    TimeGuard.h \
-    User.h \
-    Logger.h \
-    AdminLoginDialog.h \
-    Admin.h
+    admin.h \
+    adminlogindialog.h \
+    filemanager.h \
+    logger.h \
+    timeguard.h \
+    timer.h \
+    user.h
 
 FORMS    += timeguard.ui \
-    AdminLoginDialog.ui
+    adminlogindialog.ui
 
 LIBS += advapi32.lib

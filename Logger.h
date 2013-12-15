@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QString>
-#include "FileManager.h"
+#include "filemanager.h"
 
 class Logger : public QObject
 {

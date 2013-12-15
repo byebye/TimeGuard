@@ -1,7 +1,7 @@
 #ifndef ADMINLOGINDIALOG_H
 #define ADMINLOGINDIALOG_H
 
-#include "Admin.h"
+#include "admin.h"
 #include <QDialog>
 #include <QAbstractButton>
 

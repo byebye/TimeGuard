@@ -1,4 +1,4 @@
-#include "Admin.h"
+#include "admin.h"
 #include <QTextStream>
 #include <QDataStream>
 #include <QDebug>
@@ -29,12 +29,12 @@ void Admin::readCurrentPassword()
     passwordHash = QTextStream(passwordFile).readLine();
   else
   {
+    qDebug() << "Error opening the password file!";
     passwordHash = "";
-    qDebug() << "Error while reading the password from file!";
   }
   if(passwordHash == "")
     changePassword("");
-  qDebug() << "Password read |" << passwordHash << "|";
+  qDebug() << "Password read: " << passwordHash;
 }
 
 void Admin::changePassword(QString newPassword)
@@ -44,7 +44,7 @@ void Admin::changePassword(QString newPassword)
   fileStream.seek(0);
   fileStream << passwordHash << '\n';
   passwordFile->flush();
-  qDebug() << "Password changed to |" << passwordHash << "|";
+  qDebug() << "Password changed to: " << passwordHash;
 }
 
 QString Admin::hashPassword(QString password)

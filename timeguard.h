@@ -6,10 +6,10 @@
 #include <QAction>
 #include <QSystemTrayIcon>
 #include <QCloseEvent>
-#include "FileManager.h"
-#include "Logger.h"
-#include "User.h"
-#include "AdminLoginDialog.h"
+#include "filemanager.h"
+#include "logger.h"
+#include "user.h"
+#include "adminlogindialog.h"
 
 namespace Ui {
   class TimeGuard;

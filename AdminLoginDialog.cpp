@@ -1,5 +1,5 @@
-#include "AdminLoginDialog.h"
-#include "ui_AdminLoginDialog.h"
+#include "adminlogindialog.h"
+#include "ui_adminlogindialog.h"
 #include <QMessageBox>
 
 AdminLoginDialog::AdminLoginDialog(QWidget *parent, Admin *admin) :

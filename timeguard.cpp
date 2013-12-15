@@ -1,7 +1,7 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QDebug>
-#include "TimeGuard.h"
+#include "timeguard.h"
 #include "ui_timeguard.h"
 
 TimeGuard::TimeGuard(QWidget *parent) :

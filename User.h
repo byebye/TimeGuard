@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QTime>
-#include "FileManager.h"
-#include "Logger.h"
+#include "filemanager.h"
+#include "logger.h"
 
 class User : public QObject
 {
