@@ -17,6 +17,7 @@ public:
   QString readFromFile(QString filename);
   bool saveToFile(QString filename, QString data,
                   QIODevice::OpenMode appendFlag = QIODevice::Append);
+  bool saveToFileXML(QString filename, QString data, SettingName setting);
   QString readStats(QString filename);
   bool saveStats(QString filename, QString data);
   QString readSettings(QString filename);
