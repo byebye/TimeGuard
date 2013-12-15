@@ -3,6 +3,8 @@
 #include <QDebug>
 #include "timeguard.h"
 #include "ui_timeguard.h"
+#include <windows.h>
+#include <lm.h>
 
 TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
@@ -32,6 +34,8 @@ TimeGuard::TimeGuard(QWidget *parent) :
   adminLoginDialog = new AdminLoginDialog(this, admin);
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
           this, SLOT(adminSuccesfullyLogged()));
+
+  getUsersList();
 }
 
 TimeGuard::~TimeGuard()
@@ -206,6 +210,34 @@ void TimeGuard::changeAdminPassword()
   }
 }
 
+QStringList TimeGuard::getUsersList()
+{
+  LPTSTR pszServerName = NULL; // NULL -> local computer
+  DWORD dwLevel = 0; // information level: 0 -> only names
+  LPUSER_INFO_0 pBuf = NULL;
+  DWORD dwPrefMaxLen = MAX_PREFERRED_LENGTH;
+  DWORD dwEntriesRead = 0;
+  DWORD dwTotalEntries = 0;
+  DWORD dwResumeHandle = 0;
+  NetUserEnum(pszServerName,
+              dwLevel,
+              FILTER_NORMAL_ACCOUNT,
+              (LPBYTE*)&pBuf,
+              dwPrefMaxLen,
+              &dwEntriesRead,
+              &dwTotalEntries,
+              &dwResumeHandle
+              );
+  QStringList usersList;
+    for(DWORD i = 0; i < dwEntriesRead; ++i)
+  {
+    qDebug() << QString::fromWCharArray(pBuf->usri0_name);
+    usersList.push_back(QString::fromWCharArray(pBuf->usri0_name));
+    ++pBuf;
+  }
+  return usersList;
+}
+
 void TimeGuard::on_adminLogoffButton_clicked()
 {
   logoffAdmin();
@@ -223,7 +255,8 @@ void TimeGuard::on_timeEdit_timeChanged(const QTime &time)
 
 void TimeGuard::saveTimeLimit(const QTime &time)
 {
-
+  QString username = ui->chooseUserBox->currentText();
+//  fileManager->saveSettings()
 }
 
 void TimeGuard::on_saveTimeLimitButton_clicked()

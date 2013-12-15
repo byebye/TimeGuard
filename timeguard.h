@@ -57,6 +57,7 @@ private:
   void logoffAdmin();
   void changeAdminPassword();
   void saveTimeLimit(const QTime &time);
+  QStringList getUsersList();
 };
 
 #endif // TIMEGUARD_H

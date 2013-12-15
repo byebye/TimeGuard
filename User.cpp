@@ -1,6 +1,6 @@
 #include "user.h"
-#include "windows.h"
-#include "lmcons.h"
+#include <windows.h>
+#include <lmcons.h>
 
 User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
   QObject(parent),

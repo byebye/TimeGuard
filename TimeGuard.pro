@@ -33,4 +33,5 @@ HEADERS  += \
 FORMS    += timeguard.ui \
     adminlogindialog.ui
 
-LIBS += advapi32.lib
+LIBS += advapi32.lib\
+        netapi32.lib
