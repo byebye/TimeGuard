@@ -13,7 +13,7 @@ public:
   Timer(QWidget *parentWidget);
   ~Timer();
 
-  void setTime(QTime avaiableTime, int saveTimePeriod);
+  void setTime(QTime timeLimit, int saveTimePeriod);
   void startCounter();
   QString getTimeRemaining();
 public slots:

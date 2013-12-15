@@ -10,12 +10,12 @@ User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
   saveTimePeriod(10)
 {
   saveLogInTime();
-  readAvaiableTime();
+  readTimeRemaining();
 }
 
 User::~User()
 {
-  delete avaiableTime;
+  delete timeRemaining;
   fileManager = NULL;
   logger = NULL;
 }
@@ -35,7 +35,7 @@ void User::saveLogOffTime()
   logger->logOff(name);
 }
 
-void User::readAvaiableTime()
+void User::readTimeRemaining()
 {
   QString currentDate = QDate::currentDate().toString("yyyy.MM.dd");
   if(fileManager->readSettings(name, FileManager::LastLogin)
@@ -46,13 +46,13 @@ void User::readAvaiableTime()
     fileManager->saveSettings(name, timeLimit, FileManager::TimeRemaining);
   }
   QString timeString = fileManager->readSettings(name, FileManager::TimeRemaining);
-  avaiableTime = new QTime(QTime::fromString(timeString));
+  timeRemaining = new QTime(QTime::fromString(timeString));
 }
 
-void User::saveAvaiableTime()
+void User::saveTimeRemaining()
 {
-  *avaiableTime = avaiableTime->addSecs(-saveTimePeriod);
-  fileManager->saveSettings(name, avaiableTime->toString(),
+  *timeRemaining = timeRemaining->addSecs(-saveTimePeriod);
+  fileManager->saveSettings(name, timeRemaining->toString(),
                             FileManager::TimeRemaining);
 }
 
@@ -75,7 +75,7 @@ QString User::getName()
   return name;
 }
 
-QTime User::getAvaiableTime()
+QTime User::getTimeRemaining()
 {
-  return *avaiableTime;
+  return *timeRemaining;
 }

@@ -21,9 +21,9 @@ TimeGuard::TimeGuard(QWidget *parent) :
   ui->logBrowser->setPlainText(fileManager->readStats(user->getName()));
   ui->tabWidget->setCurrentIndex(0);
 
-  ui->timerLCD->setTime(user->getAvaiableTime(), user->getSaveTimePeriod());
+  ui->timerLCD->setTime(user->getTimeRemaining(), user->getSaveTimePeriod());
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
-  connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveAvaiableTime()));
+  connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveTimeRemaining()));
 
   programIcon = QIcon("images/timeguard.png");
   this->setWindowIcon(programIcon);

@@ -12,10 +12,10 @@ Timer::~Timer()
   delete timeRemaining;
 }
 
-void Timer::setTime(QTime avaiableTime, int saveTimePeriod)
+void Timer::setTime(QTime timeLimit, int saveTimePeriod)
 {
   // add 1 second to start displaying and checking time at that given
-  timeRemaining = new QTime(avaiableTime.addSecs(1));
+  timeRemaining = new QTime(timeLimit.addSecs(1));
   this->saveTimePeriod = saveTimePeriod;
   secondsElapsedCounter = 0;
   timer = new QTimer();

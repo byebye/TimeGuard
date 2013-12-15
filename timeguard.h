@@ -23,20 +23,17 @@ public:
   explicit TimeGuard(QWidget *parent = 0);
   ~TimeGuard();
 private slots:
-  void on_logOffButton_clicked();
   void userTimeout();
   void trayActivated(QSystemTrayIcon::ActivationReason reason);
   void quit();
   void showLengthenTimeWindow();
   void adminSuccesfullyLogged();
+  void on_logOffButton_clicked();
   void on_tabWidget_currentChanged(int index);
   void on_adminLogoffButton_clicked();
   void on_changePasswordButton_clicked();
-
   void on_timeEdit_timeChanged(const QTime &time);
-
   void on_saveTimeLimitButton_clicked();
-
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;

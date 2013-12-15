@@ -17,22 +17,21 @@ public:
   bool lengthenTime();
 
   QString getName();
-  QTime getAvaiableTime();
+  QTime getTimeRemaining();
   int getSaveTimePeriod();
 signals:
   
 public slots:
-  void saveAvaiableTime();
-  
+  void saveTimeRemaining();
 private:
   FileManager *fileManager;
   Logger *logger;
   QString const name;
-  QTime *avaiableTime;
+  QTime *timeRemaining;
   int const saveTimePeriod;
 
   QString getSystemUsername();
-  void readAvaiableTime();
+  void readTimeRemaining();
   void saveLogInTime();
   void saveLogOffTime();
 };
