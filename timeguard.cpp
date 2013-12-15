@@ -212,6 +212,7 @@ void TimeGuard::changeAdminPassword()
 
 QStringList TimeGuard::getUsersList()
 {
+  // -------------- VARIABLES -------------------
   LPTSTR serverName = NULL; // NULL -> local computer
   DWORD dwLevel = 0; // information level: 0 -> only names
   LPUSER_INFO_0 usersBuf = NULL;
@@ -220,6 +221,11 @@ QStringList TimeGuard::getUsersList()
   DWORD dwTotalUserEntries = 0;
   DWORD dwResumeHandle = 0;
   NET_API_STATUS nStatus;
+
+  LPLOCALGROUP_USERS_INFO_0 groupsBuf = NULL;
+  DWORD dwGroupEntries = 0;
+  DWORD dwTotalGroupEntries = 0;
+  // ---------------------------------------------
   nStatus = NetUserEnum(serverName,
               dwLevel,
               FILTER_NORMAL_ACCOUNT,
@@ -234,9 +240,7 @@ QStringList TimeGuard::getUsersList()
   {
     for(DWORD i = 0; i < dwUserEntries; ++i)
     {
-      LPLOCALGROUP_USERS_INFO_0 groupsBuf = NULL;
-      DWORD dwGroupEntries = 0;
-      DWORD dwTotalGroupEntries = 0;
+      bool normalUser = false;
       nStatus = NetUserGetLocalGroups(serverName,
                                       usersBuf->usri0_name,
                                       dwLevel,
@@ -246,7 +250,6 @@ QStringList TimeGuard::getUsersList()
                                       &dwGroupEntries,
                                       &dwTotalGroupEntries
                                       );
-      bool normalUser = false;
       if(nStatus != NERR_Success)
       {
         qDebug() << "Error reading groups list for "
