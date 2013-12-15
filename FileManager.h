@@ -3,14 +3,19 @@
 
 #include <QString>
 #include <QFile>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 class FileManager
 {
 public:
   FileManager();
+  ~FileManager();
 
-  QString readFromFile(QString filename, QString dir, QString ext);
-  bool saveToFile(QString filename, QString data, QString dir, QString ext,
+  enum SettingName { TimeRemaining, TimeLimit };
+
+  QString readFromFile(QString filename);
+  bool saveToFile(QString filename, QString data,
                   QIODevice::OpenMode appendFlag = QIODevice::Append);
   QString readStats(QString filename);
   bool saveStats(QString filename, QString data);
@@ -21,6 +26,8 @@ private:
   QString const statsDir;
   QString const settingsExt;
   QString const statsExt;
+  QXmlStreamReader *xmlReader;
+  QXmlStreamWriter *xmlWriter;
 };
 
 #endif // FILE_MANAGER_H

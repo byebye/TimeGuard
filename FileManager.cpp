@@ -11,21 +11,30 @@ FileManager::FileManager() :
     QDir().mkdir(settingsDir);
   if(!QDir(statsDir).exists())
     QDir().mkdir(statsDir);
+
+  xmlReader = new QXmlStreamReader();
+  xmlWriter = new QXmlStreamWriter();
+}
+
+FileManager::~FileManager()
+{
+  delete xmlReader;
+  delete xmlWriter;
 }
 
 QString FileManager::readStats(QString filename)
 {
-  return readFromFile(filename, statsDir, statsExt);
+  return readFromFile(statsDir + filename + statsExt);
 }
 
 QString FileManager::readSettings(QString filename)
 {
-  return readFromFile(filename, settingsDir, settingsExt);
+  return readFromFile(settingsDir + filename + settingsExt);
 }
 
-QString FileManager::readFromFile(QString filename, QString dir, QString ext)
+QString FileManager::readFromFile(QString filename)
 {
-  QFile file(dir + filename + ext);
+  QFile file(filename);
   if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     qDebug() << "Unable to open" << file.fileName() << endl;
@@ -38,19 +47,18 @@ QString FileManager::readFromFile(QString filename, QString dir, QString ext)
 
 bool FileManager::saveStats(QString filename, QString data)
 {
-  return saveToFile(filename, data, statsDir, statsExt);
+  return saveToFile(statsDir + filename + statsExt, data);
 }
 
 bool FileManager::saveSettings(QString filename, QString data)
 {
-  return saveToFile(filename, data, settingsDir, settingsExt, 0);
+  return saveToFile(settingsDir + filename + settingsExt, data, 0);
 }
 
 bool FileManager::saveToFile(QString filename, QString data,
-                             QString dir, QString ext,
                              QIODevice::OpenMode appendFlag)
 {
-  QFile file(dir + filename + ext);
+  QFile file(filename);
   if(!file.open(QIODevice::ReadWrite | QIODevice::Text | appendFlag))
   {
     qDebug() << "Unable to open" << file.fileName();
