@@ -212,28 +212,76 @@ void TimeGuard::changeAdminPassword()
 
 QStringList TimeGuard::getUsersList()
 {
-  LPTSTR pszServerName = NULL; // NULL -> local computer
+  LPTSTR serverName = NULL; // NULL -> local computer
   DWORD dwLevel = 0; // information level: 0 -> only names
-  LPUSER_INFO_0 pBuf = NULL;
+  LPUSER_INFO_0 usersBuf = NULL;
   DWORD dwPrefMaxLen = MAX_PREFERRED_LENGTH;
-  DWORD dwEntriesRead = 0;
-  DWORD dwTotalEntries = 0;
+  DWORD dwUserEntries = 0;
+  DWORD dwTotalUserEntries = 0;
   DWORD dwResumeHandle = 0;
-  NetUserEnum(pszServerName,
+  NET_API_STATUS nStatus;
+  nStatus = NetUserEnum(serverName,
               dwLevel,
               FILTER_NORMAL_ACCOUNT,
-              (LPBYTE*)&pBuf,
+              (LPBYTE*)&usersBuf,
               dwPrefMaxLen,
-              &dwEntriesRead,
-              &dwTotalEntries,
+              &dwUserEntries,
+              &dwTotalUserEntries,
               &dwResumeHandle
               );
   QStringList usersList;
-    for(DWORD i = 0; i < dwEntriesRead; ++i)
+  if(nStatus == NERR_Success)
   {
-    qDebug() << QString::fromWCharArray(pBuf->usri0_name);
-    usersList.push_back(QString::fromWCharArray(pBuf->usri0_name));
-    ++pBuf;
+    for(DWORD i = 0; i < dwUserEntries; ++i)
+    {
+      LPLOCALGROUP_USERS_INFO_0 groupsBuf = NULL;
+      DWORD dwGroupEntries = 0;
+      DWORD dwTotalGroupEntries = 0;
+      nStatus = NetUserGetLocalGroups(serverName,
+                                      usersBuf->usri0_name,
+                                      dwLevel,
+                                      LG_INCLUDE_INDIRECT,
+                                      (LPBYTE*)&groupsBuf,
+                                      dwPrefMaxLen,
+                                      &dwGroupEntries,
+                                      &dwTotalGroupEntries
+                                      );
+      bool normalUser = false;
+      if(nStatus != NERR_Success)
+      {
+        qDebug() << "Error reading groups list for "
+                 << QString::fromWCharArray(usersBuf->usri0_name);
+        normalUser = true;
+      }
+      else
+      {
+        for(DWORD j = 0; j < dwGroupEntries; ++j)
+        {
+          QString group = QString::fromWCharArray(groupsBuf->lgrui0_name);
+          if(group == tr("Użytkownicy") || group == tr("Administratorzy"))
+          {
+            normalUser = true;
+            break;
+          }
+          ++groupsBuf;
+        }
+      }
+      if(normalUser)
+      {
+        qDebug() << "User added to list: "
+                 << QString::fromWCharArray(usersBuf->usri0_name);
+        usersList.push_back(QString::fromWCharArray(usersBuf->usri0_name));
+      }
+      ++usersBuf;
+    }
+  }
+  else
+  {
+    qDebug() << "Error reading users list!";
+    QMessageBox::critical(this,
+                          "",
+                          tr("Error reading users list!"),
+                          QMessageBox::Ok);
   }
   return usersList;
 }
