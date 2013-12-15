@@ -15,8 +15,7 @@ FileManager::FileManager() :
 
 FileManager::~FileManager()
 {
-  delete xmlReader;
-  delete xmlWriter;
+
 }
 
 QString FileManager::readStats(QString filename)
@@ -24,9 +23,9 @@ QString FileManager::readStats(QString filename)
   return readFromFile(statsDir + filename + statsExt);
 }
 
-QString FileManager::readSettings(QString filename)
+QString FileManager::readSettings(QString filename, SettingName setting)
 {
-  return readFromFile(settingsDir + filename + settingsExt);
+  return readFromFileXML(settingsDir + filename + settingsExt, setting);
 }
 
 QString FileManager::readFromFile(QString filename)
@@ -42,14 +41,37 @@ QString FileManager::readFromFile(QString filename)
   return fileStream.readAll();
 }
 
+QString FileManager::readFromFileXML(QString filename, SettingName setting)
+{
+  QFile file(filename);
+  if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+  {
+    qDebug() << "Unable to open" << file.fileName() << endl;
+    return NULL;
+  }
+  QString tag = getStringTag(setting);
+  QXmlStreamReader xmlReader(&file);
+  while(!xmlReader.atEnd())
+  {
+    xmlReader.readNextStartElement();
+    if(xmlReader.qualifiedName() == tag)
+    {
+      xmlReader.readNext();
+      qDebug() << xmlReader.text();
+      return xmlReader.text().toString();
+    }
+  }
+  return NULL;
+}
+
 bool FileManager::saveStats(QString filename, QString data)
 {
   return saveToFile(statsDir + filename + statsExt, data);
 }
 
-bool FileManager::saveSettings(QString filename, QString data)
+bool FileManager::saveSettings(QString filename, QString data, SettingName setting)
 {
-  return saveToFile(settingsDir + filename + settingsExt, data, 0);
+  return saveToFileXML(settingsDir + filename + settingsExt, data, setting);
 }
 
 bool FileManager::saveToFile(QString filename, QString data,
@@ -75,16 +97,8 @@ bool FileManager::saveToFileXML(QString filename, QString data, SettingName sett
     return false;
   }
   QString settings = file.readAll();
-  QString tag;
-  switch(setting)
-  {
-    case TimeRemaining:
-      tag = "time-remaining";
-      break;
-    case TimeLimit:
-      tag = "time-limit";
-      break;
-  }
+  QString tag = getStringTag(setting);
+
   settings.replace(QRegExp("(<"+tag+">)[^<]*(</"+tag+">)"),
                    "\\1" + data + "\\2");
   file.seek(0);
@@ -93,4 +107,19 @@ bool FileManager::saveToFileXML(QString filename, QString data, SettingName sett
   file.resize(settings.size());
 
   return true;
+}
+
+QString FileManager::getStringTag(SettingName setting)
+{
+  switch(setting)
+  {
+    case TimeRemaining:
+      return "time-remaining";
+    case TimeLimit:
+      return "time-limit";
+    case LastLogin:
+      return "last-login";
+    default:
+      return "";
+  }
 }
