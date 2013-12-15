@@ -37,14 +37,23 @@ void User::saveLogOffTime()
 
 void User::readAvaiableTime()
 {
-  QString timeString = fileManager->readSettings(name);
+  QString currentDate = QDate::currentDate().toString("yyyy.MM.dd");
+  if(fileManager->readSettings(name, FileManager::LastLogin)
+     != currentDate)
+  {
+    fileManager->saveSettings(name, currentDate, FileManager::LastLogin);
+    QString timeLimit = fileManager->readSettings(name, FileManager::TimeLimit);
+    fileManager->saveSettings(name, timeLimit, FileManager::TimeRemaining);
+  }
+  QString timeString = fileManager->readSettings(name, FileManager::TimeRemaining);
   avaiableTime = new QTime(QTime::fromString(timeString));
 }
 
 void User::saveAvaiableTime()
 {
   *avaiableTime = avaiableTime->addSecs(-saveTimePeriod);
-  fileManager->saveSettings(name, avaiableTime->toString());
+  fileManager->saveSettings(name, avaiableTime->toString(),
+                            FileManager::TimeRemaining);
 }
 
 void User::logOff()
