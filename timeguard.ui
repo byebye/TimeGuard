@@ -1066,7 +1066,7 @@
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QTimeEdit" name="timeEdit">
+     <widget class="QTimeEdit" name="timeLimitEdit">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -1099,7 +1099,7 @@
        <string>Save limit</string>
       </property>
      </widget>
-     <zorder>timeEdit</zorder>
+     <zorder>timeLimitEdit</zorder>
      <zorder>changePasswordButton</zorder>
      <zorder>currentPasswordField</zorder>
      <zorder>newPasswordField</zorder>

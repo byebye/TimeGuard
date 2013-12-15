@@ -299,17 +299,6 @@ void TimeGuard::on_changePasswordButton_clicked()
   changeAdminPassword();
 }
 
-void TimeGuard::on_timeEdit_timeChanged(const QTime &time)
-{
-  saveTimeLimit(time);
-}
-
-void TimeGuard::saveTimeLimit(const QTime &time)
-{
-  QString username = ui->chooseUserBox->currentText();
-//  fileManager->saveSettings()
-}
-
 void TimeGuard::addUsersToChooseUserBox()
 {
   QStringList usersList = getUsersList();
@@ -319,5 +308,8 @@ void TimeGuard::addUsersToChooseUserBox()
 
 void TimeGuard::on_saveTimeLimitButton_clicked()
 {
-
+  QString username = ui->chooseUserBox->currentText();
+  fileManager->saveSettings(username,
+                            ui->timeLimitEdit->time().toString("hh:mm:ss"),
+                            FileManager::TimeLimit);
 }

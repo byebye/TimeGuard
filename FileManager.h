@@ -29,6 +29,8 @@ private:
   QString const settingsExt;
   QString const statsExt;
   QString getStringTag(SettingName setting);
+  QString getDefaultContent(SettingName setting);
+  QString generateSettingsXML();
 };
 
 #endif // FILE_MANAGER_H

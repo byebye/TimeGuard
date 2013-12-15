@@ -32,7 +32,7 @@ void Admin::readCurrentPassword()
     qDebug() << "Error opening the password file!";
     passwordHash = "";
   }
-  if(passwordHash == "")
+  if(passwordHash.isEmpty())
     changePassword("");
   qDebug() << "Password read: " << passwordHash;
 }

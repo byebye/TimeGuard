@@ -1,6 +1,8 @@
 #include "filemanager.h"
 #include <QDir>
 #include <QTextStream>
+#include <QXmlStreamWriter>
+#include <QDate>
 #include <QDebug>
 
 FileManager::FileManager() :
@@ -97,11 +99,14 @@ bool FileManager::saveToFileXML(QString filename, QString data, SettingName sett
     return false;
   }
   QString settings = file.readAll();
+  if(settings.isEmpty())
+    settings = generateSettingsXML();
   QString tag = getStringTag(setting);
 
   settings.replace(QRegExp("(<"+tag+">)[^<]*(</"+tag+">)"),
                    "\\1" + data + "\\2");
   file.seek(0);
+  qDebug() << "Saving XML to " << filename;
   QTextStream fileStream(&file);
   fileStream << settings;
   file.resize(settings.size());
@@ -122,4 +127,38 @@ QString FileManager::getStringTag(SettingName setting)
     default:
       return "";
   }
+}
+
+QString FileManager::getDefaultContent(SettingName setting)
+{
+  switch(setting)
+  {
+    case TimeRemaining:
+      return "00:00:00";
+    case TimeLimit:
+      return "00:00:00";
+    case LastLogin:
+      return QDate::currentDate().toString("yyyy.MM.dd");
+    default:
+      return "";
+  }
+}
+
+QString FileManager::generateSettingsXML()
+{
+  QString settings;
+  QXmlStreamWriter xml(&settings);
+  xml.setAutoFormatting(true);
+  xml.writeStartDocument();
+  xml.writeStartElement("TimeGuard");
+  QString tag, content;
+  for(int setting = TimeRemaining; setting <= LastLogin; ++setting)
+  {
+    tag = getStringTag(static_cast<SettingName>(setting));
+    content = getDefaultContent(static_cast<SettingName>(setting));
+    xml.writeTextElement(tag, content);
+  }
+  xml.writeEndElement();
+//  qDebug() << "Generated settings file:" << endl << settings;
+  return settings;
 }
