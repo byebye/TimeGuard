@@ -20,6 +20,8 @@ public:
   QTime getTimeRemaining();
   void resetTimeRemaining();
   int getSaveTimePeriod();
+  bool isLimitActive();
+  void setLimitActive(bool active);
 signals:
   
 public slots:
@@ -31,10 +33,12 @@ private:
   QTime *timeRemaining;
   QTime *timeLimit;
   int const saveTimePeriod;
+  bool limitActive;
 
   QString getSystemUsername();
   QTime readTimeRemaining();
   QTime readTimeLimit();
+  bool readLimitActive();
   void saveLogInTime();
   void saveLogOffTime();
 };

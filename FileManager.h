@@ -12,7 +12,7 @@ public:
   FileManager();
   ~FileManager();
 
-  enum SettingName { TimeRemaining, TimeLimit, LastLogin };
+  enum SettingName { TimeRemaining, TimeLimit, LastLogin, LimitActive };
 
   QString readFromFile(QString filename);
   QString readFromFileXML(QString filename, SettingName setting);

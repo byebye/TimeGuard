@@ -124,6 +124,8 @@ QString FileManager::getStringTag(SettingName setting)
       return "time-limit";
     case LastLogin:
       return "last-login";
+    case LimitActive:
+      return "limit-active";
     default:
       return "";
   }
@@ -139,6 +141,8 @@ QString FileManager::getDefaultContent(SettingName setting)
       return "00:00:00";
     case LastLogin:
       return QDate::currentDate().toString("yyyy.MM.dd");
+    case LimitActive:
+      return "false";
     default:
       return "";
   }

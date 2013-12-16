@@ -10,6 +10,7 @@ User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
   saveTimePeriod(10)
 {
   saveLogInTime();
+  limitActive = readLimitActive();
   timeLimit = new QTime();
   *timeLimit = readTimeLimit();
   timeRemaining = new QTime();
@@ -69,6 +70,25 @@ void User::saveTimeRemaining()
   *timeRemaining = timeRemaining->addSecs(-saveTimePeriod);
   fileManager->saveSettings(name, timeRemaining->toString(),
                             FileManager::TimeRemaining);
+}
+
+bool User::readLimitActive()
+{
+  return fileManager->readSettings(name, FileManager::LimitActive) == "true";
+}
+
+bool User::isLimitActive()
+{
+  return limitActive;
+}
+
+bool User::setLimitActive(bool active)
+{
+  limitActive = active;
+  if(limitActive)
+    fileManager->saveSettings(name, "true", FileManager::LimitActive);
+  else
+    fileManager->saveSettings(name, "false", FileManager::LimitActive);
 }
 
 void User::logOff()

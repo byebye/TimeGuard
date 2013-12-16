@@ -20,7 +20,8 @@ TimeGuard::TimeGuard(QWidget *parent) :
   setupUi();
 
   ui->timerLCD->setTime(user->getTimeRemaining(), user->getSaveTimePeriod());
-//  ui->timerLCD->startTime();
+  if(user->isLimitActive())
+    ui->timerLCD->startTime();
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveTimeRemaining()));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
