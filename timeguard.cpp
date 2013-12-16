@@ -26,6 +26,9 @@ TimeGuard::TimeGuard(QWidget *parent) :
   connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveTimeRemaining()));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
           this, SLOT(adminSuccesfullyLogged()));
+  connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)),
+          this, SLOT(userToSetChosen()));
+
 }
 
 TimeGuard::~TimeGuard()
@@ -221,6 +224,15 @@ void TimeGuard::changeAdminPassword()
   }
 }
 
+void TimeGuard::userToSetChosen()
+{
+  QString userChosen = ui->chooseUserBox->currentText();
+  QString timeLimit = fileManager->readSettings(userChosen, FileManager::TimeLimit);
+  ui->timeLimitEdit->setTime(QTime::fromString(timeLimit, "hh:mm:ss"));
+  QString limitActive = fileManager->readSettings(userChosen, FileManager::LimitActive);
+  setUiLimitActive(limitActive == "true");
+}
+
 QStringList TimeGuard::getUsersList()
 {
   // -------------- VARIABLES -------------------
@@ -345,4 +357,34 @@ void TimeGuard::on_stopPauseTimeButton_clicked()
     ui->stopPauseTimeButton->setIcon(resumeIcon);
     ui->timerLCD->pauseTime();
   }
+}
+
+void TimeGuard::on_changeLimitActivityButton_clicked()
+{
+  QString username = ui->chooseUserBox->currentText();
+  QString active = "false";
+  if(ui->changeLimitActivityButton->text() == "Activate")
+    active = "true";
+  fileManager->saveSettings(username, active, FileManager::LimitActive);
+  setUiLimitActive(active == "true");
+}
+
+void TimeGuard::setUiLimitActive(bool active)
+{
+  QString buttonText, labelText;
+  if(active)
+  {
+    labelText = "<html><head/><body><p><span style=\"font-size:10pt;"
+                "font-weight:600; text-decoration: underline; color:#65cb00;\">"
+                "Active</span></p></body></html>";
+    buttonText = "Deactivate";
+  }
+  else
+  {
+    labelText = "<html><head/><body><p><span style=\"font-size:10pt; color:#ee0000;\">"
+                "Not active</span></p></body></html>";
+    buttonText = "Activate";
+  }
+  ui->limitActivityLabel->setText(labelText);
+  ui->changeLimitActivityButton->setText(buttonText);
 }

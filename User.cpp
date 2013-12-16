@@ -82,7 +82,7 @@ bool User::isLimitActive()
   return limitActive;
 }
 
-bool User::setLimitActive(bool active)
+void User::setLimitActive(bool active)
 {
   limitActive = active;
   if(limitActive)

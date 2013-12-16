@@ -156,7 +156,7 @@ QString FileManager::generateSettingsXML()
   xml.writeStartDocument();
   xml.writeStartElement("TimeGuard");
   QString tag, content;
-  for(int setting = TimeRemaining; setting <= LastLogin; ++setting)
+  for(int setting = TimeRemaining; setting <= LimitActive; ++setting)
   {
     tag = getStringTag(static_cast<SettingName>(setting));
     content = getDefaultContent(static_cast<SettingName>(setting));

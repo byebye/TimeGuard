@@ -28,12 +28,14 @@ private slots:
   void quit();
   void showLengthenTimeWindow();
   void adminSuccesfullyLogged();
+  void userToSetChosen();
   void on_logOffButton_clicked();
   void on_adminLoggingButton_clicked();
   void on_changePasswordButton_clicked();
   void on_saveTimeLimitButton_clicked();
   void on_resetTimeButton_clicked();
   void on_stopPauseTimeButton_clicked();
+  void on_changeLimitActivityButton_clicked();
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -62,6 +64,7 @@ private:
   void changeAdminPassword();
   QStringList getUsersList();
   void addUsersToChooseUserBox();
+  void setUiLimitActive(bool active);
 };
 
 #endif // TIMEGUARD_H
