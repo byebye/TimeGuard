@@ -35,3 +35,6 @@ FORMS    += timeguard.ui \
 
 LIBS += advapi32.lib\
         netapi32.lib
+
+RESOURCES += \
+    images.qrc

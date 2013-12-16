@@ -32,6 +32,8 @@ private slots:
   void on_adminLoggingButton_clicked();
   void on_changePasswordButton_clicked();
   void on_saveTimeLimitButton_clicked();
+  void on_resetTimeButton_clicked();
+
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;

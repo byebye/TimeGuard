@@ -28,7 +28,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveTimeRemaining()));
 
-  programIcon = QIcon("images/timeguard.png");
+  programIcon = QIcon(":/images/timeguard.png");
   this->setWindowIcon(programIcon);
   setTrayIcon();
 
@@ -310,4 +310,10 @@ void TimeGuard::on_saveTimeLimitButton_clicked()
   fileManager->saveSettings(username,
                             ui->timeLimitEdit->time().toString("hh:mm:ss"),
                             FileManager::TimeLimit);
+}
+
+void TimeGuard::on_resetTimeButton_clicked()
+{
+  user->resetTimeRemaining();
+  ui->timerLCD->resetTime(user->getTimeRemaining());
 }

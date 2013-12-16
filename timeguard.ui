@@ -1099,6 +1099,64 @@
        <string>Save limit</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="stopPauseTimeButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>42</width>
+        <height>42</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <activeoff>:/images/images/play.png</activeoff>
+        <activeon>:/images/images/pause.png</activeon>
+       </iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>42</width>
+        <height>42</height>
+       </size>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="resetTimeButton">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>110</y>
+        <width>42</width>
+        <height>42</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <activeoff>:/images/images/repeat.png</activeoff>
+       </iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>42</width>
+        <height>42</height>
+       </size>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+     </widget>
      <zorder>timeLimitEdit</zorder>
      <zorder>changePasswordButton</zorder>
      <zorder>currentPasswordField</zorder>
@@ -1109,6 +1167,11 @@
      <zorder>newPasswordRepeatLabel</zorder>
      <zorder>chooseUserBox</zorder>
      <zorder>saveTimeLimitButton</zorder>
+     <zorder>pushButton</zorder>
+     <zorder>pushButton_2</zorder>
+     <zorder>pushButton_3</zorder>
+     <zorder>stopPauseTimeButton</zorder>
+     <zorder>resetTimeButton</zorder>
     </widget>
    </widget>
    <widget class="QLabel" name="adminLoggedNotification">
