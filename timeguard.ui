@@ -1103,7 +1103,7 @@
        <string>Save limit</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="stopPauseTimeButton">
+     <widget class="QPushButton" name="resumePauseTimeButton">
       <property name="geometry">
        <rect>
         <x>70</x>
@@ -1232,7 +1232,7 @@
      <zorder>pushButton</zorder>
      <zorder>pushButton_2</zorder>
      <zorder>pushButton_3</zorder>
-     <zorder>stopPauseTimeButton</zorder>
+     <zorder>resumePauseTimeButton</zorder>
      <zorder>resetTimeButton</zorder>
      <zorder>userSettingsInformLabel</zorder>
      <zorder>changeLimitActivityButton</zorder>

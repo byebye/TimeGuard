@@ -1,7 +1,6 @@
 #include "user.h"
 #include <windows.h>
 #include <lmcons.h>
-
 User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
   QObject(parent),
   fileManager(fileManager),
@@ -11,17 +10,15 @@ User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
 {
   saveLogInTime();
   limitActive = readLimitActive();
-  timeLimit = new QTime();
   timeRemaining = new QTime();
 
   if(limitActive)
-    readTime();
+    readTimeRemaining();
 }
 
 User::~User()
 {
   delete timeRemaining;
-  delete timeLimit;
   fileManager = NULL;
   logger = NULL;
 }
@@ -41,21 +38,16 @@ void User::saveLogOffTime()
   logger->logOff(name);
 }
 
-void User::readTime()
-{
-  *timeLimit = readTimeLimit();
-  *timeRemaining = readTimeRemaining();
-}
-
 QTime User::readTimeRemaining()
 {
   QString currentDate = QDate::currentDate().toString("yyyy.MM.dd");
   if(fileManager->readSettings(name, FileManager::LastLogin) != currentDate)
   {
+    QTime timeLimit = readTimeLimit();
     fileManager->saveSettings(name, currentDate, FileManager::LastLogin);
-    fileManager->saveSettings(name, timeLimit->toString("hh:mm:ss"),
+    fileManager->saveSettings(name, timeLimit.toString("hh:mm:ss"),
                               FileManager::TimeRemaining);
-    return *timeLimit;
+    return timeLimit;
   }
   return QTime::fromString(fileManager->readSettings(
                                             name, FileManager::TimeRemaining));
@@ -69,7 +61,7 @@ QTime User::readTimeLimit()
 
 void User::resetTimeRemaining()
 {
-  *timeRemaining = *timeLimit;
+  *timeRemaining = readTimeLimit();
 }
 
 void User::saveTimeRemaining()
@@ -93,10 +85,7 @@ void User::setLimitActive(bool active)
 {
   limitActive = active;
   if(limitActive)
-  {
     fileManager->saveSettings(name, "true", FileManager::LimitActive);
-    readTime();
-  }
   else
     fileManager->saveSettings(name, "false", FileManager::LimitActive);
 }
@@ -122,5 +111,6 @@ QString User::getName()
 
 QTime User::getTimeRemaining()
 {
+  *timeRemaining = readTimeRemaining();
   return *timeRemaining;
 }

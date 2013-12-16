@@ -34,10 +34,9 @@ private slots:
   void on_changePasswordButton_clicked();
   void on_saveTimeLimitButton_clicked();
   void on_resetTimeButton_clicked();
-  void on_stopPauseTimeButton_clicked();
+  void on_resumePauseTimeButton_clicked();
   void on_changeLimitActivityButton_clicked();
 signals:
-  void timeLimitChanged();
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -64,6 +63,7 @@ private:
   void addActions();
   void logoffAdmin();
   void changeAdminPassword();
+  void setResumePauseButtonIcon();
   QStringList getUsersList();
   void addUsersToChooseUserBox();
   void setUiLimitActive(bool active);

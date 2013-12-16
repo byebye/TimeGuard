@@ -31,8 +31,6 @@ TimeGuard::TimeGuard(QWidget *parent) :
           this, SLOT(adminSuccesfullyLogged()));
   connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)),
           this, SLOT(userToSetChosen()));
-  connect(this, SIGNAL(timeLimitChanged()), user, SLOT(readTime()));
-
 }
 
 TimeGuard::~TimeGuard()
@@ -58,6 +56,7 @@ void TimeGuard::setupUi()
   ui->logBrowser->setPlainText(fileManager->readStats(user->getName()));
   ui->tabWidget->setCurrentIndex(0);
   ui->tabWidget->setTabEnabled(1, false);
+  ui->timerLCD->display("00:00:00");
 
   this->setWindowIcon(programIcon);
   setTrayIcon();
@@ -173,6 +172,7 @@ void TimeGuard::adminSuccesfullyLogged()
   addUsersToChooseUserBox();
   ui->tabWidget->setTabEnabled(1, true);
   ui->tabWidget->setCurrentIndex(1);
+  setResumePauseButtonIcon();
 }
 
 void TimeGuard::logoffAdmin()
@@ -232,6 +232,8 @@ void TimeGuard::userToSetChosen()
 {
   QString userChosen = ui->chooseUserBox->currentText();
   QString timeLimit = fileManager->readSettings(userChosen, FileManager::TimeLimit);
+  if(timeLimit.isEmpty())
+    timeLimit = "00:00:00";
   ui->timeLimitEdit->setTime(QTime::fromString(timeLimit, "hh:mm:ss"));
   QString limitActive = fileManager->readSettings(userChosen, FileManager::LimitActive);
   setUiLimitActive(limitActive == "true");
@@ -339,30 +341,33 @@ void TimeGuard::on_saveTimeLimitButton_clicked()
   fileManager->saveSettings(username,
                             ui->timeLimitEdit->time().toString("hh:mm:ss"),
                             FileManager::TimeLimit);
-  emit timeLimitChanged();
 }
 
 void TimeGuard::on_resetTimeButton_clicked()
 {
   user->resetTimeRemaining();
-  ui->timerLCD->resetTime(user->getTimeRemaining());
+  ui->timerLCD->resetTime(user->readTimeLimit());
 }
 
-void TimeGuard::on_stopPauseTimeButton_clicked()
+void TimeGuard::on_resumePauseTimeButton_clicked()
 {
-  static bool pauseButton = true;
-  pauseButton = !pauseButton;
-  if(pauseButton)
+  if(ui->timerLCD->isTimeActive())
+    ui->timerLCD->pauseTime();
+  else
   {
-    ui->stopPauseTimeButton->setIcon(pauseIcon);
     setTime();
     ui->timerLCD->resumeTime();
   }
+
+  setResumePauseButtonIcon();
+}
+
+void TimeGuard::setResumePauseButtonIcon()
+{
+  if(ui->timerLCD->isTimeActive())
+    ui->resumePauseTimeButton->setIcon(pauseIcon);
   else
-  {
-    ui->stopPauseTimeButton->setIcon(resumeIcon);
-    ui->timerLCD->pauseTime();
-  }
+    ui->resumePauseTimeButton->setIcon(resumeIcon);
 }
 
 void TimeGuard::on_changeLimitActivityButton_clicked()

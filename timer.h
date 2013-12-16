@@ -20,6 +20,7 @@ public:
   void resetTime(QTime timeLimit);
   QString getTimeRemaining();
   bool isTimeSet();
+  bool isTimeActive();
 public slots:
   void startTimer();
   void setDisplay();

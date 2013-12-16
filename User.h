@@ -18,6 +18,7 @@ public:
 
   QString getName();
   QTime getTimeRemaining();
+  QTime readTimeLimit();
   void resetTimeRemaining();
   int getSaveTimePeriod();
   bool isLimitActive();
@@ -26,19 +27,16 @@ signals:
   
 public slots:
   void saveTimeRemaining();
-  void readTime();
 private:
   FileManager *fileManager;
   Logger *logger;
   QString const name;
   QTime *timeRemaining;
-  QTime *timeLimit;
   int const saveTimePeriod;
   bool limitActive;
 
   QString getSystemUsername();
   QTime readTimeRemaining();
-  QTime readTimeLimit();
   bool readLimitActive();
   void saveLogInTime();
   void saveLogOffTime();

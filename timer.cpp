@@ -81,3 +81,8 @@ bool Timer::isTimeSet()
 {
   return timeSet;
 }
+
+bool Timer::isTimeActive()
+{
+  return timer->isActive();
+}
