@@ -28,7 +28,7 @@ void Timer::resetTime(QTime timeLimit)
   timer->stop();
   *timeRemaining = timeLimit;
   secondsElapsedCounter = 0;
-  startTimer();
+  setDisplay();
 }
 
 QString Timer::getTimeRemaining()
