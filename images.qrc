@@ -1,7 +1,7 @@
 <RCC>
-    <qresource prefix="/images">
+    <qresource prefix="/">
         <file>images/pause.png</file>
-        <file>images/play.png</file>
+        <file>images/resume.png</file>
         <file>images/repeat.png</file>
         <file>images/timeguard.png</file>
     </qresource>

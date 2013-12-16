@@ -23,12 +23,23 @@ void Timer::setTime(QTime timeLimit, int saveTimePeriod)
   resetTime(timeLimit);
 }
 
+void Timer::pauseTime()
+{
+  timer->stop();
+}
+
+void Timer::resumeTime()
+{
+  startTimer();
+}
+
 void Timer::resetTime(QTime timeLimit)
 {
+  bool timerActive = timer->isActive();
   timer->stop();
   *timeRemaining = timeLimit;
   secondsElapsedCounter = 0;
-  setDisplay();
+  setDisplay(timerActive);
 }
 
 QString Timer::getTimeRemaining()
@@ -41,7 +52,7 @@ void Timer::startTimer()
   timer->start(1000);
 }
 
-void Timer::setDisplay()
+void Timer::setDisplay(bool timerActive)
 {
   if(++secondsElapsedCounter % saveTimePeriod == 0)
     emit saveTimeMoment();
@@ -53,7 +64,7 @@ void Timer::setDisplay()
     timer->stop();
     emit timeout();
   }
-  else
+  else if(timerActive)
     startTimer();
   *timeRemaining = timeRemaining->addSecs(-1);
 }

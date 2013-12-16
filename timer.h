@@ -15,10 +15,12 @@ public:
 
   void setTime(QTime timeLimit, int saveTimePeriod);
   void startTimer();
+  void pauseTime();
+  void resumeTime();
   void resetTime(QTime timeLimit);
   QString getTimeRemaining();
 public slots:
-  void setDisplay();
+  void setDisplay(bool timerActive = true);
 signals:
   void timeout();
   void saveTimeMoment();

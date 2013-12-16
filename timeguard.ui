@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>TimeGuard</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="images.qrc">
+    <normaloff>:/images/timeguard.png</normaloff>:/images/timeguard.png</iconset>
+  </property>
   <property name="dockOptions">
    <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
@@ -1113,7 +1117,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <activeoff>:/images/images/play.png</activeoff>
+        <activeoff>:/images/pause.png</activeoff>
         <activeon>:/images/images/pause.png</activeon>
        </iconset>
       </property>
@@ -1141,7 +1145,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <activeoff>:/images/images/repeat.png</activeoff>
+        <activeoff>:/images/repeat.png</activeoff>
        </iconset>
       </property>
       <property name="iconSize">
@@ -1256,6 +1260,8 @@
    <header>timer.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>

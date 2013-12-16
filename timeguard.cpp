@@ -17,22 +17,11 @@ TimeGuard::TimeGuard(QWidget *parent) :
   admin = new Admin(this);
   user = new User(this, fileManager, logger);
 
-  ui->setupUi(this);
-  logoffAdmin();
-  ui->userNameLabel->setText(user->getName());
-  ui->logBrowser->setPlainText(fileManager->readStats(user->getName()));
-  ui->tabWidget->setCurrentIndex(0);
-  ui->tabWidget->setTabEnabled(1, false);
+  setupUi();
 
   ui->timerLCD->setTime(user->getTimeRemaining(), user->getSaveTimePeriod());
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveTimeRemaining()));
-
-  programIcon = QIcon(":/images/timeguard.png");
-  this->setWindowIcon(programIcon);
-  setTrayIcon();
-
-  adminLoginDialog = new AdminLoginDialog(this, admin);
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
           this, SLOT(adminSuccesfullyLogged()));
 }
@@ -49,6 +38,28 @@ TimeGuard::~TimeGuard()
   delete quitAct;
   delete lengthenAct;
   delete adminLoginDialog;
+}
+
+void TimeGuard::setupUi()
+{
+  setupIcons();
+  ui->setupUi(this);
+  logoffAdmin();
+  ui->userNameLabel->setText(user->getName());
+  ui->logBrowser->setPlainText(fileManager->readStats(user->getName()));
+  ui->tabWidget->setCurrentIndex(0);
+  ui->tabWidget->setTabEnabled(1, false);
+
+  this->setWindowIcon(programIcon);
+  setTrayIcon();
+  adminLoginDialog = new AdminLoginDialog(this, admin);
+}
+
+void TimeGuard::setupIcons()
+{
+  programIcon = QIcon(":/images/timeguard.png");
+  pauseIcon = QIcon(":/images/pause.png");
+  resumeIcon = QIcon(":/images/resume.png");
 }
 
 void TimeGuard::userTimeout()
@@ -316,4 +327,20 @@ void TimeGuard::on_resetTimeButton_clicked()
 {
   user->resetTimeRemaining();
   ui->timerLCD->resetTime(user->getTimeRemaining());
+}
+
+void TimeGuard::on_stopPauseTimeButton_clicked()
+{
+  static bool pauseButton = true;
+  pauseButton = !pauseButton;
+  if(pauseButton)
+  {
+    ui->stopPauseTimeButton->setIcon(pauseIcon);
+    ui->timerLCD->resumeTime();
+  }
+  else
+  {
+    ui->stopPauseTimeButton->setIcon(resumeIcon);
+    ui->timerLCD->pauseTime();
+  }
 }

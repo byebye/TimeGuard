@@ -33,7 +33,7 @@ private slots:
   void on_changePasswordButton_clicked();
   void on_saveTimeLimitButton_clicked();
   void on_resetTimeButton_clicked();
-
+  void on_stopPauseTimeButton_clicked();
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -41,6 +41,8 @@ private:
   Admin *admin;
   User *user;
   QIcon programIcon;
+  QIcon pauseIcon;
+  QIcon resumeIcon;
   QSystemTrayIcon *trayIcon;
   QMenu *trayContextMenu;
   QAction *quitAct;
@@ -49,6 +51,8 @@ private:
   bool loggedAsAdmin;
   AdminLoginDialog *adminLoginDialog;
 
+  void setupUi();
+  void setupIcons();
   void startTimer();
   void setTrayIcon();
   void closeEvent(QCloseEvent *event);
