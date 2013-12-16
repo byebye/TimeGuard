@@ -26,6 +26,7 @@ signals:
   
 public slots:
   void saveTimeRemaining();
+  void readTime();
 private:
   FileManager *fileManager;
   Logger *logger;
@@ -36,7 +37,6 @@ private:
   bool limitActive;
 
   QString getSystemUsername();
-  void readTime();
   QTime readTimeRemaining();
   QTime readTimeLimit();
   bool readLimitActive();

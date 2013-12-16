@@ -5,6 +5,7 @@ Timer::Timer(QWidget *parentWidget)
 {
   setParent(parentWidget);
   setDigitCount(8);
+  timeSet = false;
   timeRemaining = new QTime();
   timer = new QTimer();
   timer->setInterval(1000);
@@ -20,6 +21,7 @@ Timer::~Timer()
 
 void Timer::setTime(QTime timeLimit, int saveTimePeriod, bool limitActive)
 {
+  timeSet = true;
   this->saveTimePeriod = saveTimePeriod;
   resetTime(timeLimit);
 }
@@ -73,4 +75,9 @@ void Timer::setDisplay()
     emit timeout();
   }
   *timeRemaining = timeRemaining->addSecs(-1);
+}
+
+bool Timer::isTimeSet()
+{
+  return timeSet;
 }

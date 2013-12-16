@@ -19,6 +19,7 @@ public:
   void resumeTime();
   void resetTime(QTime timeLimit);
   QString getTimeRemaining();
+  bool isTimeSet();
 public slots:
   void startTimer();
   void setDisplay();
@@ -30,6 +31,7 @@ private:
   QTime *timeRemaining;
   int saveTimePeriod;
   int secondsElapsedCounter;
+  bool timeSet;
 
   void setTimer();
 };

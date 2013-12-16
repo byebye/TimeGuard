@@ -19,15 +19,19 @@ TimeGuard::TimeGuard(QWidget *parent) :
 
   setupUi();
 
-  ui->timerLCD->setTime(user->getTimeRemaining(), user->getSaveTimePeriod());
   if(user->isLimitActive())
+  {
+    setTime();
     ui->timerLCD->startTime();
+  }
+
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveTimeRemaining()));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
           this, SLOT(adminSuccesfullyLogged()));
   connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)),
           this, SLOT(userToSetChosen()));
+  connect(this, SIGNAL(timeLimitChanged()), user, SLOT(readTime()));
 
 }
 
@@ -335,6 +339,7 @@ void TimeGuard::on_saveTimeLimitButton_clicked()
   fileManager->saveSettings(username,
                             ui->timeLimitEdit->time().toString("hh:mm:ss"),
                             FileManager::TimeLimit);
+  emit timeLimitChanged();
 }
 
 void TimeGuard::on_resetTimeButton_clicked()
@@ -350,6 +355,7 @@ void TimeGuard::on_stopPauseTimeButton_clicked()
   if(pauseButton)
   {
     ui->stopPauseTimeButton->setIcon(pauseIcon);
+    setTime();
     ui->timerLCD->resumeTime();
   }
   else
@@ -387,4 +393,10 @@ void TimeGuard::setUiLimitActive(bool active)
   }
   ui->limitActivityLabel->setText(labelText);
   ui->changeLimitActivityButton->setText(buttonText);
+}
+
+void TimeGuard::setTime()
+{
+  if(!ui->timerLCD->isTimeSet())
+    ui->timerLCD->setTime(user->getTimeRemaining(), user->getSaveTimePeriod());
 }

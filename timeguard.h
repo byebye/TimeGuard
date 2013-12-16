@@ -36,6 +36,8 @@ private slots:
   void on_resetTimeButton_clicked();
   void on_stopPauseTimeButton_clicked();
   void on_changeLimitActivityButton_clicked();
+signals:
+  void timeLimitChanged();
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -53,9 +55,9 @@ private:
   bool loggedAsAdmin;
   AdminLoginDialog *adminLoginDialog;
 
+  void setTime();
   void setupUi();
   void setupIcons();
-  void startTimer();
   void setTrayIcon();
   void closeEvent(QCloseEvent *event);
   void createActions();
