@@ -30,7 +30,7 @@ private:
   QString const statsExt;
   QString getStringTag(SettingName setting);
   QString getDefaultContent(SettingName setting);
-  QString generateSettingsXML();
+  QString generateDefaultSettingsXML();
 };
 
 #endif // FILE_MANAGER_H

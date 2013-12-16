@@ -100,7 +100,7 @@ bool FileManager::saveToFileXML(QString filename, QString data, SettingName sett
   }
   QString settings = file.readAll();
   if(settings.isEmpty())
-    settings = generateSettingsXML();
+    settings = generateDefaultSettingsXML();
   QString tag = getStringTag(setting);
 
   settings.replace(QRegExp("(<"+tag+">)[^<]*(</"+tag+">)"),
@@ -148,7 +148,7 @@ QString FileManager::getDefaultContent(SettingName setting)
   }
 }
 
-QString FileManager::generateSettingsXML()
+QString FileManager::generateDefaultSettingsXML()
 {
   QString settings;
   QXmlStreamWriter xml(&settings);

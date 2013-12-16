@@ -36,6 +36,7 @@ private:
   bool limitActive;
 
   QString getSystemUsername();
+  void readTime();
   QTime readTimeRemaining();
   QTime readTimeLimit();
   bool readLimitActive();
