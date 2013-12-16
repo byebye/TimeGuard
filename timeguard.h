@@ -29,8 +29,7 @@ private slots:
   void showLengthenTimeWindow();
   void adminSuccesfullyLogged();
   void on_logOffButton_clicked();
-  void on_tabWidget_currentChanged(int index);
-  void on_adminLogoffButton_clicked();
+  void on_adminLoggingButton_clicked();
   void on_changePasswordButton_clicked();
   void on_saveTimeLimitButton_clicked();
 private:

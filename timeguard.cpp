@@ -22,6 +22,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   ui->userNameLabel->setText(user->getName());
   ui->logBrowser->setPlainText(fileManager->readStats(user->getName()));
   ui->tabWidget->setCurrentIndex(0);
+  ui->tabWidget->setTabEnabled(1, false);
 
   ui->timerLCD->setTime(user->getTimeRemaining(), user->getSaveTimePeriod());
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
@@ -144,31 +145,23 @@ void TimeGuard::showLengthenTimeWindow()
                            QMessageBox::Ok, QMessageBox::Cancel);
 }
 
-void TimeGuard::on_tabWidget_currentChanged(int tabIndex)
-{
-  if(tabIndex == 1 && !loggedAsAdmin)
-  {
-    adminLoginDialog->exec();
-    if(!loggedAsAdmin)
-      ui->tabWidget->setCurrentIndex(0);
-    else
-      addUsersToChooseUserBox();
-  }
-}
-
 void TimeGuard::adminSuccesfullyLogged()
 {
   loggedAsAdmin = true;
-  ui->adminLoggedNotification->show();
-  ui->adminLogoffButton->show();
+  ui->adminLoggedNotification->setText("<html><head/><body><p><span style=\" font-size:11pt; font-weight:600; text-decoration: underline; color:#55aa00;\">Logged as Admin</span></p></body></html>");
+  ui->adminLoggingButton->setText(tr("Log off"));
+  addUsersToChooseUserBox();
+  ui->tabWidget->setTabEnabled(1, true);
+  ui->tabWidget->setCurrentIndex(1);
 }
 
 void TimeGuard::logoffAdmin()
 {
   loggedAsAdmin = false;
-  ui->adminLoggedNotification->hide();
-  ui->adminLogoffButton->hide();
+  ui->adminLoggedNotification->setText("Log in as Admin");
+  ui->adminLoggingButton->setText(tr("Log in"));
   ui->tabWidget->setCurrentIndex(0);
+  ui->tabWidget->setTabEnabled(1, false);
 }
 
 void TimeGuard::changeAdminPassword()
@@ -289,9 +282,9 @@ QStringList TimeGuard::getUsersList()
   return usersList;
 }
 
-void TimeGuard::on_adminLogoffButton_clicked()
+void TimeGuard::on_adminLoggingButton_clicked()
 {
-  logoffAdmin();
+  loggedAsAdmin ? logoffAdmin() : adminLoginDialog->exec();
 }
 
 void TimeGuard::on_changePasswordButton_clicked()

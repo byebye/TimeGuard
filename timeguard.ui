@@ -1148,7 +1148,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="adminLogoffButton">
+   <widget class="QPushButton" name="adminLoggingButton">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -1158,7 +1158,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Log Off</string>
+     <string>Log In</string>
     </property>
     <property name="autoRepeat">
      <bool>false</bool>
