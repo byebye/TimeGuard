@@ -29,10 +29,12 @@ private:
   Logger *logger;
   QString const name;
   QTime *timeRemaining;
+  QTime *timeLimit;
   int const saveTimePeriod;
 
   QString getSystemUsername();
-  void readTimeRemaining();
+  QTime readTimeRemaining();
+  QTime readTimeLimit();
   void saveLogInTime();
   void saveLogOffTime();
 };
