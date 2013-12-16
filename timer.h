@@ -13,14 +13,15 @@ public:
   Timer(QWidget *parentWidget);
   ~Timer();
 
-  void setTime(QTime timeLimit, int saveTimePeriod);
-  void startTimer();
+  void setTime(QTime timeLimit, int saveTimePeriod, bool limitActive = false);
+  void startTime();
   void pauseTime();
   void resumeTime();
   void resetTime(QTime timeLimit);
   QString getTimeRemaining();
 public slots:
-  void setDisplay(bool timerActive = true);
+  void startTimer();
+  void setDisplay();
 signals:
   void timeout();
   void saveTimeMoment();

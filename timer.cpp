@@ -9,6 +9,7 @@ Timer::Timer(QWidget *parentWidget)
   timer = new QTimer();
   timer->setInterval(1000);
   connect(timer, SIGNAL(timeout()), this, SLOT(setDisplay()));
+  connect(timer, SIGNAL(timeout()), this, SLOT(startTimer()));
 }
 
 Timer::~Timer()
@@ -17,10 +18,15 @@ Timer::~Timer()
   delete timeRemaining;
 }
 
-void Timer::setTime(QTime timeLimit, int saveTimePeriod)
+void Timer::setTime(QTime timeLimit, int saveTimePeriod, bool limitActive)
 {
   this->saveTimePeriod = saveTimePeriod;
   resetTime(timeLimit);
+}
+
+void Timer::startTime()
+{
+  startTimer();
 }
 
 void Timer::pauseTime()
@@ -39,7 +45,9 @@ void Timer::resetTime(QTime timeLimit)
   timer->stop();
   *timeRemaining = timeLimit;
   secondsElapsedCounter = 0;
-  setDisplay(timerActive);
+  setDisplay();
+  if(timerActive)
+    startTimer();
 }
 
 QString Timer::getTimeRemaining()
@@ -52,7 +60,7 @@ void Timer::startTimer()
   timer->start(1000);
 }
 
-void Timer::setDisplay(bool timerActive)
+void Timer::setDisplay()
 {
   if(++secondsElapsedCounter % saveTimePeriod == 0)
     emit saveTimeMoment();
@@ -64,7 +72,5 @@ void Timer::setDisplay(bool timerActive)
     timer->stop();
     emit timeout();
   }
-  else if(timerActive)
-    startTimer();
   *timeRemaining = timeRemaining->addSecs(-1);
 }
