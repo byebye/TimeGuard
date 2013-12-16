@@ -49,6 +49,12 @@ void User::readTimeRemaining()
   timeRemaining = new QTime(QTime::fromString(timeString));
 }
 
+void User::resetTimeRemaining()
+{
+  QString timeLimit = fileManager->readSettings(name, FileManager::TimeLimit);
+  timeRemaining = new QTime(QTime::fromString(timeLimit));
+}
+
 void User::saveTimeRemaining()
 {
   *timeRemaining = timeRemaining->addSecs(-saveTimePeriod);

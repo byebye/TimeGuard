@@ -18,6 +18,7 @@ public:
 
   QString getName();
   QTime getTimeRemaining();
+  void resetTimeRemaining();
   int getSaveTimePeriod();
 signals:
   

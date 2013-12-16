@@ -14,7 +14,8 @@ public:
   ~Timer();
 
   void setTime(QTime timeLimit, int saveTimePeriod);
-  void startCounter();
+  void startTimer();
+  void resetTime(QTime timeLimit);
   QString getTimeRemaining();
 public slots:
   void setDisplay();

@@ -4,6 +4,11 @@
 Timer::Timer(QWidget *parentWidget)
 {
   setParent(parentWidget);
+  setDigitCount(8);
+  timeRemaining = new QTime();
+  timer = new QTimer();
+  timer->setInterval(1000);
+  connect(timer, SIGNAL(timeout()), this, SLOT(setDisplay()));
 }
 
 Timer::~Timer()
@@ -14,15 +19,16 @@ Timer::~Timer()
 
 void Timer::setTime(QTime timeLimit, int saveTimePeriod)
 {
-  // add 1 second to start displaying and checking time at that given
-  timeRemaining = new QTime(timeLimit.addSecs(1));
   this->saveTimePeriod = saveTimePeriod;
+  resetTime(timeLimit);
+}
+
+void Timer::resetTime(QTime timeLimit)
+{
+  timer->stop();
+  *timeRemaining = timeLimit;
   secondsElapsedCounter = 0;
-  timer = new QTimer();
-  timer->setInterval(1000);
-  connect(timer, SIGNAL(timeout()), this, SLOT(setDisplay()));
-  setDigitCount(8);
-  startCounter();
+  startTimer();
 }
 
 QString Timer::getTimeRemaining()
@@ -30,7 +36,7 @@ QString Timer::getTimeRemaining()
   return timeRemaining->toString("hh:mm:ss");
 }
 
-void Timer::startCounter()
+void Timer::startTimer()
 {
   timer->start(1000);
 }
@@ -40,7 +46,6 @@ void Timer::setDisplay()
   if(++secondsElapsedCounter % saveTimePeriod == 0)
     emit saveTimeMoment();
 
-  *timeRemaining = timeRemaining->addSecs(-1);
   QString timeString = timeRemaining->toString("hh:mm:ss");
   display(timeString);
   if(timeString == "00:00:00")
@@ -49,5 +54,6 @@ void Timer::setDisplay()
     emit timeout();
   }
   else
-    startCounter();
+    startTimer();
+  *timeRemaining = timeRemaining->addSecs(-1);
 }
