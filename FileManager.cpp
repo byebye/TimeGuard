@@ -140,7 +140,7 @@ QString FileManager::getDefaultContent(SettingName setting)
     case TimeLimit:
       return "00:00:00";
     case LastLogin:
-      return QDate::currentDate().toString("yyyy.MM.dd");
+      return "0000.00.00";
     case LimitActive:
       return "false";
     default:
