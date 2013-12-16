@@ -1073,9 +1073,9 @@
      <widget class="QTimeEdit" name="timeLimitEdit">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>40</y>
-        <width>80</width>
+        <x>10</x>
+        <y>110</y>
+        <width>70</width>
         <height>22</height>
        </rect>
       </property>
@@ -1084,7 +1084,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
+        <y>80</y>
         <width>120</width>
         <height>22</height>
        </rect>
@@ -1093,8 +1093,8 @@
      <widget class="QPushButton" name="saveTimeLimitButton">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>70</y>
+        <x>10</x>
+        <y>135</y>
         <width>70</width>
         <height>23</height>
        </rect>
@@ -1106,8 +1106,8 @@
      <widget class="QPushButton" name="stopPauseTimeButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>110</y>
+        <x>70</x>
+        <y>10</y>
         <width>42</width>
         <height>42</height>
        </rect>
@@ -1134,8 +1134,8 @@
      <widget class="QPushButton" name="resetTimeButton">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>110</y>
+        <x>10</x>
+        <y>10</y>
         <width>42</width>
         <height>42</height>
        </rect>
@@ -1161,6 +1161,64 @@
        <bool>true</bool>
       </property>
      </widget>
+     <widget class="QLabel" name="userSettingsInformLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Change settings of:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="changeLimitActivityButton">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>135</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Activate</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="limitLabel">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>110</y>
+        <width>31</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Limit:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="limitActivityLabel">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>110</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Consolas</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; text-decoration: underline; color:#65cb00;&quot;&gt;Active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
      <zorder>timeLimitEdit</zorder>
      <zorder>changePasswordButton</zorder>
      <zorder>currentPasswordField</zorder>
@@ -1176,6 +1234,10 @@
      <zorder>pushButton_3</zorder>
      <zorder>stopPauseTimeButton</zorder>
      <zorder>resetTimeButton</zorder>
+     <zorder>userSettingsInformLabel</zorder>
+     <zorder>changeLimitActivityButton</zorder>
+     <zorder>limitLabel</zorder>
+     <zorder>limitActivityLabel</zorder>
     </widget>
    </widget>
    <widget class="QLabel" name="adminLoggedNotification">
