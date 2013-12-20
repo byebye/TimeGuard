@@ -172,6 +172,8 @@ void TimeGuard::adminSuccesfullyLogged()
   addUsersToChooseUserBox();
   ui->tabWidget->setTabEnabled(1, true);
   ui->tabWidget->setCurrentIndex(1);
+  ui->resumePauseTimeButton->setEnabled(true);
+  ui->resetTimeButton->setEnabled(true);
   setResumePauseButtonIcon();
 }
 
@@ -182,6 +184,8 @@ void TimeGuard::logoffAdmin()
   ui->adminLoggingButton->setText(tr("Log in"));
   ui->tabWidget->setCurrentIndex(0);
   ui->tabWidget->setTabEnabled(1, false);
+  ui->resumePauseTimeButton->setDisabled(true);
+  ui->resetTimeButton->setDisabled(true);
 }
 
 void TimeGuard::changeAdminPassword()
