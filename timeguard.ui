@@ -46,28 +46,12 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="currentUserLabel">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>61</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>User:</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
    <widget class="Timer" name="timerLCD">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>175</x>
       <y>5</y>
-      <width>140</width>
+      <width>135</width>
       <height>35</height>
      </rect>
     </property>
@@ -505,9 +489,9 @@
    <widget class="QLabel" name="userNameLabel">
     <property name="geometry">
      <rect>
-      <x>75</x>
+      <x>10</x>
       <y>10</y>
-      <width>170</width>
+      <width>155</width>
       <height>25</height>
      </rect>
     </property>
@@ -1074,7 +1058,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>60</y>
         <width>70</width>
         <height>22</height>
        </rect>
@@ -1084,7 +1068,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>80</y>
+        <y>30</y>
         <width>120</width>
         <height>22</height>
        </rect>
@@ -1094,7 +1078,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>135</y>
+        <y>85</y>
         <width>70</width>
         <height>23</height>
        </rect>
@@ -1103,69 +1087,11 @@
        <string>Save limit</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="resumePauseTimeButton">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>10</y>
-        <width>42</width>
-        <height>42</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <activeoff>:/images/pause.png</activeoff>
-        <activeon>:/images/images/pause.png</activeon>
-       </iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>42</width>
-        <height>42</height>
-       </size>
-      </property>
-      <property name="flat">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="resetTimeButton">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>42</width>
-        <height>42</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <activeoff>:/images/repeat.png</activeoff>
-       </iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>42</width>
-        <height>42</height>
-       </size>
-      </property>
-      <property name="autoDefault">
-       <bool>false</bool>
-      </property>
-      <property name="flat">
-       <bool>true</bool>
-      </property>
-     </widget>
      <widget class="QLabel" name="userSettingsInformLabel">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>10</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -1177,8 +1103,8 @@
      <widget class="QPushButton" name="changeLimitActivityButton">
       <property name="geometry">
        <rect>
-        <x>90</x>
-        <y>135</y>
+        <x>10</x>
+        <y>137</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -1190,8 +1116,8 @@
      <widget class="QLabel" name="limitLabel">
       <property name="geometry">
        <rect>
-        <x>90</x>
-        <y>110</y>
+        <x>10</x>
+        <y>115</y>
         <width>31</width>
         <height>22</height>
        </rect>
@@ -1203,8 +1129,8 @@
      <widget class="QLabel" name="limitActivityLabel">
       <property name="geometry">
        <rect>
-        <x>120</x>
-        <y>110</y>
+        <x>40</x>
+        <y>115</y>
         <width>81</width>
         <height>22</height>
        </rect>
@@ -1229,11 +1155,6 @@
      <zorder>newPasswordRepeatLabel</zorder>
      <zorder>chooseUserBox</zorder>
      <zorder>saveTimeLimitButton</zorder>
-     <zorder>pushButton</zorder>
-     <zorder>pushButton_2</zorder>
-     <zorder>pushButton_3</zorder>
-     <zorder>resumePauseTimeButton</zorder>
-     <zorder>resetTimeButton</zorder>
      <zorder>userSettingsInformLabel</zorder>
      <zorder>changeLimitActivityButton</zorder>
      <zorder>limitLabel</zorder>
@@ -1291,6 +1212,64 @@
     </property>
     <property name="autoRepeat">
      <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="resumePauseTimeButton">
+    <property name="geometry">
+     <rect>
+      <x>315</x>
+      <y>5</y>
+      <width>35</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <activeoff>:/images/pause.png</activeoff>
+      <activeon>:/images/images/pause.png</activeon>
+     </iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>35</width>
+      <height>35</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="resetTimeButton">
+    <property name="geometry">
+     <rect>
+      <x>355</x>
+      <y>5</y>
+      <width>35</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <activeoff>:/images/repeat.png</activeoff>
+     </iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>35</width>
+      <height>35</height>
+     </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
