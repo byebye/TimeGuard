@@ -359,8 +359,13 @@ void TimeGuard::on_resumePauseTimeButton_clicked()
     ui->timerLCD->pauseTime();
   else
   {
-    setTime();
-    ui->timerLCD->resumeTime();
+    if(setTime())
+      ui->timerLCD->resumeTime();
+    else
+      QMessageBox::critical(this,
+                            "",
+                            tr("Limit is not set!"),
+                            QMessageBox::Ok);
   }
 
   setResumePauseButtonIcon();
@@ -404,8 +409,13 @@ void TimeGuard::setUiLimitActive(bool active)
   ui->changeLimitActivityButton->setText(buttonText);
 }
 
-void TimeGuard::setTime()
+bool TimeGuard::setTime()
 {
   if(!ui->timerLCD->isTimeSet())
+  {
+    if(!fileManager->settingsFileExists(user->getName()))
+      return false;
     ui->timerLCD->setTime(user->getTimeRemaining(), user->getSaveTimePeriod());
+  }
+  return true;
 }

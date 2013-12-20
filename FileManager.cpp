@@ -166,3 +166,18 @@ QString FileManager::generateDefaultSettingsXML()
 //  qDebug() << "Generated settings file:" << endl << settings;
   return settings;
 }
+
+bool FileManager::fileExists(QString filename) const
+{
+  return QFile(filename).exists();
+}
+
+bool FileManager::settingsFileExists(QString filename) const
+{
+  return fileExists(settingsDir + filename + settingsExt);
+}
+
+bool FileManager::statsFileExists(QString filename) const
+{
+  return fileExists(statsDir + filename + statsExt);
+}

@@ -23,6 +23,9 @@ public:
   bool saveStats(QString filename, QString data);
   QString readSettings(QString filename, SettingName setting);
   bool saveSettings(QString filename, QString data, SettingName setting);
+  bool fileExists(QString filename) const;
+  bool settingsFileExists(QString filename) const;
+  bool statsFileExists(QString filename) const;
 private:
   QString const settingsDir;
   QString const statsDir;

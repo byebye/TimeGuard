@@ -54,7 +54,7 @@ private:
   bool loggedAsAdmin;
   AdminLoginDialog *adminLoginDialog;
 
-  void setTime();
+  bool setTime();
   void setupUi();
   void setupIcons();
   void setTrayIcon();
