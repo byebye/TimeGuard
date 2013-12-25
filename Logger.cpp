@@ -13,7 +13,7 @@ void Logger::log(QString filename, QString event)
 {
   QString logMsg("[" + getCurrentDateAndTime() + "] " + event);
   qDebug() << logMsg << endl;
-  fileManager->saveStats(filename, logMsg );
+  fileManager->saveStats(filename, logMsg);
 }
 
 void Logger::logIn(QString username)

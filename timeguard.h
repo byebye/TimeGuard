@@ -9,6 +9,7 @@
 #include "filemanager.h"
 #include "logger.h"
 #include "user.h"
+#include "messages.h"
 #include "adminlogindialog.h"
 
 namespace Ui {
@@ -41,6 +42,7 @@ private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
   Logger *logger;
+  Messages *messages;
   Admin *admin;
   User *user;
   QIcon programIcon;

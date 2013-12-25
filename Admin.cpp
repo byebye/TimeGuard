@@ -34,7 +34,7 @@ void Admin::readCurrentPassword()
   }
   if(passwordHash.isEmpty())
     changePassword("");
-  qDebug() << "Password read: " << passwordHash;
+//  qDebug() << "Password read: " << passwordHash;
 }
 
 void Admin::changePassword(QString newPassword)
@@ -44,7 +44,7 @@ void Admin::changePassword(QString newPassword)
   fileStream.seek(0);
   fileStream << passwordHash << '\n';
   passwordFile->flush();
-  qDebug() << "Password changed to: " << passwordHash;
+//  qDebug() << "Password changed to: " << passwordHash;
 }
 
 QString Admin::hashPassword(QString password)

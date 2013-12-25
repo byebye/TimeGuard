@@ -59,7 +59,7 @@ QString FileManager::readFromFileXML(QString filename, SettingName setting)
     if(xmlReader.qualifiedName() == tag)
     {
       xmlReader.readNext();
-      qDebug() << xmlReader.text();
+//      qDebug() << xmlReader.text();
       return xmlReader.text().toString();
     }
   }

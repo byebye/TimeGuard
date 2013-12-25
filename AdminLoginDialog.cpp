@@ -1,10 +1,10 @@
 #include "adminlogindialog.h"
 #include "ui_adminlogindialog.h"
-#include <QMessageBox>
 
-AdminLoginDialog::AdminLoginDialog(QWidget *parent, Admin *admin) :
+AdminLoginDialog::AdminLoginDialog(QWidget *parent, Messages *messages, Admin *admin) :
   QDialog(parent),
   ui(new Ui::AdminLoginDialog),
+  messages(messages),
   admin(admin)
 {
   ui->setupUi(this);
@@ -13,6 +13,7 @@ AdminLoginDialog::AdminLoginDialog(QWidget *parent, Admin *admin) :
 AdminLoginDialog::~AdminLoginDialog()
 {
   delete ui;
+  messages = NULL;
   admin = NULL;
 }
 
@@ -21,11 +22,11 @@ void AdminLoginDialog::accept()
   if(admin->isPasswordCorrect(ui->adminPasswordEdit->text()))
   {
     emit passwordAccepted();
-    showPasswordAcceptedDialog();
+    messages->information(Messages::PasswordCorrect);
     close();
   }
   else
-    showPasswordRejectedDialog();
+    messages->critical(Messages::PasswordIncorrect);
 }
 
 void AdminLoginDialog::on_buttonBox_clicked(QAbstractButton *button)
@@ -39,22 +40,6 @@ void AdminLoginDialog::close()
   ui->adminPasswordEdit->clear();
   ui->adminPasswordEdit->setEchoMode(QLineEdit::Password);
   QDialog::close();
-}
-
-void AdminLoginDialog::showPasswordAcceptedDialog()
-{
-  QMessageBox::information(this,
-                           "",
-                           tr("Password correct - welcome Admin!"),
-                           QMessageBox::Ok);
-}
-
-void AdminLoginDialog::showPasswordRejectedDialog()
-{
-  QMessageBox::critical(this,
-                        "",
-                        tr("Password incorrect!"),
-                        QMessageBox::Ok);
 }
 
 void AdminLoginDialog::on_showCharsCheckBox_stateChanged(int state)

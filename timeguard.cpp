@@ -1,4 +1,3 @@
-#include <QMessageBox>
 #include <QMenu>
 #include <QDebug>
 #include "timeguard.h"
@@ -14,6 +13,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
 
   fileManager = new FileManager();
   logger = new Logger(this, fileManager);
+  messages = new Messages(this);
   admin = new Admin(this);
   user = new User(this, fileManager, logger);
 
@@ -38,6 +38,7 @@ TimeGuard::~TimeGuard()
   delete ui;
   delete fileManager;
   delete logger;
+  delete messages;
   delete admin;
   delete user;
   delete trayIcon;
@@ -60,7 +61,7 @@ void TimeGuard::setupUi()
 
   this->setWindowIcon(programIcon);
   setTrayIcon();
-  adminLoginDialog = new AdminLoginDialog(this, admin);
+  adminLoginDialog = new AdminLoginDialog(this, messages, admin);
 }
 
 void TimeGuard::setupIcons()
@@ -72,10 +73,7 @@ void TimeGuard::setupIcons()
 
 void TimeGuard::userTimeout()
 {
-  QMessageBox::information(NULL,
-                           "Koniec czasu!",
-                           "Czas się skończył!",
-                           QMessageBox::Ok);
+  messages->information(Messages::UserTimeout);
   user->logOff();
 }
 
@@ -158,10 +156,10 @@ void TimeGuard::quit()
 
 void TimeGuard::showLengthenTimeWindow()
 {
-  QMessageBox::information(this,
-                           tr("Lengthening time"),
-                           tr("Time to lengthen the limit: "),
-                           QMessageBox::Ok, QMessageBox::Cancel);
+//  QMessageBox::information(this,
+//                           tr("Lengthening time"),
+//                           tr("Time to lengthen the limit: "),
+//                           QMessageBox::Ok, QMessageBox::Cancel);
 }
 
 void TimeGuard::adminSuccesfullyLogged()
@@ -196,40 +194,23 @@ void TimeGuard::changeAdminPassword()
     if(newPassword == ui->newPaswordRepeatField->text())
     {
       if(admin->isPasswordCorrect(newPassword))
-        QMessageBox::critical(this,
-                              "",
-                              tr("New password identical as the current! Use another one."),
-                              QMessageBox::Ok);
+        messages->critical(Messages::PasswordIdentical);
       else if(newPassword.isEmpty())
-        QMessageBox::critical(this,
-                              "",
-                              tr("Password can not be empty!"),
-                              QMessageBox::Ok);
+        messages->critical(Messages::PasswordEmpty);
       else
       {
         admin->changePassword(newPassword);
-        QMessageBox::information(this,
-                            "",
-                            tr("Password has been changed!"),
-                            QMessageBox::Ok);
+        messages->information(Messages::PasswordChanged);
         ui->currentPasswordField->clear();
         ui->newPasswordField->clear();
         ui->newPaswordRepeatField->clear();
       }
     }
     else
-      QMessageBox::critical(this,
-                            "",
-                            tr("Passwords don't match!"),
-                            QMessageBox::Ok);
+      messages->critical(Messages::PasswordNotMatch);
   }
   else
-  {
-    QMessageBox::critical(this,
-                          "",
-                          tr("Password incorrect!"),
-                          QMessageBox::Ok);
-  }
+    messages->critical(Messages::PasswordIncorrect);
 }
 
 void TimeGuard::userToSetChosen()
@@ -314,10 +295,7 @@ QStringList TimeGuard::getUsersList()
   else
   {
     qDebug() << "Error reading users list!";
-    QMessageBox::critical(this,
-                          "",
-                          tr("Error reading users list!"),
-                          QMessageBox::Ok);
+    messages->critical(Messages::ErrorReadingUsers);
   }
   return usersList;
 }
@@ -362,12 +340,8 @@ void TimeGuard::on_resumePauseTimeButton_clicked()
     if(setTime())
       ui->timerLCD->resumeTime();
     else
-      QMessageBox::critical(this,
-                            "",
-                            tr("Limit is not set!"),
-                            QMessageBox::Ok);
+      messages->critical(Messages::LimitNotSet);
   }
-
   setResumePauseButtonIcon();
 }
 
