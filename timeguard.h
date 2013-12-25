@@ -27,7 +27,7 @@ private slots:
   void userTimeout();
   void trayActivated(QSystemTrayIcon::ActivationReason reason);
   void quit();
-  void showLengthenTimeWindow();
+  void showExtendLimitWindow();
   void adminSuccesfullyLogged();
   void userToSetChosen();
   void on_logOffButton_clicked();
@@ -51,7 +51,7 @@ private:
   QSystemTrayIcon *trayIcon;
   QMenu *trayContextMenu;
   QAction *quitAct;
-  QAction *lengthenAct;
+  QAction *extendLimitAct;
   bool closeFromTrayMenu;
   bool loggedAsAdmin;
   AdminLoginDialog *adminLoginDialog;

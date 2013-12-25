@@ -120,9 +120,9 @@ void TimeGuard::closeEvent(QCloseEvent *event)
     hide();
     if(!msgShown)
     {
-      trayIcon->showMessage("Aplikacja wciąż działa",
-                          QString("Program został zminimalizowany do traya. ") +
-                          "Naciśnij na ikonkę, by przywrócić okno programu");
+      trayIcon->showMessage(tr("Program is still working"),
+                            tr("Program has been minimized to tray. "
+                               "Click icon to maximize it"));
       msgShown = true;
     }
   }
@@ -135,16 +135,16 @@ void TimeGuard::on_logOffButton_clicked()
 
 void TimeGuard::createActions()
 {
-  quitAct = new QAction(tr("&Exit"), this);
+  quitAct = new QAction(tr("Exit"), this);
   connect(quitAct, SIGNAL(triggered()), this, SLOT(quit()));
 
-  lengthenAct = new QAction(tr("&Lengthen time"), this);
-  connect(lengthenAct, SIGNAL(triggered()), this, SLOT(showLengthenTimeWindow()));
+  extendLimitAct = new QAction(tr("Extend limit"), this);
+  connect(extendLimitAct, SIGNAL(triggered()), this, SLOT(showExtendLimitWindow()));
 }
 
 void TimeGuard::addActions()
 {
-  trayContextMenu->addAction(lengthenAct);
+  trayContextMenu->addAction(extendLimitAct);
   trayContextMenu->addAction(quitAct);
 }
 
@@ -154,18 +154,20 @@ void TimeGuard::quit()
   close();
 }
 
-void TimeGuard::showLengthenTimeWindow()
+void TimeGuard::showExtendLimitWindow()
 {
 //  QMessageBox::information(this,
-//                           tr("Lengthening time"),
-//                           tr("Time to lengthen the limit: "),
+//                           tr("Extend Limit"),
+//                           tr("Extend limit for: "),
 //                           QMessageBox::Ok, QMessageBox::Cancel);
 }
 
 void TimeGuard::adminSuccesfullyLogged()
 {
   loggedAsAdmin = true;
-  ui->adminLoggedNotification->setText("<html><head/><body><p><span style=\" font-size:11pt; font-weight:600; text-decoration: underline; color:#55aa00;\">Logged as Admin</span></p></body></html>");
+  ui->adminLoggedNotification->setText(QString("<html><head/><body><p><span style=\" font-size:11pt; font-weight:600; text-decoration: underline; color:#55aa00;\">")
+                                       + tr("Logged as Admin")
+                                       + QString("</span></p></body></html>"));
   ui->adminLoggingButton->setText(tr("Log off"));
   addUsersToChooseUserBox();
   ui->tabWidget->setTabEnabled(1, true);
@@ -178,7 +180,7 @@ void TimeGuard::adminSuccesfullyLogged()
 void TimeGuard::logoffAdmin()
 {
   loggedAsAdmin = false;
-  ui->adminLoggedNotification->setText("Log in as Admin");
+  ui->adminLoggedNotification->setText(tr("Log in as Admin"));
   ui->adminLoggingButton->setText(tr("Log in"));
   ui->tabWidget->setCurrentIndex(0);
   ui->tabWidget->setTabEnabled(1, false);
@@ -357,7 +359,7 @@ void TimeGuard::on_changeLimitActivityButton_clicked()
 {
   QString username = ui->chooseUserBox->currentText();
   QString active = "false";
-  if(ui->changeLimitActivityButton->text() == "Activate")
+  if(ui->changeLimitActivityButton->text() == tr("Activate"))
     active = "true";
   fileManager->saveSettings(username, active, FileManager::LimitActive);
   setUiLimitActive(active == "true");
@@ -371,13 +373,13 @@ void TimeGuard::setUiLimitActive(bool active)
     labelText = "<html><head/><body><p><span style=\"font-size:10pt;"
                 "font-weight:600; text-decoration: underline; color:#65cb00;\">"
                 "Active</span></p></body></html>";
-    buttonText = "Deactivate";
+    buttonText = tr("Deactivate");
   }
   else
   {
     labelText = "<html><head/><body><p><span style=\"font-size:10pt; color:#ee0000;\">"
                 "Not active</span></p></body></html>";
-    buttonText = "Activate";
+    buttonText = tr("Activate");
   }
   ui->limitActivityLabel->setText(labelText);
   ui->changeLimitActivityButton->setText(buttonText);
