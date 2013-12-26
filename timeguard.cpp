@@ -186,6 +186,7 @@ void TimeGuard::logoffAdmin()
   ui->tabWidget->setTabEnabled(1, false);
   ui->resumePauseTimeButton->setDisabled(true);
   ui->resetTimeButton->setDisabled(true);
+  ui->chooseUserBox->clear();
 }
 
 void TimeGuard::changeAdminPassword()
