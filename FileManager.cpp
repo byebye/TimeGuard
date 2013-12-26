@@ -7,7 +7,7 @@
 
 FileManager::FileManager() :
   settingsDir("settings/"), logDir("log/"),
-  ext(".xml")
+  settingsExt(".xml"), logExt(".log")
 {
   if(!QDir(settingsDir).exists())
     QDir().mkdir(settingsDir);
@@ -22,12 +22,12 @@ FileManager::~FileManager()
 
 QString FileManager::readLog(QString filename)
 {
-  return readFromFile(logDir + filename + ext);
+  return readFromFile(logDir + filename + logExt);
 }
 
 QString FileManager::readSettings(QString filename, SettingName setting)
 {
-  return readSettingsFromXML(settingsDir + filename + ext, setting);
+  return readSettingsFromXML(settingsDir + filename + settingsExt, setting);
 }
 
 QString FileManager::readFromFile(QString filename)
@@ -68,12 +68,12 @@ QString FileManager::readSettingsFromXML(QString filename, SettingName setting)
 
 bool FileManager::saveLog(QString filename, QString data)
 {
-  return saveToFile(logDir + filename + ext, data);
+  return saveToFile(logDir + filename + logExt, data);
 }
 
 bool FileManager::saveSettings(QString filename, QString data, SettingName setting)
 {
-  return saveSettingsToXML(settingsDir + filename + ext, data, setting);
+  return saveSettingsToXML(settingsDir + filename + settingsExt, data, setting);
 }
 
 bool FileManager::saveToFile(QString filename, QString data,
@@ -142,7 +142,7 @@ QString FileManager::getDefaultContent(SettingName setting)
     case LastLogin:
       return "0000.00.00";
     case LimitActive:
-      return "false";
+      return "0";
     default:
       return "";
   }
@@ -174,10 +174,10 @@ bool FileManager::fileExists(QString filename)
 
 bool FileManager::settingsFileExists(QString filename)
 {
-  return fileExists(settingsDir + filename + ext);
+  return fileExists(settingsDir + filename + settingsExt);
 }
 
 bool FileManager::historyFileExists(QString filename)
 {
-  return fileExists(logDir + filename + ext);
+  return fileExists(logDir + filename + logExt);
 }

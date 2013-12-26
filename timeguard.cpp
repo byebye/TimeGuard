@@ -225,7 +225,7 @@ void TimeGuard::userToSetChosen()
     timeLimit = "00:00:00";
   ui->timeLimitEdit->setTime(QTime::fromString(timeLimit, "hh:mm:ss"));
   QString limitActive = fileManager->readSettings(userChosen, FileManager::LimitActive);
-  setUiLimitActive(limitActive == "true");
+  setUiLimitActive(limitActive == "1");
 }
 
 QStringList TimeGuard::getUsersList()
@@ -360,11 +360,11 @@ void TimeGuard::setResumePauseButtonIcon()
 void TimeGuard::on_changeLimitActivityButton_clicked()
 {
   QString username = ui->chooseUserBox->currentText();
-  QString active = "false";
+  QString active = "0"; // false
   if(ui->changeLimitActivityButton->text() == tr("Activate"))
-    active = "true";
+    active = "1"; // true
   fileManager->saveSettings(username, active, FileManager::LimitActive);
-  setUiLimitActive(active == "true");
+  setUiLimitActive(active == "1");
 }
 
 void TimeGuard::setUiLimitActive(bool active)

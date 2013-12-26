@@ -25,7 +25,8 @@ public:
 private:
   QString const settingsDir;
   QString const logDir;
-  QString const ext;
+  QString const settingsExt;
+  QString const logExt;
   QString getStringTag(SettingName setting);
   QString getDefaultContent(SettingName setting);
   QString generateDefaultSettingsXML();

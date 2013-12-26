@@ -73,7 +73,7 @@ void User::saveTimeRemaining()
 
 bool User::readLimitActive()
 {
-  return fileManager->readSettings(name, FileManager::LimitActive) == "true";
+  return fileManager->readSettings(name, FileManager::LimitActive) == "1";
 }
 
 bool User::isLimitActive()
@@ -85,9 +85,9 @@ void User::setLimitActive(bool active)
 {
   limitActive = active;
   if(limitActive)
-    fileManager->saveSettings(name, "true", FileManager::LimitActive);
+    fileManager->saveSettings(name, "1", FileManager::LimitActive);
   else
-    fileManager->saveSettings(name, "false", FileManager::LimitActive);
+    fileManager->saveSettings(name, "0", FileManager::LimitActive);
 }
 
 void User::logOff()
