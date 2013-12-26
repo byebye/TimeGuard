@@ -19,7 +19,7 @@ Timer::~Timer()
   delete timeRemaining;
 }
 
-void Timer::setTime(QTime timeLimit, int saveTimePeriod, bool limitActive)
+void Timer::setTime(QTime timeLimit, int saveTimePeriod)
 {
   timeSet = true;
   this->saveTimePeriod = saveTimePeriod;
