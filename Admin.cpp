@@ -6,7 +6,7 @@
 Admin::Admin(QObject *parent) :
   QObject(parent)
 {
-  hasher = new QCryptographicHash(QCryptographicHash::Sha1);
+  hasher = new QCryptographicHash(QCryptographicHash::Sha3_512);
   passwordFile = new QFile("passwd.txt");
   readCurrentPassword();
 }
