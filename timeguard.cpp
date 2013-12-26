@@ -53,7 +53,7 @@ void TimeGuard::setupUi()
   ui->setupUi(this);
   logoffAdmin();
   ui->userNameLabel->setText(user->getName());
-  ui->logBrowser->setPlainText(fileManager->readStats(user->getName()));
+  ui->logBrowser->setPlainText(fileManager->readLog(user->getName()));
   ui->tabWidget->setCurrentIndex(0);
   ui->tabWidget->setTabEnabled(1, false);
   ui->timerLCD->display("00:00:00");

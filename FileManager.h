@@ -3,8 +3,6 @@
 
 #include <QString>
 #include <QFile>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
 
 class FileManager
 {
@@ -15,25 +13,25 @@ public:
   enum SettingName { TimeRemaining, TimeLimit, LastLogin, LimitActive };
 
   QString readFromFile(QString filename);
-  QString readFromFileXML(QString filename, SettingName setting);
   bool saveToFile(QString filename, QString data,
                   QIODevice::OpenMode appendFlag = QIODevice::Append);
-  bool saveToFileXML(QString filename, QString data, SettingName setting);
-  QString readStats(QString filename);
-  bool saveStats(QString filename, QString data);
+  QString readLog(QString filename);
+  bool saveLog(QString filename, QString data);
   QString readSettings(QString filename, SettingName setting);
   bool saveSettings(QString filename, QString data, SettingName setting);
-  bool fileExists(QString filename) const;
-  bool settingsFileExists(QString filename) const;
-  bool statsFileExists(QString filename) const;
+  bool fileExists(QString filename);
+  bool settingsFileExists(QString filename);
+  bool historyFileExists(QString filename);
 private:
   QString const settingsDir;
-  QString const statsDir;
-  QString const settingsExt;
-  QString const statsExt;
+  QString const logDir;
+  QString const ext;
   QString getStringTag(SettingName setting);
   QString getDefaultContent(SettingName setting);
   QString generateDefaultSettingsXML();
+
+  QString readSettingsFromXML(QString filename, SettingName setting);
+  bool saveSettingsToXML(QString filename, QString data, SettingName setting);
 };
 
 #endif // FILE_MANAGER_H

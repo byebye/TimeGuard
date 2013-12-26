@@ -6,13 +6,13 @@
 #include <QDebug>
 
 FileManager::FileManager() :
-  settingsDir("settings/"), statsDir("stats/"),
-  settingsExt(".set"), statsExt(".sts")
+  settingsDir("settings/"), logDir("log/"),
+  ext(".xml")
 {
   if(!QDir(settingsDir).exists())
     QDir().mkdir(settingsDir);
-  if(!QDir(statsDir).exists())
-    QDir().mkdir(statsDir);
+  if(!QDir(logDir).exists())
+    QDir().mkdir(logDir);
 }
 
 FileManager::~FileManager()
@@ -20,14 +20,14 @@ FileManager::~FileManager()
 
 }
 
-QString FileManager::readStats(QString filename)
+QString FileManager::readLog(QString filename)
 {
-  return readFromFile(statsDir + filename + statsExt);
+  return readFromFile(logDir + filename + ext);
 }
 
 QString FileManager::readSettings(QString filename, SettingName setting)
 {
-  return readFromFileXML(settingsDir + filename + settingsExt, setting);
+  return readSettingsFromXML(settingsDir + filename + ext, setting);
 }
 
 QString FileManager::readFromFile(QString filename)
@@ -36,20 +36,20 @@ QString FileManager::readFromFile(QString filename)
   if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     qDebug() << "Unable to open" << file.fileName() << endl;
-    return NULL;
+    return QString();
   }
 
   QTextStream fileStream(&file);
   return fileStream.readAll();
 }
 
-QString FileManager::readFromFileXML(QString filename, SettingName setting)
+QString FileManager::readSettingsFromXML(QString filename, SettingName setting)
 {
   QFile file(filename);
   if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     qDebug() << "Unable to open" << file.fileName() << endl;
-    return NULL;
+    return QString();
   }
   QString tag = getStringTag(setting);
   QXmlStreamReader xmlReader(&file);
@@ -63,17 +63,17 @@ QString FileManager::readFromFileXML(QString filename, SettingName setting)
       return xmlReader.text().toString();
     }
   }
-  return NULL;
+  return QString();
 }
 
-bool FileManager::saveStats(QString filename, QString data)
+bool FileManager::saveLog(QString filename, QString data)
 {
-  return saveToFile(statsDir + filename + statsExt, data);
+  return saveToFile(logDir + filename + ext, data);
 }
 
 bool FileManager::saveSettings(QString filename, QString data, SettingName setting)
 {
-  return saveToFileXML(settingsDir + filename + settingsExt, data, setting);
+  return saveSettingsToXML(settingsDir + filename + ext, data, setting);
 }
 
 bool FileManager::saveToFile(QString filename, QString data,
@@ -90,7 +90,7 @@ bool FileManager::saveToFile(QString filename, QString data,
   return true;
 }
 
-bool FileManager::saveToFileXML(QString filename, QString data, SettingName setting)
+bool FileManager::saveSettingsToXML(QString filename, QString data, SettingName setting)
 {
   QFile file(filename);
   if(!file.open(QIODevice::ReadWrite | QIODevice::Text))
@@ -167,17 +167,17 @@ QString FileManager::generateDefaultSettingsXML()
   return settings;
 }
 
-bool FileManager::fileExists(QString filename) const
+bool FileManager::fileExists(QString filename)
 {
   return QFile(filename).exists();
 }
 
-bool FileManager::settingsFileExists(QString filename) const
+bool FileManager::settingsFileExists(QString filename)
 {
-  return fileExists(settingsDir + filename + settingsExt);
+  return fileExists(settingsDir + filename + ext);
 }
 
-bool FileManager::statsFileExists(QString filename) const
+bool FileManager::historyFileExists(QString filename)
 {
-  return fileExists(statsDir + filename + statsExt);
+  return fileExists(logDir + filename + ext);
 }
