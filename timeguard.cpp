@@ -19,11 +19,9 @@ TimeGuard::TimeGuard(QWidget *parent) :
 
   setupUi();
 
+  setTime();
   if(user->isLimitActive())
-  {
-    setTime();
     ui->timerLCD->startTime();
-  }
 
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveTimeRemaining()));
