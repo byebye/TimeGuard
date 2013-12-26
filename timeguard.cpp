@@ -24,7 +24,8 @@ TimeGuard::TimeGuard(QWidget *parent) :
     ui->timerLCD->startTime();
 
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
-  connect(ui->timerLCD, SIGNAL(saveTimeMoment()), user, SLOT(saveTimeRemaining()));
+  connect(ui->timerLCD, SIGNAL(saveTimeMoment()),
+          user, SLOT(saveTimeRemaining()));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
           this, SLOT(adminSuccesfullyLogged()));
   connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)),
@@ -186,6 +187,7 @@ void TimeGuard::logoffAdmin()
   ui->resumePauseTimeButton->setDisabled(true);
   ui->resetTimeButton->setDisabled(true);
   ui->chooseUserBox->clear();
+  setResumePauseButtonIcon();
 }
 
 void TimeGuard::changeAdminPassword()
