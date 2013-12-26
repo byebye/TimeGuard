@@ -44,7 +44,7 @@ TimeGuard::~TimeGuard()
   delete trayIcon;
   delete trayContextMenu;
   delete quitAct;
-  delete lengthenAct;
+  delete extendLimitAct;
   delete adminLoginDialog;
 }
 
