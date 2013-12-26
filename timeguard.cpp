@@ -118,7 +118,7 @@ void TimeGuard::closeEvent(QCloseEvent *event)
   else
   {
     event->ignore();
-    hide();
+    showMinimized();
     if(!msgShown)
     {
       trayIcon->showMessage(tr("Program is still working"),

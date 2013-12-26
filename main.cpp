@@ -3,9 +3,10 @@
 
 int main(int argc, char *argv[])
 {
-  QApplication a(argc, argv);
-  TimeGuard w;
-  w.show();
+  QApplication app(argc, argv);
+
+  TimeGuard timeGuard;
+  timeGuard.show();
   
-  return a.exec();
+  return app.exec();
 }
