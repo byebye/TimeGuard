@@ -111,6 +111,7 @@ void TimeGuard::closeEvent(QCloseEvent *event)
   static bool msgShown = false;
   if(closeFromTrayMenu)
   {
+    closeFromTrayMenu = false;
     if(!loggedAsAdmin) adminLoginDialog->exec();
     loggedAsAdmin ? event->accept() : event->ignore();
   }

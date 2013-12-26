@@ -19,7 +19,7 @@ Admin::~Admin()
 
 bool Admin::isPasswordCorrect(QString password)
 {
-  qDebug() << passwordHash << endl << hashPassword(password);
+//  qDebug() << passwordHash << endl << hashPassword(password);
   return hashPassword(password) == passwordHash;
 }
 
