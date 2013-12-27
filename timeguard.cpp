@@ -381,3 +381,31 @@ void TimeGuard::on_changeLimitActivityButton_clicked()
     emit userLimitDeactivated(username);
   setUiLimitActive(active == "1");
 }
+
+void TimeGuard::on_deleteUserFilesButton_clicked()
+{
+   QString username = ui->chooseUserBox->currentText();
+
+   if(messages->information(Messages::QuestionDeleteUserFiles,
+                            QMessageBox::Ok | QMessageBox::Cancel)
+            == QMessageBox::Ok)
+   {
+     if(fileManager->deleteLogFile(username)
+        && fileManager->deleteSettingsFile(username))
+     {
+       messages->information(Messages::FilesDeleted);
+       userChosenToSet();
+       setUiLimitActive(false);
+       if(username == user->getName())
+       {
+         ui->timerLCD->resetTime();
+         setResumePauseButtonIcon();
+       }
+     }
+     else
+     {
+       messages->critical(Messages::UnableToDeleteFiles);
+       return;
+     }
+   }
+}

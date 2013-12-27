@@ -22,6 +22,9 @@ public:
   bool fileExists(QString filename);
   bool settingsFileExists(QString filename);
   bool historyFileExists(QString filename);
+  bool deleteFile(QString filename);
+  bool deleteSettingsFile(QString filename);
+  bool deleteLogFile(QString filename);
 private:
   QString const settingsDir;
   QString const logDir;

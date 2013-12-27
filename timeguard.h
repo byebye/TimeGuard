@@ -38,6 +38,8 @@ private slots:
   void on_resetTimeButton_clicked();
   void on_resumePauseTimeButton_clicked();
   void on_changeLimitActivityButton_clicked();
+  void on_deleteUserFilesButton_clicked();
+
 signals:
   void programClosed();
   void adminLoggedIn();

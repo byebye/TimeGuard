@@ -1145,6 +1145,19 @@
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; text-decoration: underline; color:#65cb00;&quot;&gt;Active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="deleteUserFilesButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>170</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Delete files</string>
+      </property>
+     </widget>
      <zorder>timeLimitEdit</zorder>
      <zorder>changePasswordButton</zorder>
      <zorder>currentPasswordField</zorder>
@@ -1159,6 +1172,7 @@
      <zorder>changeLimitActivityButton</zorder>
      <zorder>limitLabel</zorder>
      <zorder>limitActivityLabel</zorder>
+     <zorder>deleteUserFilesButton</zorder>
     </widget>
    </widget>
    <widget class="QLabel" name="adminLoggedNotification">

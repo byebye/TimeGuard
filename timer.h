@@ -18,6 +18,7 @@ public:
   void pauseTime();
   void resumeTime();
   void resetTime(QTime timeLimit);
+  void resetTime();
   QString getTimeRemaining();
   bool isTimeSet();
   bool isTimeActive();

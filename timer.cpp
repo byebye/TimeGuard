@@ -39,6 +39,13 @@ void Timer::resumeTime()
   startTimer();
 }
 
+void Timer::resetTime()
+{
+  timeSet = false;
+  timer->stop();
+  display("00:00:00");
+}
+
 void Timer::resetTime(QTime timeLimit)
 {
   bool timerActive = timer->isActive();

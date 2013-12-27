@@ -68,7 +68,7 @@ QString FileManager::readSettingsFromXML(QString filename, SettingName setting)
 
 bool FileManager::saveLog(QString filename, QString data)
 {
-  qDebug() << "Log:" << data << "into" << filename + logExt;
+  qDebug() << "Log:" << data << "--->" << filename + logExt;
   return saveToFile(logDir + filename + logExt, data);
 }
 
@@ -181,4 +181,19 @@ bool FileManager::settingsFileExists(QString filename)
 bool FileManager::historyFileExists(QString filename)
 {
   return fileExists(logDir + filename + logExt);
+}
+
+bool FileManager::deleteFile(QString filename)
+{
+  return fileExists(filename) ? QFile(filename).remove() : true;
+}
+
+bool FileManager::deleteSettingsFile(QString filename)
+{
+  return deleteFile(settingsDir + filename + settingsExt);
+}
+
+bool FileManager::deleteLogFile(QString filename)
+{
+  return deleteFile(logDir + filename + logExt);
 }
