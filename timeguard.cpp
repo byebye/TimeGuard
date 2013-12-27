@@ -69,6 +69,34 @@ void TimeGuard::setupUi()
   adminLoginDialog = new AdminLoginDialog(this, messages, admin);
 }
 
+void TimeGuard::setResumePauseButtonIcon()
+{
+  if(ui->timerLCD->isTimeActive())
+    ui->resumePauseTimeButton->setIcon(pauseIcon);
+  else
+    ui->resumePauseTimeButton->setIcon(resumeIcon);
+}
+
+void TimeGuard::setUiLimitActive(bool active)
+{
+  QString buttonText, labelText;
+  if(active)
+  {
+    labelText = "<html><head/><body><p><span style=\"font-size:10pt;"
+                "font-weight:600; text-decoration: underline; color:#65cb00;\">"
+                "Active</span></p></body></html>";
+    buttonText = tr("Deactivate");
+  }
+  else
+  {
+    labelText = "<html><head/><body><p><span style=\"font-size:10pt; color:#ee0000;\">"
+                "Not active</span></p></body></html>";
+    buttonText = tr("Activate");
+  }
+  ui->limitActivityLabel->setText(labelText);
+  ui->changeLimitActivityButton->setText(buttonText);
+}
+
 void TimeGuard::setupLogger()
 {
   connect(this, SIGNAL(adminLoggedIn()),
@@ -102,13 +130,6 @@ void TimeGuard::setupIcons()
   resumeIcon = QIcon(":/images/resume.png");
 }
 
-void TimeGuard::userTimeout()
-{
-  emit userLoggedOff(user->getName());
-  messages->information(Messages::UserTimeout);
-  user->logOff();
-}
-
 void TimeGuard::setTrayIcon()
 {
   trayIcon = new QSystemTrayIcon(programIcon, this);
@@ -124,6 +145,21 @@ void TimeGuard::setTrayIcon()
           this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
 }
 
+void TimeGuard::createActions()
+{
+  quitAct = new QAction(tr("Exit"), this);
+  connect(quitAct, SIGNAL(triggered()), this, SLOT(quit()));
+
+  extendLimitAct = new QAction(tr("Extend limit"), this);
+  connect(extendLimitAct, SIGNAL(triggered()), this, SLOT(showExtendLimitWindow()));
+}
+
+void TimeGuard::addActions()
+{
+  trayContextMenu->addAction(extendLimitAct);
+  trayContextMenu->addAction(quitAct);
+}
+
 void TimeGuard::trayActivated(QSystemTrayIcon::ActivationReason reason)
 {
   switch(reason)
@@ -136,6 +172,12 @@ void TimeGuard::trayActivated(QSystemTrayIcon::ActivationReason reason)
       isHidden() ? show() : hide();
       break;
   }
+}
+
+void TimeGuard::quit()
+{
+  closeFromTrayMenu = true;
+  close();
 }
 
 void TimeGuard::closeEvent(QCloseEvent *event)
@@ -165,33 +207,6 @@ void TimeGuard::closeEvent(QCloseEvent *event)
       msgShown = true;
     }
   }
-}
-
-void TimeGuard::on_logOffButton_clicked()
-{
-  emit userLoggedOff(user->getName());
-  user->logOff();
-}
-
-void TimeGuard::createActions()
-{
-  quitAct = new QAction(tr("Exit"), this);
-  connect(quitAct, SIGNAL(triggered()), this, SLOT(quit()));
-
-  extendLimitAct = new QAction(tr("Extend limit"), this);
-  connect(extendLimitAct, SIGNAL(triggered()), this, SLOT(showExtendLimitWindow()));
-}
-
-void TimeGuard::addActions()
-{
-  trayContextMenu->addAction(extendLimitAct);
-  trayContextMenu->addAction(quitAct);
-}
-
-void TimeGuard::quit()
-{
-  closeFromTrayMenu = true;
-  close();
 }
 
 void TimeGuard::showExtendLimitWindow()
@@ -258,6 +273,24 @@ void TimeGuard::changeAdminPassword()
   }
   else
     messages->critical(Messages::PasswordIncorrect);
+}
+
+bool TimeGuard::setTime()
+{
+  if(!ui->timerLCD->isTimeSet())
+  {
+    if(!fileManager->settingsFileExists(user->getName()))
+      return false;
+    ui->timerLCD->setTime(user->getTimeRemaining());
+  }
+  return true;
+}
+
+void TimeGuard::userTimeout()
+{
+  emit userLoggedOff(user->getName());
+  messages->information(Messages::UserTimeout);
+  user->logOff();
 }
 
 void TimeGuard::userChosenToSet()
@@ -347,6 +380,12 @@ QStringList TimeGuard::getUsersList()
   return usersList;
 }
 
+void TimeGuard::on_logOffButton_clicked()
+{
+  emit userLoggedOff(user->getName());
+  user->logOff();
+}
+
 void TimeGuard::on_adminLoggingButton_clicked()
 {
   loggedAsAdmin ? logOffAdmin() : adminLoginDialog->exec();
@@ -404,14 +443,6 @@ void TimeGuard::on_resumePauseTimeButton_clicked()
   setResumePauseButtonIcon();
 }
 
-void TimeGuard::setResumePauseButtonIcon()
-{
-  if(ui->timerLCD->isTimeActive())
-    ui->resumePauseTimeButton->setIcon(pauseIcon);
-  else
-    ui->resumePauseTimeButton->setIcon(resumeIcon);
-}
-
 void TimeGuard::on_changeLimitActivityButton_clicked()
 {
   QString username = ui->chooseUserBox->currentText();
@@ -424,35 +455,4 @@ void TimeGuard::on_changeLimitActivityButton_clicked()
   else
     emit userLimitDeactivated(username);
   setUiLimitActive(active == "1");
-}
-
-void TimeGuard::setUiLimitActive(bool active)
-{
-  QString buttonText, labelText;
-  if(active)
-  {
-    labelText = "<html><head/><body><p><span style=\"font-size:10pt;"
-                "font-weight:600; text-decoration: underline; color:#65cb00;\">"
-                "Active</span></p></body></html>";
-    buttonText = tr("Deactivate");
-  }
-  else
-  {
-    labelText = "<html><head/><body><p><span style=\"font-size:10pt; color:#ee0000;\">"
-                "Not active</span></p></body></html>";
-    buttonText = tr("Activate");
-  }
-  ui->limitActivityLabel->setText(labelText);
-  ui->changeLimitActivityButton->setText(buttonText);
-}
-
-bool TimeGuard::setTime()
-{
-  if(!ui->timerLCD->isTimeSet())
-  {
-    if(!fileManager->settingsFileExists(user->getName()))
-      return false;
-    ui->timerLCD->setTime(user->getTimeRemaining());
-  }
-  return true;
 }
