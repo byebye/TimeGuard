@@ -11,6 +11,7 @@
 #include "user.h"
 #include "messages.h"
 #include "adminlogindialog.h"
+#include "systemquery.h"
 
 namespace Ui {
   class TimeGuard;
@@ -54,6 +55,7 @@ private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
   Logger *logger;
+  SystemQuery *systemQuery;
   Messages *messages;
   Admin *admin;
   User *user;

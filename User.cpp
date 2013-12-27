@@ -1,11 +1,12 @@
 #include "user.h"
-#include <windows.h>
-#include <lmcons.h>
-User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
+
+User::User(QObject *parent, FileManager *fileManager,
+           SystemQuery *systemQuery, Logger *logger) :
   QObject(parent),
   fileManager(fileManager),
+  systemQuery(systemQuery),
   logger(logger),
-  name(getSystemUsername())
+  name(systemQuery->getCurrentUserName())
 {
   limitActive = readLimitActive();
   timeRemaining = new QTime();
@@ -18,6 +19,7 @@ User::~User()
 {
   delete timeRemaining;
   fileManager = NULL;
+  systemQuery = NULL;
   logger = NULL;
 }
 
@@ -76,14 +78,6 @@ void User::setLimitActive(bool active)
 void User::logOff()
 {
 //  ExitWindowsEx(EWX_FORCE, 0);
-}
-
-QString User::getSystemUsername()
-{
-  DWORD ULEN = UNLEN+1;
-  TCHAR username[UNLEN+1];
-  GetUserName(username, &ULEN);
-  return QString(QString::fromWCharArray(username));
 }
 
 QString User::getName()

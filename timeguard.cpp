@@ -2,8 +2,6 @@
 #include <QDebug>
 #include "timeguard.h"
 #include "ui_timeguard.h"
-#include <windows.h>
-#include <lm.h>
 
 TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
@@ -14,8 +12,9 @@ TimeGuard::TimeGuard(QWidget *parent) :
   fileManager = new FileManager();
   logger = new Logger(this, fileManager);
   messages = new Messages(this);
+  systemQuery = new SystemQuery(messages);
   admin = new Admin(this);
-  user = new User(this, fileManager, logger);
+  user = new User(this, fileManager, systemQuery, logger);
 
   setupUi();
   setupLogger();
@@ -43,6 +42,7 @@ TimeGuard::~TimeGuard()
   delete ui;
   delete fileManager;
   delete logger;
+  delete systemQuery;
   delete messages;
   delete admin;
   delete user;
@@ -304,81 +304,7 @@ void TimeGuard::userChosenToSet()
   setUiLimitActive(limitActive == "1");
 }
 
-QStringList TimeGuard::getUsersList()
-{
-  // -------------- VARIABLES -------------------
-  LPTSTR serverName = NULL; // NULL -> local computer
-  DWORD dwLevel = 0; // information level: 0 -> only names
-  LPUSER_INFO_0 usersBuf = NULL;
-  DWORD dwPrefMaxLen = MAX_PREFERRED_LENGTH;
-  DWORD dwUserEntries = 0;
-  DWORD dwTotalUserEntries = 0;
-  DWORD dwResumeHandle = 0;
-  NET_API_STATUS nStatus;
 
-  LPLOCALGROUP_USERS_INFO_0 groupsBuf = NULL;
-  DWORD dwGroupEntries = 0;
-  DWORD dwTotalGroupEntries = 0;
-  // ---------------------------------------------
-  nStatus = NetUserEnum(serverName,
-              dwLevel,
-              FILTER_NORMAL_ACCOUNT,
-              (LPBYTE*)&usersBuf,
-              dwPrefMaxLen,
-              &dwUserEntries,
-              &dwTotalUserEntries,
-              &dwResumeHandle
-              );
-  QStringList usersList;
-  if(nStatus == NERR_Success)
-  {
-    for(DWORD i = 0; i < dwUserEntries; ++i)
-    {
-      bool normalUser = false;
-      nStatus = NetUserGetLocalGroups(serverName,
-                                      usersBuf->usri0_name,
-                                      dwLevel,
-                                      LG_INCLUDE_INDIRECT,
-                                      (LPBYTE*)&groupsBuf,
-                                      dwPrefMaxLen,
-                                      &dwGroupEntries,
-                                      &dwTotalGroupEntries
-                                      );
-      if(nStatus != NERR_Success)
-      {
-        qDebug() << "Error reading groups list for "
-                 << QString::fromWCharArray(usersBuf->usri0_name);
-        normalUser = true;
-      }
-      else
-      {
-        for(DWORD j = 0; j < dwGroupEntries; ++j)
-        {
-          QString group = QString::fromWCharArray(groupsBuf->lgrui0_name);
-          if(group == tr("Użytkownicy") || group == tr("Administratorzy"))
-          {
-            normalUser = true;
-            break;
-          }
-          ++groupsBuf;
-        }
-      }
-      if(normalUser)
-      {
-        qDebug() << "User added to list: "
-                 << QString::fromWCharArray(usersBuf->usri0_name);
-        usersList.push_back(QString::fromWCharArray(usersBuf->usri0_name));
-      }
-      ++usersBuf;
-    }
-  }
-  else
-  {
-    qDebug() << "Error reading users list!";
-    messages->critical(Messages::ErrorReadingUsers);
-  }
-  return usersList;
-}
 
 void TimeGuard::on_logOffButton_clicked()
 {
@@ -398,7 +324,7 @@ void TimeGuard::on_changePasswordButton_clicked()
 
 void TimeGuard::addUsersToChooseUserBox()
 {
-  QStringList usersList = getUsersList();
+  QStringList usersList = systemQuery->getUsersList();
   for(QString username : usersList)
     ui->chooseUserBox->addItem(username);
 }

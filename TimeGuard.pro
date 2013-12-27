@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     timeguard.cpp \
     timer.cpp \
     user.cpp \
-    messages.cpp
+    messages.cpp \
+    systemquery.cpp
 
 HEADERS  += \
     admin.h \
@@ -30,7 +31,8 @@ HEADERS  += \
     timeguard.h \
     timer.h \
     user.h \
-    messages.h
+    messages.h \
+    systemquery.h
 
 FORMS    += timeguard.ui \
     adminlogindialog.ui
