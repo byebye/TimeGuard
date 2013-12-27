@@ -10,7 +10,6 @@ Timer::Timer(QWidget *parentWidget)
   timer = new QTimer();
   timer->setInterval(1000);
   connect(timer, SIGNAL(timeout()), this, SLOT(setDisplay()));
-  connect(timer, SIGNAL(timeout()), this, SLOT(startTimer()));
 }
 
 Timer::~Timer()
@@ -74,7 +73,8 @@ void Timer::setDisplay()
     timer->stop();
     emit timeout();
   }
-  *timeRemaining = timeRemaining->addSecs(-1);
+  else
+    *timeRemaining = timeRemaining->addSecs(-1);
 }
 
 bool Timer::isTimeSet()
