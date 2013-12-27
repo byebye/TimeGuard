@@ -296,6 +296,7 @@ void TimeGuard::userTimeout()
 void TimeGuard::userChosenToSet()
 {
   QString userChosen = ui->chooseUserBox->currentText();
+  if(userChosen.isEmpty()) return;
   QString timeLimit = fileManager->readSettings(userChosen, FileManager::TimeLimit);
   if(timeLimit.isEmpty())
     timeLimit = "00:00:00";
@@ -303,8 +304,6 @@ void TimeGuard::userChosenToSet()
   QString limitActive = fileManager->readSettings(userChosen, FileManager::LimitActive);
   setUiLimitActive(limitActive == "1");
 }
-
-
 
 void TimeGuard::on_logOffButton_clicked()
 {
