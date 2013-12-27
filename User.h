@@ -26,13 +26,12 @@ public:
 signals:
   
 public slots:
-  void saveTimeRemaining();
+  void saveTimeRemaining(QTime time);
 private:
   FileManager *fileManager;
   Logger *logger;
   QString const name;
   QTime *timeRemaining;
-  int const saveTimePeriod;
   bool limitActive;
 
   QString getSystemUsername();

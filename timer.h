@@ -13,7 +13,7 @@ public:
   Timer(QWidget *parentWidget);
   ~Timer();
 
-  void setTime(QTime timeLimit, int saveTimePeriod);
+  void setTime(QTime timeLimit);
   void startTime();
   void pauseTime();
   void resumeTime();
@@ -26,7 +26,7 @@ public slots:
   void setDisplay();
 signals:
   void timeout();
-  void saveTimeMoment();
+  void timeToSaveTimeRemaining(QTime time);
 private:
   QTimer *timer;
   QTime *timeRemaining;

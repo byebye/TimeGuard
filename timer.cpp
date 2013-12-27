@@ -1,7 +1,7 @@
 #include "timer.h"
 #include "QMessageBox"
 
-Timer::Timer(QWidget *parentWidget)
+Timer::Timer(QWidget *parentWidget) : saveTimePeriod(10)
 {
   setParent(parentWidget);
   setDigitCount(8);
@@ -18,10 +18,9 @@ Timer::~Timer()
   delete timeRemaining;
 }
 
-void Timer::setTime(QTime timeLimit, int saveTimePeriod)
+void Timer::setTime(QTime timeLimit)
 {
   timeSet = true;
-  this->saveTimePeriod = saveTimePeriod;
   resetTime(timeLimit);
 }
 
@@ -64,7 +63,7 @@ void Timer::startTimer()
 void Timer::setDisplay()
 {
   if(++secondsElapsedCounter % saveTimePeriod == 0)
-    emit saveTimeMoment();
+    emit timeToSaveTimeRemaining(*timeRemaining);
 
   QString timeString = timeRemaining->toString("hh:mm:ss");
   display(timeString);

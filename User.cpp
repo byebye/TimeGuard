@@ -5,8 +5,7 @@ User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
   QObject(parent),
   fileManager(fileManager),
   logger(logger),
-  name(getSystemUsername()),
-  saveTimePeriod(10)
+  name(getSystemUsername())
 {
   limitActive = readLimitActive();
   timeRemaining = new QTime();
@@ -20,11 +19,6 @@ User::~User()
   delete timeRemaining;
   fileManager = NULL;
   logger = NULL;
-}
-
-int User::getSaveTimePeriod()
-{
-  return saveTimePeriod;
 }
 
 QTime User::readTimeRemaining()
@@ -53,9 +47,9 @@ void User::resetTimeRemaining()
   *timeRemaining = readTimeLimit();
 }
 
-void User::saveTimeRemaining()
+void User::saveTimeRemaining(QTime time)
 {
-  *timeRemaining = timeRemaining->addSecs(-saveTimePeriod);
+  *timeRemaining = time;
   fileManager->saveSettings(name, timeRemaining->toString(),
                             FileManager::TimeRemaining);
 }

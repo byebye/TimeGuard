@@ -30,8 +30,8 @@ TimeGuard::TimeGuard(QWidget *parent) :
   }
 
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
-  connect(ui->timerLCD, SIGNAL(saveTimeMoment()),
-          user, SLOT(saveTimeRemaining()));
+  connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(QTime)),
+          user, SLOT(saveTimeRemaining(QTime)));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
           this, SLOT(adminSuccesfullyLogged()));
   connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)),
@@ -452,7 +452,7 @@ bool TimeGuard::setTime()
   {
     if(!fileManager->settingsFileExists(user->getName()))
       return false;
-    ui->timerLCD->setTime(user->getTimeRemaining(), user->getSaveTimePeriod());
+    ui->timerLCD->setTime(user->getTimeRemaining());
   }
   return true;
 }
