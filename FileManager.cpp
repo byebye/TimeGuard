@@ -35,7 +35,7 @@ QString FileManager::readFromFile(QString filename)
   QFile file(filename);
   if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
-    qDebug() << "Unable to open" << file.fileName() << endl;
+    qDebug() << "Unable to open" << file.fileName() << " for reading";
     return QString();
   }
 
@@ -48,7 +48,7 @@ QString FileManager::readSettingsFromXML(QString filename, SettingName setting)
   QFile file(filename);
   if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
-    qDebug() << "Unable to open" << file.fileName() << endl;
+    qDebug() << "Unable to open" << file.fileName() << " for reading settings";
     return QString();
   }
   QString tag = getStringTag(setting);
@@ -68,6 +68,7 @@ QString FileManager::readSettingsFromXML(QString filename, SettingName setting)
 
 bool FileManager::saveLog(QString filename, QString data)
 {
+  qDebug() << "Log:" << data << "into" << filename + logExt;
   return saveToFile(logDir + filename + logExt, data);
 }
 
@@ -82,7 +83,7 @@ bool FileManager::saveToFile(QString filename, QString data,
   QFile file(filename);
   if(!file.open(QIODevice::ReadWrite | QIODevice::Text | appendFlag))
   {
-    qDebug() << "Unable to open" << file.fileName();
+    qDebug() << "Unable to open" << file.fileName() << " for writing";
     return false;
   }
   QTextStream fileStream(&file);
@@ -95,7 +96,7 @@ bool FileManager::saveSettingsToXML(QString filename, QString data, SettingName 
   QFile file(filename);
   if(!file.open(QIODevice::ReadWrite | QIODevice::Text))
   {
-    qDebug() << "Unable to open" << file.fileName();
+    qDebug() << "Unable to open" << file.fileName() << " for writing settings";
     return false;
   }
   QString settings = file.readAll();

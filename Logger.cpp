@@ -1,7 +1,6 @@
 #include "logger.h"
 #include <QTime>
 #include <QDate>
-#include <QDebug>
 
 Logger::Logger(QObject *parent, FileManager *fileManager) :
   QObject(parent),
@@ -13,7 +12,6 @@ Logger::Logger(QObject *parent, FileManager *fileManager) :
 void Logger::log(QString filename, QString event)
 {
   QString logMsg("[" + getCurrentDateAndTime() + "] " + event);
-  qDebug() << logMsg << endl;
   fileManager->saveLog(filename, logMsg);
 }
 
