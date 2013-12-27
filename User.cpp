@@ -41,6 +41,8 @@ QTime User::readTimeRemaining()
 QTime User::readTimeLimit()
 {
   QString timeString = fileManager->readSettings(name, FileManager::TimeLimit);
+  if(timeString.isEmpty())
+    timeString = "00:00:00";
   return QTime::fromString(timeString);
 }
 

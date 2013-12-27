@@ -340,6 +340,11 @@ void TimeGuard::on_saveTimeLimitButton_clicked()
 
 void TimeGuard::on_resetTimeButton_clicked()
 {
+  if(!fileManager->settingsFileExists(user->getName()))
+  {
+    messages->critical(Messages::LimitNotSet);
+    return;
+  }
   user->resetTimeRemaining();
   QTime timeRemaining = user->readTimeLimit();
   ui->timerLCD->resetTime(timeRemaining);
