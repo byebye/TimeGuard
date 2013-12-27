@@ -29,7 +29,7 @@ private slots:
   void quit();
   void showExtendLimitWindow();
   void adminSuccesfullyLogged();
-  void userToSetChosen();
+  void userChosenToSet();
   void on_logOffButton_clicked();
   void on_adminLoggingButton_clicked();
   void on_changePasswordButton_clicked();
@@ -38,6 +38,18 @@ private slots:
   void on_resumePauseTimeButton_clicked();
   void on_changeLimitActivityButton_clicked();
 signals:
+  void programClosed();
+  void adminLoggedIn();
+  void adminLoggedOff();
+  void adminPasswordChanged();
+  void userLoggedIn(QString username);
+  void userLoggedOff(QString username);
+  void userLimitChanged(QString username, QString limit);
+  void userLimitActivated(QString username);
+  void userLimitDeactivated(QString username);
+  void userTimePaused(QString username, QString time);
+  void userTimeStarted(QString username, QString time);
+  void userTimeReset(QString username, QString time);
 private:
   Ui::TimeGuard *ui;
   FileManager *fileManager;
@@ -57,13 +69,14 @@ private:
   AdminLoginDialog *adminLoginDialog;
 
   bool setTime();
+  void setupLogger();
   void setupUi();
   void setupIcons();
   void setTrayIcon();
   void closeEvent(QCloseEvent *event);
   void createActions();
   void addActions();
-  void logoffAdmin();
+  void logOffAdmin();
   void changeAdminPassword();
   void setResumePauseButtonIcon();
   QStringList getUsersList();

@@ -38,8 +38,6 @@ private:
   QString getSystemUsername();
   QTime readTimeRemaining();
   bool readLimitActive();
-  void saveLogInTime();
-  void saveLogOffTime();
 };
 
 #endif // USER_H

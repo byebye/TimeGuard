@@ -11,16 +11,24 @@ class Logger : public QObject
 public:
   explicit Logger(QObject *parent = 0, FileManager *fileManager = 0);
   void log(QString filename, QString event);
-  void logIn(QString username);
-  void logOff(QString username);
   QString getCurrentDateAndTime();
 signals:
   
 public slots:
-
+  void logAdminLoggedIn();
+  void logAdminLoggedOff();
+  void logAdminPasswordChanged();
+  void logUserLoggedIn(QString username);
+  void logUserLoggedOff(QString username);
+  void logUserLimitChanged(QString username, QString limit);
+  void logUserLimitActivated(QString username);
+  void logUserLimitDeactivated(QString username);
+  void logUserTimePaused(QString username, QString time);
+  void logUserTimeStarted(QString username, QString time);
+  void logUserTimeReset(QString username, QString time);
 private:
   FileManager *fileManager;
-  
+  QString const logFile;
 };
 
 #endif // LOGGER_H

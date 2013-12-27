@@ -18,10 +18,16 @@ TimeGuard::TimeGuard(QWidget *parent) :
   user = new User(this, fileManager, logger);
 
   setupUi();
+  setupLogger();
 
+  emit userLoggedIn(user->getName());
   setTime();
   if(user->isLimitActive())
+  {
     ui->timerLCD->startTime();
+    emit userTimeStarted(user->getName(),
+                         user->getTimeRemaining().toString("hh:mm:ss"));
+  }
 
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(saveTimeMoment()),
@@ -29,7 +35,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   connect(adminLoginDialog, SIGNAL(passwordAccepted()),
           this, SLOT(adminSuccesfullyLogged()));
   connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)),
-          this, SLOT(userToSetChosen()));
+          this, SLOT(userChosenToSet()));
 }
 
 TimeGuard::~TimeGuard()
@@ -51,7 +57,7 @@ void TimeGuard::setupUi()
 {
   setupIcons();
   ui->setupUi(this);
-  logoffAdmin();
+  logOffAdmin();
   ui->userNameLabel->setText(user->getName());
   ui->logBrowser->setPlainText(fileManager->readLog(user->getName()));
   ui->tabWidget->setCurrentIndex(0);
@@ -63,6 +69,32 @@ void TimeGuard::setupUi()
   adminLoginDialog = new AdminLoginDialog(this, messages, admin);
 }
 
+void TimeGuard::setupLogger()
+{
+  connect(this, SIGNAL(adminLoggedIn()),
+          logger, SLOT(logAdminLoggedIn()));
+  connect(this, SIGNAL(adminLoggedOff()),
+          logger, SLOT(logAdminLoggedOff()));
+  connect(this, SIGNAL(adminPasswordChanged()),
+          logger, SLOT(logAdminPasswordChanged()));
+  connect(this, SIGNAL(userLoggedIn(QString)),
+          logger, SLOT(logUserLoggedIn(QString)));
+  connect(this, SIGNAL(userLoggedOff(QString)),
+          logger, SLOT(logUserLoggedOff(QString)));
+  connect(this, SIGNAL(userLimitActivated(QString)),
+          logger, SLOT(logUserLimitActivated(QString)));
+  connect(this, SIGNAL(userLimitDeactivated(QString)),
+          logger, SLOT(logUserLimitDeactivated(QString)));
+  connect(this, SIGNAL(userLimitChanged(QString,QString)),
+          logger, SLOT(logUserLimitChanged(QString,QString)));
+  connect(this, SIGNAL(userTimePaused(QString,QString)),
+          logger, SLOT(logUserTimePaused(QString,QString)));
+  connect(this, SIGNAL(userTimeStarted(QString,QString)),
+          logger, SLOT(logUserTimeStarted(QString,QString)));
+  connect(this, SIGNAL(userTimeReset(QString,QString)),
+          logger, SLOT(logUserTimeReset(QString,QString)));
+}
+
 void TimeGuard::setupIcons()
 {
   programIcon = QIcon(":/images/timeguard.png");
@@ -72,6 +104,7 @@ void TimeGuard::setupIcons()
 
 void TimeGuard::userTimeout()
 {
+  emit userLoggedOff(user->getName());
   messages->information(Messages::UserTimeout);
   user->logOff();
 }
@@ -112,7 +145,13 @@ void TimeGuard::closeEvent(QCloseEvent *event)
   {
     closeFromTrayMenu = false;
     if(!loggedAsAdmin) adminLoginDialog->exec();
-    loggedAsAdmin ? event->accept() : event->ignore();
+    if(loggedAsAdmin)
+    {
+      emit programClosed();
+      event->accept();
+    }
+    else
+      event->ignore();
   }
   else
   {
@@ -130,6 +169,7 @@ void TimeGuard::closeEvent(QCloseEvent *event)
 
 void TimeGuard::on_logOffButton_clicked()
 {
+  emit userLoggedOff(user->getName());
   user->logOff();
 }
 
@@ -164,6 +204,7 @@ void TimeGuard::showExtendLimitWindow()
 
 void TimeGuard::adminSuccesfullyLogged()
 {
+  emit adminLoggedIn();
   loggedAsAdmin = true;
   ui->adminLoggedNotification->setText(QString("<html><head/><body><p><span style=\" font-size:11pt; font-weight:600; text-decoration: underline; color:#55aa00;\">")
                                        + tr("Logged as Admin")
@@ -177,8 +218,9 @@ void TimeGuard::adminSuccesfullyLogged()
   setResumePauseButtonIcon();
 }
 
-void TimeGuard::logoffAdmin()
+void TimeGuard::logOffAdmin()
 {
+  emit adminLoggedOff();
   loggedAsAdmin = false;
   ui->adminLoggedNotification->setText(tr("Log in as Admin"));
   ui->adminLoggingButton->setText(tr("Log in"));
@@ -204,6 +246,7 @@ void TimeGuard::changeAdminPassword()
       else
       {
         admin->changePassword(newPassword);
+        emit adminPasswordChanged();
         messages->information(Messages::PasswordChanged);
         ui->currentPasswordField->clear();
         ui->newPasswordField->clear();
@@ -217,7 +260,7 @@ void TimeGuard::changeAdminPassword()
     messages->critical(Messages::PasswordIncorrect);
 }
 
-void TimeGuard::userToSetChosen()
+void TimeGuard::userChosenToSet()
 {
   QString userChosen = ui->chooseUserBox->currentText();
   QString timeLimit = fileManager->readSettings(userChosen, FileManager::TimeLimit);
@@ -306,7 +349,7 @@ QStringList TimeGuard::getUsersList()
 
 void TimeGuard::on_adminLoggingButton_clicked()
 {
-  loggedAsAdmin ? logoffAdmin() : adminLoginDialog->exec();
+  loggedAsAdmin ? logOffAdmin() : adminLoginDialog->exec();
 }
 
 void TimeGuard::on_changePasswordButton_clicked()
@@ -324,25 +367,37 @@ void TimeGuard::addUsersToChooseUserBox()
 void TimeGuard::on_saveTimeLimitButton_clicked()
 {
   QString username = ui->chooseUserBox->currentText();
+  QString limit =  ui->timeLimitEdit->time().toString("hh:mm:ss");
   fileManager->saveSettings(username,
-                            ui->timeLimitEdit->time().toString("hh:mm:ss"),
+                            limit,
                             FileManager::TimeLimit);
+  emit userLimitChanged(username, limit);
 }
 
 void TimeGuard::on_resetTimeButton_clicked()
 {
   user->resetTimeRemaining();
-  ui->timerLCD->resetTime(user->readTimeLimit());
+  QTime timeRemaining = user->readTimeLimit();
+  ui->timerLCD->resetTime(timeRemaining);
+  emit userTimeReset(user->getName(), timeRemaining.toString("hh:mm:ss"));
 }
 
 void TimeGuard::on_resumePauseTimeButton_clicked()
 {
   if(ui->timerLCD->isTimeActive())
+  {
+    emit userTimePaused(user->getName(),
+                        ui->timerLCD->getTimeRemaining());
     ui->timerLCD->pauseTime();
+  }
   else
   {
     if(setTime())
+    {
+      emit userTimeStarted(user->getName(),
+                           ui->timerLCD->getTimeRemaining());
       ui->timerLCD->resumeTime();
+    }
     else
       messages->critical(Messages::LimitNotSet);
   }
@@ -364,6 +419,10 @@ void TimeGuard::on_changeLimitActivityButton_clicked()
   if(ui->changeLimitActivityButton->text() == tr("Activate"))
     active = "1"; // true
   fileManager->saveSettings(username, active, FileManager::LimitActive);
+  if(active == "1")
+    emit userLimitActivated(username);
+  else
+    emit userLimitDeactivated(username);
   setUiLimitActive(active == "1");
 }
 

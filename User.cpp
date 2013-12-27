@@ -8,7 +8,6 @@ User::User(QObject *parent, FileManager *fileManager, Logger *logger) :
   name(getSystemUsername()),
   saveTimePeriod(10)
 {
-  saveLogInTime();
   limitActive = readLimitActive();
   timeRemaining = new QTime();
 
@@ -26,16 +25,6 @@ User::~User()
 int User::getSaveTimePeriod()
 {
   return saveTimePeriod;
-}
-
-void User::saveLogInTime()
-{
-  logger->logIn(name);
-}
-
-void User::saveLogOffTime()
-{
-  logger->logOff(name);
 }
 
 QTime User::readTimeRemaining()
@@ -92,7 +81,6 @@ void User::setLimitActive(bool active)
 
 void User::logOff()
 {
-  saveLogOffTime();
 //  ExitWindowsEx(EWX_FORCE, 0);
 }
 
