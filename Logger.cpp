@@ -6,7 +6,7 @@
 Logger::Logger(QObject *parent, FileManager *fileManager) :
   QObject(parent),
   fileManager(fileManager),
-  logFile("log.txt")
+  logFile("TimeGuard")
 {
 }
 
