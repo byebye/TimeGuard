@@ -1,33 +1,40 @@
 #include "messages.h"
-#include <QMessageBox>
 
 Messages::Messages(QObject *parent) :
   QObject(parent)
 {
 }
 
-void Messages::critical(QString title, QString text, QWidget *parent)
+QMessageBox::StandardButton Messages::critical(QString title, QString text,
+                        QMessageBox::StandardButtons buttons,
+                        QWidget *parent)
 {
-  QMessageBox::critical(parent, title, text, QMessageBox::Ok);
+  return QMessageBox::critical(parent, title, text, buttons);
 }
 
-void Messages::information(QString title, QString text, QWidget *parent)
+QMessageBox::StandardButton Messages::information(QString title, QString text,
+                             QMessageBox::StandardButtons buttons,
+                             QWidget *parent)
 {
-  QMessageBox::information(parent, title, text, QMessageBox::Ok);
+  return QMessageBox::information(parent, title, text, buttons);
 }
 
-void Messages::critical(Message message, QWidget *parent)
+QMessageBox::StandardButton Messages::critical(Message message,
+                        QMessageBox::StandardButtons buttons,
+                        QWidget *parent)
 {
   QString title, text;
   getTitleAndText(title, text, message);
-  critical(title, text, parent);
+  return critical(title, text, buttons, parent);
 }
 
-void Messages::information(Message message, QWidget *parent)
+QMessageBox::StandardButton Messages::information(Message message,
+                             QMessageBox::StandardButtons buttons,
+                             QWidget *parent)
 {
   QString title, text;
   getTitleAndText(title, text, message);
-  information(title, text, parent);
+  return information(title, text, buttons, parent);
 }
 
 void Messages::getTitleAndText(QString &title, QString &text, Message message)
@@ -70,5 +77,17 @@ void Messages::getTitleAndText(QString &title, QString &text, Message message)
       title = tr("Timeout");
       text = tr("Timeout - you will be logged out!");
       break;
+    case FilesDeleted:
+      title = "";
+      text = tr("Files deleted succesfully");
+      break;
+    case UnableToDeleteFiles:
+      title = "";
+      text = tr("Unable to delete files! Try again or delete them manually");
+      break;
+    case QuestionDeleteUserFiles:
+      title = "";
+      text = tr("Limit will be deactivated and time will be stopped. "
+                "Are you sure?");
   }
 }
