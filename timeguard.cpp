@@ -188,24 +188,16 @@ void TimeGuard::closeEvent(QCloseEvent *event)
     closeFromTrayMenu = false;
     if(!loggedAsAdmin) adminLoginDialog->exec();
     if(loggedAsAdmin)
-    {
-      emit programClosed();
-      event->accept();
-    }
+      emit programQuit();
     else
       event->ignore();
   }
-  else
+  else if(!msgShown)
   {
-    event->ignore();
-    showMinimized();
-    if(!msgShown)
-    {
-      trayIcon->showMessage(tr("Program is still working"),
-                            tr("Program has been minimized to tray. "
-                               "Click icon to maximize it"));
-      msgShown = true;
-    }
+    trayIcon->showMessage(tr("Program is still working"),
+                          tr("Program has been minimized to tray. "
+                             "Click icon to maximize it"));
+    msgShown = true;
   }
 }
 
