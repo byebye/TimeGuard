@@ -1,3 +1,4 @@
 TEMPLATE = subdirs
 
-SUBDIRS += timeguardgui
+SUBDIRS += timeguardgui \
+    timeguardservice
