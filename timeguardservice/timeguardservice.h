@@ -20,9 +20,9 @@ protected:
   virtual void onResume();
 
   void serviceThreadWorker();
-  std::thread serviceThread;
 
-private:
+  std::thread serviceThread;
+  bool isRunning;
 };
 
 #endif // TIMEGUARDSERVICE_H
