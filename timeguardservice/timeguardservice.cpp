@@ -1,4 +1,5 @@
 #include "timeguardservice.h"
+#include <fstream>
 
 TimeGuardService::TimeGuardService(PWSTR pszServiceName,
                                    BOOL fCanStop,
@@ -46,8 +47,28 @@ void TimeGuardService::onResume()
 
 void TimeGuardService::serviceThreadWorker()
 {
+//  char buffer[MAX_PATH];
+//  GetCurrentDirectory(MAX_PATH, (LPWSTR) buffer);
+
+  logEvent(L"TimeGuardServie is working", EVENTLOG_INFORMATION_TYPE);
+//  logEvent((PWSTR)buffer, EVENTLOG_INFORMATION_TYPE);
+
+  std::ofstream fileStream("D:\\timeguardservice.log");
+//  if(fileStream.fail())
+//  {
+//    logEvent((PWSTR) strerror(errno), EVENTLOG_INFORMATION_TYPE);
+//    stream << strerror(errno) << std::endl;
+//    stream.close();
+//  }
+
+  fileStream << "LOG" << std::endl;
+  int counter = 0;
   while(isRunning)
   {
-    // do some work
+    fileStream << counter << std::endl;
+    ++counter;
+    ::Sleep(1000);
   }
+  fileStream.close();
+  // else error opening file
 }

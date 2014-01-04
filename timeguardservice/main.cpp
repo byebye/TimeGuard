@@ -13,22 +13,21 @@ int main(int argc, char *argv[])
                            L"NT AUTHORITY\\LocalService", // Service running account
                            NULL                           // Password of the account
                            );
-    else if (_stricmp("remove", argv[1] + 1) == 0)
+    else if (_stricmp("uninstall", argv[1] + 1) == 0)
       ServiceBase::uninstall(L"TimeGuardService");
+    else
+      printf("Parameters:\n"
+             "\t-install          to install the service.\n"
+             "\t-uninstall        to uninstall the service.\n"
+             "\twithout arguments to run the service.\n");
   }
   else
   {
-    printf("Parameters:\n"
-           "\t-i(nstall)          to install the service.\n"
-           "\t-u(ninstall)        to uninstall the service.\n"
-           "\twithout arguments   to run the service.\n");
     TimeGuardService timeGuardService(L"TimeGuardService");
     if(!ServiceBase::run(timeGuardService))
-    {
       printf("Service failed to run w/err 0x%08lx\n", GetLastError());
-    }
-//    else
-//      printf("Service started successfully\n");
+    else
+      printf("Service started successfully\n");
   }
 
   return 0;

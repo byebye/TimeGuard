@@ -4,16 +4,12 @@
 #
 #-------------------------------------------------
 
-#QT       += core
-#QT       -= gui
-
-TARGET = timeguardservice
-CONFIG += console
-CONFIG -= qt
-CONFIG -= app_bundle
-
 TEMPLATE = app
 
+TARGET = timeguardservice
+
+CONFIG += console
+CONFIG -= qt app_bundle
 
 SOURCES += \
     main.cpp \
