@@ -17,6 +17,14 @@ public:
 
     void stop();
 
+    static void install(PWSTR pszServiceName,
+                        PWSTR pszDisplayName,
+                        DWORD dwStartType,
+                        PWSTR pszDependencies,
+                        PWSTR pszAccount,
+                        PWSTR pszPassword);
+    static void uninistall(PWSTR pszServiceName);
+
 protected:
     virtual void onStart(DWORD dwArgc, PWSTR *pszArgv);
     virtual void onStop();
