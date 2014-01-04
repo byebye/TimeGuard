@@ -15,4 +15,13 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += \
+    main.cpp \
+    servicebase.cpp \
+    timeguardservice.cpp
+
+HEADERS += \
+    servicebase.h \
+    timeguardservice.h
+
+LIBS += advapi32.lib
