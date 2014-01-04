@@ -223,7 +223,7 @@ Cleanup:
 //   NOTE: If the function fails to uninstall the service, it prints the
 //   error in the standard output stream for users to diagnose the problem.
 //
-void ServiceBase::uninistall(PWSTR pszServiceName)
+void ServiceBase::uninstall(PWSTR pszServiceName)
 {
   SC_HANDLE schSCManager = NULL;
   SC_HANDLE schService = NULL;

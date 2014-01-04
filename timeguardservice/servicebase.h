@@ -23,7 +23,7 @@ public:
                         PWSTR pszDependencies,
                         PWSTR pszAccount,
                         PWSTR pszPassword);
-    static void uninistall(PWSTR pszServiceName);
+    static void uninstall(PWSTR pszServiceName);
 
 protected:
     virtual void onStart(DWORD dwArgc, PWSTR *pszArgv);

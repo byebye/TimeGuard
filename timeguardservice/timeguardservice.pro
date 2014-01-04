@@ -4,13 +4,13 @@
 #
 #-------------------------------------------------
 
-QT       += core
-
-QT       -= gui
+#QT       += core
+#QT       -= gui
 
 TARGET = timeguardservice
-CONFIG   += console
-CONFIG   -= app_bundle
+CONFIG += console
+CONFIG -= qt
+CONFIG -= app_bundle
 
 TEMPLATE = app
 
