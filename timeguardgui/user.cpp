@@ -54,8 +54,7 @@ void User::resetTimeRemaining()
 void User::saveTimeRemaining(QTime time)
 {
   *timeRemaining = time;
-  fileManager->saveSettings(name, timeRemaining->toString(),
-                            FileManager::TimeRemaining);
+  fileManager->saveSettings(name, timeRemaining->toString(), FileManager::TimeRemaining);
 }
 
 bool User::readLimitActive()

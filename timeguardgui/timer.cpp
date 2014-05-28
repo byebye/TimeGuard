@@ -18,6 +18,11 @@ Timer::~Timer()
   delete timeRemaining;
 }
 
+void Timer::displayDefaultTime()
+{
+  display("00:00:00");
+}
+
 void Timer::setTime(QTime timeLimit)
 {
   timeSet = true;

@@ -37,7 +37,7 @@ private slots:
   void on_saveTimeLimitButton_clicked();
   void on_resetTimeButton_clicked();
   void on_resumePauseTimeButton_clicked();
-  void on_changeLimitActivityButton_clicked();
+  void on_enableDisableLimitButton_clicked();
   void on_deleteUserFilesButton_clicked();
 signals:
   void programQuit();
@@ -70,12 +70,16 @@ private:
   bool closeFromTrayMenu;
   bool loggedAsAdmin;
   AdminLoginDialog *adminLoginDialog;
+  const int USER_TAB;
+  const int ADMIN_TAB;
 
   bool setTime();
+  void initObjects();
+  void initLoggedUser();
   void setupLogger();
   void setupUi();
   void setupIcons();
-  void setTrayIcon();
+  void setupTray();
   void closeEvent(QCloseEvent *event);
   void createActions();
   void addActions();

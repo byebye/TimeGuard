@@ -22,6 +22,7 @@ public:
   QString getTimeRemaining();
   bool isTimeSet();
   bool isTimeActive();
+  void displayDefaultTime();
 public slots:
   void startTimer();
   void setDisplay();

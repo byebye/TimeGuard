@@ -19,7 +19,7 @@ QString SystemQuery::getCurrentUserName()
   DWORD ULEN = UNLEN+1;
   TCHAR username[UNLEN+1];
   GetUserName(username, &ULEN);
-  return QString(QString::fromWCharArray(username));
+  return QString::fromWCharArray(username);
 }
 
 QStringList SystemQuery::getUsersList()

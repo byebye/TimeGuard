@@ -36,9 +36,8 @@ QString FileManager::readFromFile(QString filename)
   if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     qDebug() << "Unable to open" << file.fileName() << " for reading";
-    return QString();
+    return "";
   }
-
   QTextStream fileStream(&file);
   return fileStream.readAll();
 }

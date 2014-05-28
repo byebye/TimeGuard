@@ -47,7 +47,7 @@ void Messages::getTitleAndText(QString &title, QString &text, Message message)
       break;
     case PasswordEmpty:
       title = "";
-      text = tr("Password can not be empty!");
+      text = tr("Password cannot be empty!");
       break;
     case PasswordIdentical:
       title = "";

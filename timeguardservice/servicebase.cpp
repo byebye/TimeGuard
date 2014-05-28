@@ -279,7 +279,7 @@ void ServiceBase::uninstall(PWSTR pszServiceName)
     goto Cleanup;
   }
 
-  wprintf(L"%s is removed.\n", pszServiceName);
+  wprintf(L"%s is uninstalled.\n", pszServiceName);
 
 Cleanup:
   // Centralized cleanup for all allocated resources.
