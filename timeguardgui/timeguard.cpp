@@ -17,6 +17,10 @@ TimeGuard::TimeGuard(QWidget *parent) :
   connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(QTime)), user, SLOT(saveTimeRemaining(QTime)));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()), this, SLOT(adminSuccesfullyLogged()));
   connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)), this, SLOT(userChosenToSet()));
+  UsersTableModel *usersTableModel = new UsersTableModel();
+  ui->tableView->setModel(usersTableModel);
+  ui->tableView->show();
+  ui->tableView->setIndexWidget(ui->tableView->model()->index(0, 0), new QPushButton);
 }
 
 TimeGuard::~TimeGuard()

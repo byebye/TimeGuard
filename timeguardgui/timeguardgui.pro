@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TimeGuard
 TEMPLATE = app
 
+CONFIG += c++11
 
 SOURCES += main.cpp\
     admin.cpp \
@@ -21,7 +22,8 @@ SOURCES += main.cpp\
     timer.cpp \
     user.cpp \
     messages.cpp \
-    systemquery.cpp
+    systemquery.cpp \
+    userstablemodel.cpp
 
 HEADERS  += \
     admin.h \
@@ -32,7 +34,8 @@ HEADERS  += \
     timer.h \
     user.h \
     messages.h \
-    systemquery.h
+    systemquery.h \
+    userstablemodel.h
 
 FORMS    += timeguard.ui \
     adminlogindialog.ui

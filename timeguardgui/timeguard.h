@@ -12,6 +12,7 @@
 #include "messages.h"
 #include "adminlogindialog.h"
 #include "systemquery.h"
+#include "userstablemodel.h"
 
 namespace Ui {
   class TimeGuard;
