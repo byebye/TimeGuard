@@ -73,7 +73,7 @@ private:
   const int USER_TAB;
   const int ADMIN_TAB;
 
-  bool setTime();
+  bool setTimeIfLimitIsSet();
   void initObjects();
   void initLoggedUser();
   void setupLogger();
@@ -89,6 +89,8 @@ private:
   QStringList getUsersList();
   void addUsersToChooseUserBox();
   void setUiLimitActive(bool active);
+  void enableAdminUIElements();
+  void disableAdminUIElements();
 };
 
 #endif // TIMEGUARD_H

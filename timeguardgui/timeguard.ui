@@ -1122,7 +1122,7 @@
             </rect>
            </property>
            <property name="text">
-            <string>Activate</string>
+            <string>Enable</string>
            </property>
           </widget>
           <widget class="QComboBox" name="chooseUserBox">
@@ -1145,7 +1145,7 @@
             </rect>
            </property>
           </widget>
-          <widget class="QLabel" name="limitActivityLabel">
+          <widget class="QLabel" name="limitEnabledDisabledLabel">
            <property name="geometry">
             <rect>
              <x>30</x>

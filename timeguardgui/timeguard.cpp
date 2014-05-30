@@ -50,7 +50,7 @@ void TimeGuard::initObjects()
 void TimeGuard::initLoggedUser()
 {
   emit userLoggedIn(user->getName());
-  setTime();
+  setTimeIfLimitIsSet();
   if(user->isLimitActive())
   {
     ui->timerLCD->startTime();
@@ -101,7 +101,7 @@ void TimeGuard::setUiLimitActive(bool active)
                 "</span></p></body></html>";
     buttonText = tr("Enable");
   }
-  ui->limitActivityLabel->setText(labelText);
+  ui->limitEnabledDisabledLabel->setText(labelText);
   ui->enableDisableLimitButton->setText(buttonText);
 }
 
@@ -183,7 +183,8 @@ void TimeGuard::closeEvent(QCloseEvent *event)
   if(closeFromTrayMenu)
   {
     closeFromTrayMenu = false;
-    if(!loggedAsAdmin) adminLoginDialog->exec();
+    if(!loggedAsAdmin)
+      adminLoginDialog->exec();
     if(loggedAsAdmin)
       emit programQuit();
     else
@@ -210,6 +211,11 @@ void TimeGuard::adminSuccesfullyLogged()
 {
   emit adminLoggedIn();
   loggedAsAdmin = true;
+  enableAdminUIElements();
+}
+
+void TimeGuard::enableAdminUIElements()
+{
   ui->adminLoggedNotification->setText("<html><head/><body><p><span style=\" font-size:11pt; font-weight:600; text-decoration: underline; color:#55aa00;\">"
                                        + tr("Logged as Admin")
                                        + "</span></p></body></html>");
@@ -222,10 +228,8 @@ void TimeGuard::adminSuccesfullyLogged()
   setResumePauseButtonIcon();
 }
 
-void TimeGuard::logOffAdmin()
+void TimeGuard::disableAdminUIElements()
 {
-  emit adminLoggedOff();
-  loggedAsAdmin = false;
   ui->adminLoggedNotification->setText(tr("Log in as Admin"));
   ui->adminLoggingButton->setText(tr("Log in"));
   ui->tabWidget->setCurrentIndex(USER_TAB);
@@ -236,12 +240,20 @@ void TimeGuard::logOffAdmin()
   setResumePauseButtonIcon();
 }
 
+void TimeGuard::logOffAdmin()
+{
+  emit adminLoggedOff();
+  loggedAsAdmin = false;
+  disableAdminUIElements();
+}
+
 void TimeGuard::changeAdminPassword()
 {
   if(admin->isPasswordCorrect(ui->currentPasswordField->text()))
   {
     QString newPassword = ui->newPasswordField->text();
-    if(newPassword == ui->newPaswordRepeatField->text())
+    QString newPasswordRepeated = ui->newPaswordRepeatField->text();
+    if(newPassword == newPasswordRepeated)
     {
       if(admin->isPasswordCorrect(newPassword))
         messages->critical(Messages::PasswordIdentical);
@@ -264,7 +276,7 @@ void TimeGuard::changeAdminPassword()
     messages->critical(Messages::PasswordIncorrect);
 }
 
-bool TimeGuard::setTime()
+bool TimeGuard::setTimeIfLimitIsSet()
 {
   if(!ui->timerLCD->isTimeSet())
   {
@@ -285,7 +297,8 @@ void TimeGuard::userTimeout()
 void TimeGuard::userChosenToSet()
 {
   QString userChosen = ui->chooseUserBox->currentText();
-  if(userChosen.isEmpty()) return;
+  if(userChosen.isEmpty())
+    return;
   QString timeLimit = fileManager->readSettings(userChosen, FileManager::TimeLimit);
   if(timeLimit.isEmpty())
     timeLimit = "00:00:00";
@@ -320,7 +333,7 @@ void TimeGuard::addUsersToChooseUserBox()
 void TimeGuard::on_saveTimeLimitButton_clicked()
 {
   QString username = ui->chooseUserBox->currentText();
-  QString limit =  ui->timeLimitEdit->time().toString("hh:mm:ss");
+  QString limit = ui->timeLimitEdit->time().toString("hh:mm:ss");
   fileManager->saveSettings(username, limit, FileManager::TimeLimit);
   emit userLimitChanged(username, limit);
 }
@@ -347,7 +360,7 @@ void TimeGuard::on_resumePauseTimeButton_clicked()
   }
   else
   {
-    if(setTime())
+    if(setTimeIfLimitIsSet())
     {
       emit userTimeStarted(user->getName(), ui->timerLCD->getTimeRemaining());
       ui->timerLCD->resumeTime();
@@ -362,7 +375,7 @@ void TimeGuard::on_enableDisableLimitButton_clicked()
 {
   QString username = ui->chooseUserBox->currentText();
   QString active;
-  if(ui->enableDisableLimitButton->text() == tr("Activate"))
+  if(ui->enableDisableLimitButton->text() == tr("Enable"))
   {
     active = "1";
     emit userLimitActivated(username);
@@ -398,8 +411,7 @@ void TimeGuard::on_deleteUserFilesButton_clicked()
        }
      }
      else
-     {
-       messages->critical(Messages::UnableToDeleteFiles);
+     {       messages->critical(Messages::UnableToDeleteFiles);
        return;
      }
    }

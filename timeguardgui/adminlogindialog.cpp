@@ -22,7 +22,6 @@ void AdminLoginDialog::accept()
   if(admin->isPasswordCorrect(ui->adminPasswordEdit->text()))
   {
     emit passwordAccepted();
-    messages->information(Messages::PasswordCorrect);
     close();
   }
   else
@@ -54,3 +53,4 @@ void AdminLoginDialog::on_showCharsCheckBox_stateChanged(int state)
       break;
   }
 }
+
