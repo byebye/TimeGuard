@@ -47,28 +47,25 @@ void TimeGuardService::onResume()
 
 void TimeGuardService::serviceThreadWorker()
 {
-//  char buffer[MAX_PATH];
-//  GetCurrentDirectory(MAX_PATH, (LPWSTR) buffer);
-
   logEvent(L"TimeGuardServie is working", EVENTLOG_INFORMATION_TYPE);
-//  logEvent((PWSTR)buffer, EVENTLOG_INFORMATION_TYPE);
 
-  std::ofstream fileStream("D:\\timeguardservice.log");
-//  if(fileStream.fail())
-//  {
-//    logEvent((PWSTR) strerror(errno), EVENTLOG_INFORMATION_TYPE);
-//    stream << strerror(errno) << std::endl;
-//    stream.close();
-//  }
 
-  fileStream << "LOG" << std::endl;
+  std::ofstream fileStream("D:\\Programy\\TimeGuard\\timeguardservice.log");
+
+  fileStream << "Service started working\n";
+
   int counter = 0;
   while(isRunning)
   {
     fileStream << counter << std::endl;
     ++counter;
+    if(counter >= 100)
+      break;
     ::Sleep(1000);
   }
-  fileStream.close();
+  fileStream << counter << std::endl;
+  fileStream << "Service ended working\n";
   // else error opening file
+
+  fileStream.close();
 }

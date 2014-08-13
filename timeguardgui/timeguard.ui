@@ -1361,6 +1361,13 @@ and log files</string>
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="addRowButton">
+          <property name="text">
+           <string>Add row</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>

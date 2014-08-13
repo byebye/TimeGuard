@@ -40,6 +40,8 @@ private slots:
   void on_resumePauseTimeButton_clicked();
   void on_enableDisableLimitButton_clicked();
   void on_deleteUserFilesButton_clicked();
+  void on_addRowButton_clicked();
+
 signals:
   void programQuit();
   void adminLoggedIn();
@@ -68,6 +70,7 @@ private:
   QMenu *trayContextMenu;
   QAction *quitAct;
   QAction *extendLimitAct;
+  UsersTableModel *usersTableModel;
   bool closeFromTrayMenu;
   bool loggedAsAdmin;
   AdminLoginDialog *adminLoginDialog;

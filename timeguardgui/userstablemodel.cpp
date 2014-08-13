@@ -2,25 +2,20 @@
 #include <QPushButton>
 
 UsersTableModel::UsersTableModel(QObject *parent) :
-  QAbstractTableModel(parent)
+  QAbstractTableModel(parent),
+  rowsNumber(0), columnsNumber(3)
 {
-  headerValues << tr("Username") << tr("Limit") << tr("Files");
-  for(int i = 0; i < 2; ++i)
-  {
-    gridData.push_back(QVector<QString>());
-    for(int j = 0; j < 3; ++j)
-      gridData[i].push_back(QString("%1,%2").arg(i).arg(j));
-  }
+  headerValues = {tr("Username"), tr("Limit"), tr("Files")};
 }
 
 int UsersTableModel::rowCount(const QModelIndex &parent) const
 {
-   return 2;
+   return rowsNumber;
 }
 
 int UsersTableModel::columnCount(const QModelIndex &parent) const
 {
-    return 3;
+  return columnsNumber;
 }
 
 QVariant UsersTableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -28,7 +23,7 @@ QVariant UsersTableModel::headerData(int section, Qt::Orientation orientation, i
   if(role == Qt::DisplayRole)
   {
     if(orientation == Qt::Horizontal)
-      return section;
+      return headerValues[section];
     else
       return section + 1;
   }
@@ -56,7 +51,14 @@ bool UsersTableModel::setData(const QModelIndex &index, const QVariant &value, i
 bool UsersTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
   beginInsertRows(parent, row, row + count - 1);
-
+  rowsNumber += count;
+  for(int i = 0; i < count; ++i)
+  {
+    QVector<QString> dataToInsert;
+    for(int j = 0; j < columnCount(); ++j)
+      dataToInsert.push_back(QString("%1,%2").arg(row + i).arg(j));
+    gridData.insert(gridData.begin() + row + i, dataToInsert);
+  }
   endInsertRows();
   return true;
 }
@@ -64,7 +66,10 @@ bool UsersTableModel::insertRows(int row, int count, const QModelIndex &parent)
 bool UsersTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
   beginRemoveRows(parent, row, row + count - 1);
-
+  rowsNumber -= count;
+  auto begin = gridData.begin() + row;
+  auto end = begin + count;
+  gridData.erase(begin, end);
   endRemoveRows();
   return true;
 }

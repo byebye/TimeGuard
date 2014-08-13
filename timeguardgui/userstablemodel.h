@@ -23,6 +23,8 @@ public slots:
 private:
   QVector<QVector<QString>> gridData;
   QStringList headerValues;
+  int rowsNumber;
+  int columnsNumber;
 };
 
 #endif // USERSTABLEMODEL_H

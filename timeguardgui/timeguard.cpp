@@ -17,10 +17,10 @@ TimeGuard::TimeGuard(QWidget *parent) :
   connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(QTime)), user, SLOT(saveTimeRemaining(QTime)));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()), this, SLOT(adminSuccesfullyLogged()));
   connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)), this, SLOT(userChosenToSet()));
-  UsersTableModel *usersTableModel = new UsersTableModel();
+  usersTableModel = new UsersTableModel();
   ui->tableView->setModel(usersTableModel);
   ui->tableView->show();
-  ui->tableView->setIndexWidget(ui->tableView->model()->index(0, 0), new QPushButton);
+  ui->tableView->setIndexWidget(usersTableModel->index(0, 0), new QPushButton);
 }
 
 TimeGuard::~TimeGuard()
@@ -37,6 +37,7 @@ TimeGuard::~TimeGuard()
   delete quitAct;
   delete extendLimitAct;
   delete adminLoginDialog;
+  delete usersTableModel;
 }
 
 void TimeGuard::initObjects()
@@ -415,8 +416,14 @@ void TimeGuard::on_deleteUserFilesButton_clicked()
        }
      }
      else
-     {       messages->critical(Messages::UnableToDeleteFiles);
+     {
+       messages->critical(Messages::UnableToDeleteFiles);
        return;
      }
    }
+}
+
+void TimeGuard::on_addRowButton_clicked()
+{
+  usersTableModel->insertRow(usersTableModel->rowCount());
 }
