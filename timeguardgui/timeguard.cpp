@@ -20,7 +20,9 @@ TimeGuard::TimeGuard(QWidget *parent) :
   usersTableModel = new UsersTableModel();
   ui->tableView->setModel(usersTableModel);
   ui->tableView->show();
-  ui->tableView->setIndexWidget(usersTableModel->index(0, 0), new QPushButton);
+//  ui->tableView->horizontalHeader()->setDefaultSectionSize(100);
+//  ui->tableView->verticalHeader()->setDefaultSectionSize(30);
+//  ui->tableView->setIndexWidget(usersTableModel->index(0, 0), new QPushButton);
 }
 
 TimeGuard::~TimeGuard()
@@ -86,28 +88,6 @@ void TimeGuard::setResumePauseButtonIcon()
     ui->resumePauseTimeButton->setIcon(pauseIcon);
   else
     ui->resumePauseTimeButton->setIcon(resumeIcon);
-}
-
-void TimeGuard::setUiLimitActive(bool active)
-{
-  QString buttonText, labelText;
-  if(active)
-  {
-    labelText = "<html><head/><body><p><span style=\"font-size:10pt;"
-                "font-weight:600; text-decoration: underline; color:#65cb00;\">"
-                + tr("Active") +
-                "</span></p></body></html>";
-    buttonText = tr("Disable");
-  }
-  else
-  {
-    labelText = "<html><head/><body><p><span style=\"font-size:10pt; color:#ee0000;\">"
-                 + tr("Disabled") +
-                "</span></p></body></html>";
-    buttonText = tr("Enable");
-  }
-  ui->limitEnabledDisabledLabel->setText(labelText);
-  ui->enableDisableLimitButton->setText(buttonText);
 }
 
 void TimeGuard::setupLogger()
@@ -250,6 +230,28 @@ void TimeGuard::logOffAdmin()
   emit adminLoggedOff();
   loggedAsAdmin = false;
   disableAdminUIElements();
+}
+
+void TimeGuard::setUiLimitActive(bool active)
+{
+  QString buttonText, labelText;
+  if(active)
+  {
+    labelText = "<html><head/><body><p><span style=\"font-size:10pt;"
+                "font-weight:600; text-decoration: underline; color:#65cb00;\">"
+                + tr("Active") +
+                "</span></p></body></html>";
+    buttonText = tr("Disable");
+  }
+  else
+  {
+    labelText = "<html><head/><body><p><span style=\"font-size:10pt; color:#ee0000;\">"
+                 + tr("Disabled") +
+                "</span></p></body></html>";
+    buttonText = tr("Enable");
+  }
+  ui->limitEnabledDisabledLabel->setText(labelText);
+  ui->enableDisableLimitButton->setText(buttonText);
 }
 
 void TimeGuard::changeAdminPassword()

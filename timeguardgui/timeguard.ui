@@ -1125,16 +1125,6 @@
             <string>Enable</string>
            </property>
           </widget>
-          <widget class="QComboBox" name="chooseUserBox">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>20</y>
-             <width>120</width>
-             <height>22</height>
-            </rect>
-           </property>
-          </widget>
           <widget class="QTimeEdit" name="timeLimitEdit">
            <property name="geometry">
             <rect>
@@ -1355,16 +1345,23 @@ and log files</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QPushButton" name="addRowButton">
+            <property name="text">
+             <string>Add row</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="chooseUserBox"/>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QTableView" name="tableView">
           <property name="sortingEnabled">
            <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="addRowButton">
-          <property name="text">
-           <string>Add row</string>
           </property>
          </widget>
         </item>

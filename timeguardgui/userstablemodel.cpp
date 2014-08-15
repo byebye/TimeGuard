@@ -3,9 +3,10 @@
 
 UsersTableModel::UsersTableModel(QObject *parent) :
   QAbstractTableModel(parent),
-  rowsNumber(0), columnsNumber(3)
+  headerValues({tr("Username"), tr("Limit status"), tr("Configuration files"), tr("Today limit"), tr("Time spent today")}),
+  rowsNumber(0),
+  columnsNumber(headerValues.size())
 {
-  headerValues = {tr("Username"), tr("Limit"), tr("Files")};
 }
 
 int UsersTableModel::rowCount(const QModelIndex &parent) const
