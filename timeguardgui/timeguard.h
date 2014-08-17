@@ -31,7 +31,6 @@ private slots:
   void quit();
   void showExtendLimitWindow();
   void adminSuccesfullyLogged();
-  void userChosenToSet();
   void on_logOffButton_clicked();
   void on_adminLoggingButton_clicked();
   void on_changePasswordButton_clicked();
@@ -40,7 +39,8 @@ private slots:
   void on_resumePauseTimeButton_clicked();
   void on_enableDisableLimitButton_clicked();
   void on_deleteUserFilesButton_clicked();
-  void on_addRowButton_clicked();
+
+  void on_applyChangedSettingsButton_clicked();
 
 signals:
   void programQuit();
@@ -75,6 +75,7 @@ private:
   bool loggedAsAdmin;
   AdminLoginDialog *adminLoginDialog;
   const int USER_TAB;
+  const int SETTINGS_TAB;
   const int ADMIN_TAB;
 
   bool setTimeIfLimitIsSet();
@@ -91,10 +92,10 @@ private:
   void changeAdminPassword();
   void setResumePauseButtonIcon();
   QStringList getUsersList();
-  void addUsersToChooseUserBox();
+  void readUsersSettings();
   void setUiLimitActive(bool active);
-  void enableAdminUIElements();
-  void disableAdminUIElements();
+  void enableAdminUiElements();
+  void disableAdminUiElements();
 };
 
 #endif // TIMEGUARD_H

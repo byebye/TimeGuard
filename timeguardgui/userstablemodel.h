@@ -16,6 +16,7 @@ public:
   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
   Qt::ItemFlags flags(const QModelIndex &index) const;
+  void setUsersData(QVector<QVector<QVariant>> &settings);
 signals:
 
 public slots:

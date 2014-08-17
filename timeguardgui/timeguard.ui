@@ -1031,7 +1031,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="userTab">
        <attribute name="title">
@@ -1048,144 +1048,136 @@
         </property>
        </widget>
       </widget>
+      <widget class="QWidget" name="settingsTab">
+       <attribute name="title">
+        <string>Settings</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QTableView" name="tableView">
+              <property name="sortingEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_4">
+                <item>
+                 <widget class="QLabel" name="dailyLimitLabel">
+                  <property name="text">
+                   <string>Daily Limit</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTimeEdit" name="dailyTimeEdit"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <item>
+                 <widget class="QLabel" name="weeklyLimitLabel">
+                  <property name="text">
+                   <string>Weekly Limit</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTimeEdit" name="weeklyTimeEdit"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_6">
+                <item>
+                 <widget class="QLabel" name="monthlyLimitLabel">
+                  <property name="text">
+                   <string>Monthly Limit</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTimeEdit" name="monthlyTimeEdit"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <widget class="QPushButton" name="enableDisableLimitButton">
+                  <property name="text">
+                   <string>Enable limit</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="deleteUserFilesButton">
+                  <property name="text">
+                   <string>Delete files</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <spacer name="horizontalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="applyChangedSettingsButton">
+                <property name="text">
+                 <string>Apply</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_6">
+                <item>
+                 <widget class="QPushButton" name="abortChangedSettingsButton">
+                  <property name="text">
+                   <string>Abort</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="adminTab">
        <attribute name="title">
         <string>Admin</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QFrame" name="changeSettingsFrame">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <widget class="QPushButton" name="deleteUserFilesButton">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>180</y>
-             <width>75</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Delete files</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="saveTimeLimitButton">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>75</y>
-             <width>70</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Save limit</string>
-           </property>
-          </widget>
-          <widget class="QLabel" name="limitLabel">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>105</y>
-             <width>31</width>
-             <height>22</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Limit:</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="enableDisableLimitButton">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>127</y>
-             <width>75</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Enable</string>
-           </property>
-          </widget>
-          <widget class="QTimeEdit" name="timeLimitEdit">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>50</y>
-             <width>70</width>
-             <height>22</height>
-            </rect>
-           </property>
-          </widget>
-          <widget class="QLabel" name="limitEnabledDisabledLabel">
-           <property name="geometry">
-            <rect>
-             <x>30</x>
-             <y>105</y>
-             <width>81</width>
-             <height>22</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <family>Consolas</family>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; text-decoration: underline; color:#65cb00;&quot;&gt;Active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
-          <widget class="QLabel" name="deleteFilesLabel">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>150</y>
-             <width>81</width>
-             <height>31</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Delete settings
-and log files</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-          <widget class="QLabel" name="userSettingsInformLabel">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>121</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Change settings of:</string>
-           </property>
-          </widget>
-         </widget>
-        </item>
         <item>
          <widget class="QFrame" name="changePasswordFrame">
           <property name="sizePolicy">
@@ -1336,127 +1328,6 @@ and log files</string>
            </size>
           </property>
          </spacer>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Page</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_9">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_8">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
-              <item>
-               <widget class="QPushButton" name="addRowButton">
-                <property name="text">
-                 <string>Add row</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="chooseUserBox"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QTableView" name="tableView">
-              <property name="sortingEnabled">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_7">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_7">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_4">
-                <item>
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>Daily Limit</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QTimeEdit" name="timeEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_5">
-                <item>
-                 <widget class="QLabel" name="label_2">
-                  <property name="text">
-                   <string>Weekly Limit</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QTimeEdit" name="timeEdit_2"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_6">
-                <item>
-                 <widget class="QLabel" name="label_3">
-                  <property name="text">
-                   <string>Monthly Limit</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QTimeEdit" name="timeEdit_3"/>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_8">
-              <item>
-               <spacer name="horizontalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_6">
-                <item>
-                 <widget class="QPushButton" name="abortSettingsChangesButton">
-                  <property name="text">
-                   <string>Abort</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="applySettingsChangesButton">
-                  <property name="text">
-                   <string>Apply</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-         </layout>
         </item>
        </layout>
       </widget>

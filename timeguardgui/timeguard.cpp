@@ -9,7 +9,7 @@
 TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::TimeGuard),
-  USER_TAB(0), ADMIN_TAB(1)
+  USER_TAB(0), SETTINGS_TAB(1), ADMIN_TAB(2)
 {
   initObjects();
   setupUi();
@@ -19,7 +19,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(QTime)), user, SLOT(saveTimeRemaining(QTime)));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()), this, SLOT(adminSuccesfullyLogged()));
-  connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)), this, SLOT(userChosenToSet()));
+
   // init users table
   usersTableModel = new UsersTableModel();
   ui->tableView->setModel(usersTableModel);
@@ -200,32 +200,33 @@ void TimeGuard::adminSuccesfullyLogged()
 {
   emit adminLoggedIn();
   loggedAsAdmin = true;
-  enableAdminUIElements();
+  enableAdminUiElements();
 }
 
-void TimeGuard::enableAdminUIElements()
+void TimeGuard::enableAdminUiElements()
 {
   ui->adminLoggedNotification->setText("<html><head/><body><p><span style=\" font-size:11pt; font-weight:600; text-decoration: underline; color:#55aa00;\">"
                                        + tr("Logged as Admin")
                                        + "</span></p></body></html>");
   ui->adminLoggingButton->setText(tr("Log off"));
-  addUsersToChooseUserBox();
+  readUsersSettings();
+  ui->tabWidget->setTabEnabled(SETTINGS_TAB, true);
   ui->tabWidget->setTabEnabled(ADMIN_TAB, true);
-  ui->tabWidget->setCurrentIndex(ADMIN_TAB);
+  ui->tabWidget->setCurrentIndex(SETTINGS_TAB);
   ui->resumePauseTimeButton->setEnabled(true);
   ui->resetTimeButton->setEnabled(true);
   setResumePauseButtonIcon();
 }
 
-void TimeGuard::disableAdminUIElements()
+void TimeGuard::disableAdminUiElements()
 {
   ui->adminLoggedNotification->setText(tr("Log in as Admin"));
   ui->adminLoggingButton->setText(tr("Log in"));
   ui->tabWidget->setCurrentIndex(USER_TAB);
+  ui->tabWidget->setTabEnabled(SETTINGS_TAB, false);
   ui->tabWidget->setTabEnabled(ADMIN_TAB, false);
   ui->resumePauseTimeButton->setDisabled(true);
   ui->resetTimeButton->setDisabled(true);
-  ui->chooseUserBox->clear();
   setResumePauseButtonIcon();
 }
 
@@ -233,7 +234,7 @@ void TimeGuard::logOffAdmin()
 {
   emit adminLoggedOff();
   loggedAsAdmin = false;
-  disableAdminUIElements();
+  disableAdminUiElements();
 }
 
 void TimeGuard::setUiLimitActive(bool active)
@@ -254,7 +255,7 @@ void TimeGuard::setUiLimitActive(bool active)
                 "</span></p></body></html>";
     buttonText = tr("Enable");
   }
-  ui->limitEnabledDisabledLabel->setText(labelText);
+//  ui->limitEnabledDisabledLabel->setText(labelText);
   ui->enableDisableLimitButton->setText(buttonText);
 }
 
@@ -305,19 +306,6 @@ void TimeGuard::userTimeout()
   user->logOff();
 }
 
-void TimeGuard::userChosenToSet()
-{
-  QString userChosen = ui->chooseUserBox->currentText();
-  if(userChosen.isEmpty())
-    return;
-  QString timeLimit = fileManager->readSettings(userChosen, FileManager::TimeLimit);
-  if(timeLimit.isEmpty())
-    timeLimit = "00:00:00";
-  ui->timeLimitEdit->setTime(QTime::fromString(timeLimit, "hh:mm:ss"));
-  QString limitActive = fileManager->readSettings(userChosen, FileManager::LimitActive);
-  setUiLimitActive(limitActive == "1");
-}
-
 void TimeGuard::on_logOffButton_clicked()
 {
   emit userLoggedOff(user->getName());
@@ -334,19 +322,86 @@ void TimeGuard::on_changePasswordButton_clicked()
   changeAdminPassword();
 }
 
-void TimeGuard::addUsersToChooseUserBox()
+void TimeGuard::readUsersSettings()
 {
   QStringList usersList = systemQuery->getUsersList();
-  for(QString username : usersList)
-    ui->chooseUserBox->addItem(username);
+ // tr("Username"), tr("Limit status"), tr("Today limit"), tr("Time used today")
+  QVector<QVector<QVariant>> settings(usersList.size());
+//  QMap <QString, QMap<int, QString>> settings;
+  for(int i = 0; i < usersList.size(); ++i)
+  {
+    QString user = usersList[i];
+    settings[i].push_back(user);
+    settings[i].push_back(fileManager->readSettings(user, FileManager::LimitActive) == "1" ? "enabled" : "disabled");
+    QString timeLimit = fileManager->readSettings(user, FileManager::TimeLimit);
+    settings[i].push_back(timeLimit.isEmpty() ? "Not set" : timeLimit);
+    settings[i].push_back("00:00:00");
+
+//    settings[user][0] = fileManager->readSettings(user, FileManager::LimitActive) == "1" ? "enabled" : "disabled";
+//    QString timeLimit = fileManager->readSettings(user, FileManager::TimeLimit);
+//    settings[user][2] = timeLimit.isEmpty() ? "Not set" : timeLimit;
+//    settings[user][3] = "00:00:00";
+  }
+  usersTableModel->setUsersData(settings);
+}
+
+void TimeGuard::on_applyChangedSettingsButton_clicked()
+{
+//  usersTableModel->
 }
 
 void TimeGuard::on_saveTimeLimitButton_clicked()
 {
-  QString username = ui->chooseUserBox->currentText();
-  QString limit = ui->timeLimitEdit->time().toString("hh:mm:ss");
-  fileManager->saveSettings(username, limit, FileManager::TimeLimit);
-  emit userLimitChanged(username, limit);
+//  QString limit = ui->timeLimitEdit->time().toString("hh:mm:ss");
+//  fileManager->saveSettings(username, limit, FileManager::TimeLimit);
+//  emit userLimitChanged(username, limit);
+}
+
+void TimeGuard::on_enableDisableLimitButton_clicked()
+{
+//  QString username = ui->chooseUserBox->currentText();
+//  QString active;
+//  if(ui->enableDisableLimitButton->text() == tr("Enable"))
+//  {
+//    active = "1";
+//    emit userLimitActivated(username);
+//  }
+//  else
+//  {
+//    active = "0";
+//    emit userLimitDeactivated(username);
+//  }
+//  fileManager->saveSettings(username, active, FileManager::LimitActive);
+
+//  setUiLimitActive(active == "1");
+}
+
+void TimeGuard::on_deleteUserFilesButton_clicked()
+{
+//   QString username = ui->chooseUserBox->currentText();
+
+//   if(messages->information(Messages::QuestionDeleteUserFiles,
+//                            QMessageBox::Ok | QMessageBox::Cancel)
+//            == QMessageBox::Ok)
+//   {
+//     if(fileManager->deleteLogFile(username)
+//        && fileManager->deleteSettingsFile(username))
+//     {
+//       messages->information(Messages::FilesDeleted);
+//       userChosenToSet();
+//       setUiLimitActive(false);
+//       if(username == user->getName())
+//       {
+//         ui->timerLCD->resetTime();
+//         setResumePauseButtonIcon();
+//       }
+//     }
+//     else
+//     {
+//       messages->critical(Messages::UnableToDeleteFiles);
+//       return;
+//     }
+//   }
 }
 
 void TimeGuard::on_resetTimeButton_clicked()
@@ -382,55 +437,3 @@ void TimeGuard::on_resumePauseTimeButton_clicked()
   setResumePauseButtonIcon();
 }
 
-void TimeGuard::on_enableDisableLimitButton_clicked()
-{
-  QString username = ui->chooseUserBox->currentText();
-  QString active;
-  if(ui->enableDisableLimitButton->text() == tr("Enable"))
-  {
-    active = "1";
-    emit userLimitActivated(username);
-  }
-  else
-  {
-    active = "0";
-    emit userLimitDeactivated(username);
-  }
-  fileManager->saveSettings(username, active, FileManager::LimitActive);
-
-  setUiLimitActive(active == "1");
-}
-
-void TimeGuard::on_deleteUserFilesButton_clicked()
-{
-   QString username = ui->chooseUserBox->currentText();
-
-   if(messages->information(Messages::QuestionDeleteUserFiles,
-                            QMessageBox::Ok | QMessageBox::Cancel)
-            == QMessageBox::Ok)
-   {
-     if(fileManager->deleteLogFile(username)
-        && fileManager->deleteSettingsFile(username))
-     {
-       messages->information(Messages::FilesDeleted);
-       userChosenToSet();
-       setUiLimitActive(false);
-       if(username == user->getName())
-       {
-         ui->timerLCD->resetTime();
-         setResumePauseButtonIcon();
-       }
-     }
-     else
-     {
-       messages->critical(Messages::UnableToDeleteFiles);
-       return;
-     }
-   }
-}
-
-void TimeGuard::on_addRowButton_clicked()
-{
-  usersTableModel->insertRow(usersTableModel->rowCount());
-//  ui->tableView->setIndexWidget(usersTableModel->index(usersTableModel->rowCount()-1, 0), new QCheckBox());
-}

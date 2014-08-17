@@ -4,7 +4,7 @@
 
 UsersTableModel::UsersTableModel(QObject *parent) :
   QAbstractTableModel(parent),
-  headerValues({"", tr("Username"), tr("Limit status"), tr("Configuration files"), tr("Today's' limit"), tr("Time used today")}),
+  headerValues({"", tr("Username"), tr("Limit status"), tr("Today limit"), tr("Time used today")}),
   rowsNumber(0),
   columnsNumber(headerValues.size())
 {
@@ -88,15 +88,15 @@ bool UsersTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
   beginInsertRows(parent, row, row + count - 1);
   rowsNumber += count;
-  for(int i = 0; i < count; ++i)
-  {
-    QVector<QVariant> dataToInsert;
-    dataToInsert.push_back(Qt::Unchecked);
-    for(int j = 0; j < columnCount(); ++j)
-      dataToInsert.push_back(QString("%1,%2").arg(row + i).arg(j));
-    gridData.insert(gridData.begin() + row + i, dataToInsert);
-//    selectedRows.insert(selectedRows.begin() + row + i, Qt::Unchecked);
-  }
+//  for(int i = 0; i < count; ++i)
+//  {
+//    QVector<QVariant> dataToInsert;
+//    dataToInsert.push_back(Qt::Unchecked);
+//    for(int j = 0; j < columnCount(); ++j)
+//      dataToInsert.push_back(QString("%1,%2").arg(row + i).arg(j));
+//    gridData.insert(gridData.begin() + row + i, dataToInsert);
+////    selectedRows.insert(selectedRows.begin() + row + i, Qt::Unchecked);
+//  }
   endInsertRows();
   return true;
 }
@@ -118,4 +118,28 @@ Qt::ItemFlags UsersTableModel::flags(const QModelIndex &index) const
   if(index.column() == 0)
     flags |= Qt::ItemIsUserCheckable;
   return flags;
+}
+
+void UsersTableModel::setUsersData(QVector<QVector<QVariant>> &settings)
+{
+  const int usersNumber = settings.size();
+  for(int i = 0; i < usersNumber; ++i)
+  {
+    gridData.resize(usersNumber);
+    gridData[i].push_back(Qt::Unchecked);
+    for(auto setting : settings[i])
+      gridData[i].push_back(setting);
+  }
+//  const int usersNumber = settings.keys().size();
+//  gridData.resize(usersNumber);
+//  int i = 0;
+//  for(QString user : settings.keys())
+//  {
+//    gridData[i].push_back(Qt::Unchecked);
+//    gridData[i].push_back(user);
+//    for(auto settingName : settings[user].keys())
+//      gridData[i].push_back(settings[user][settingName]);
+//    ++i;
+//  }
+  insertRows(0, usersNumber);
 }
