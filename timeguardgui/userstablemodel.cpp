@@ -85,9 +85,6 @@ bool UsersTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
   beginRemoveRows(parent, row, row + count - 1);
   rowsNumber -= count;
-  auto begin = gridData.begin() + row;
-  auto end = begin + count;
-  gridData.erase(begin, end);
   endRemoveRows();
   return true;
 }
@@ -104,10 +101,9 @@ void UsersTableModel::setUsersData(QVector<QVector<QVariant>> &settings)
 {
   const int usersNumber = settings.size();
   selectedRows.fill(Qt::Unchecked, usersNumber);
-  gridData.resize(usersNumber);
-  for(int i = 0; i < usersNumber; ++i)
-    for(auto setting : settings[i])
-      gridData[i].push_back(setting);
+  gridData = settings;
+  if(rowCount() > 0)
+    removeRows(0, rowCount());
   insertRows(0, usersNumber);
 }
 
@@ -118,4 +114,9 @@ QStringList UsersTableModel::getSelectedUsers()
     if(selectedRows[i] == Qt::Checked)
       selectedUsers.push_back(gridData[i][0].toString());
   return selectedUsers;
+}
+
+QVector<QVector<QVariant>> UsersTableModel::getData()
+{
+  return gridData;
 }

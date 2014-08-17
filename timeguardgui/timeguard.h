@@ -76,6 +76,7 @@ private:
   const int USER_TAB;
   const int SETTINGS_TAB;
   const int ADMIN_TAB;
+  QVector<QVector<QVariant>> beforeSaveSettings;
 
   bool setTimeIfLimitIsSet();
   void initObjects();

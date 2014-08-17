@@ -213,6 +213,7 @@ void TimeGuard::enableAdminUiElements()
   ui->tabWidget->setCurrentIndex(SETTINGS_TAB);
   ui->resumePauseTimeButton->setEnabled(true);
   ui->resetTimeButton->setEnabled(true);
+  ui->undoSavedSettingsButton->setEnabled(false);
   setResumePauseButtonIcon();
 }
 
@@ -338,6 +339,7 @@ void TimeGuard::readUsersSettings()
 
 void TimeGuard::on_applyChangedSettingsButton_clicked()
 {
+  beforeSaveSettings = usersTableModel->getData();
   QString newDailyLimit = ui->dailyTimeEdit->time().toString("hh:mm:ss");
 //  QString newWeeklyLimit = ui->weeklyTimeEdit->time().toString("hh:mm:ss");
 //  QString newMonthlyLimit = ui->monthlyTimeEdit->time().toString("hh:mm:ss");
@@ -346,13 +348,21 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
     fileManager->saveSettings(username, newDailyLimit, FileManager::TimeLimit);
     emit userLimitChanged(username, newDailyLimit);
   }
+  readUsersSettings();
+  ui->undoSavedSettingsButton->setEnabled(true);
 }
 
 void TimeGuard::on_undoSavedSettingsButton_clicked()
 {
-  ui->dailyTimeEdit->setTime(QTime(0, 0));
-  ui->weeklyTimeEdit->setTime(QTime(0, 0));
-  ui->monthlyTimeEdit->setTime(QTime(0, 0));
+  ui->undoSavedSettingsButton->setEnabled(false);
+  for(int i = 0; i < beforeSaveSettings.size(); ++i)
+  {
+    QString username = beforeSaveSettings[i][0].toString();
+    QString dailyLimit = beforeSaveSettings[i][2].toString();
+    fileManager->saveSettings(username, dailyLimit, FileManager::TimeLimit);
+    emit userLimitChanged(username, dailyLimit);
+  }
+  readUsersSettings();
 }
 
 void TimeGuard::on_enableDisableLimitButton_clicked()

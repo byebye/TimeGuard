@@ -18,6 +18,7 @@ public:
   Qt::ItemFlags flags(const QModelIndex &index) const;
   void setUsersData(QVector<QVector<QVariant>> &settings);
   QStringList getSelectedUsers();
+  QVector<QVector<QVariant>> getData();
 signals:
 
 public slots:
