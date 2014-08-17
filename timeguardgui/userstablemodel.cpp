@@ -40,7 +40,7 @@ QVariant UsersTableModel::data(const QModelIndex &index, int role) const
   {
     case Qt::DisplayRole:
       if(col >= 1)
-        return gridData[row][col];
+        return gridData[row][col-1];
       break;
     case Qt::FontRole:
       break;
@@ -52,7 +52,7 @@ QVariant UsersTableModel::data(const QModelIndex &index, int role) const
       break;
     case Qt::CheckStateRole:
       if(col == 0)
-          return gridData[row][0];
+        selectedRows[row];
       break;
   }
   return QVariant();
@@ -60,25 +60,14 @@ QVariant UsersTableModel::data(const QModelIndex &index, int role) const
 
 bool UsersTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-//  if(role == Qt::EditRole)
-//  {
-//    gridData[index.row()][index.column()] = value.toString();
-//    emit dataChanged(index, index);
-//  }
   int row = index.row();
   int col = index.column();
   if(role == Qt::CheckStateRole)
   {
     if((Qt::CheckState) value.toInt() == Qt::Checked)
-    {
-      gridData[row][col] = Qt::Checked;
-//      selectedRows[index.row()] = Qt::Checked;
-    }
+      selectedRows[row] = Qt::Checked;
     else
-    {
-      gridData[row][col] = Qt::Unchecked;
-//      selectedRows[index.row()] = Qt::Unchecked;
-    }
+      selectedRows[row] = Qt::Unchecked;
     return true;
   }
   return false;
@@ -88,15 +77,6 @@ bool UsersTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
   beginInsertRows(parent, row, row + count - 1);
   rowsNumber += count;
-//  for(int i = 0; i < count; ++i)
-//  {
-//    QVector<QVariant> dataToInsert;
-//    dataToInsert.push_back(Qt::Unchecked);
-//    for(int j = 0; j < columnCount(); ++j)
-//      dataToInsert.push_back(QString("%1,%2").arg(row + i).arg(j));
-//    gridData.insert(gridData.begin() + row + i, dataToInsert);
-////    selectedRows.insert(selectedRows.begin() + row + i, Qt::Unchecked);
-//  }
   endInsertRows();
   return true;
 }
@@ -123,23 +103,11 @@ Qt::ItemFlags UsersTableModel::flags(const QModelIndex &index) const
 void UsersTableModel::setUsersData(QVector<QVector<QVariant>> &settings)
 {
   const int usersNumber = settings.size();
+  if(selectedRows.empty())
+    selectedRows.fill(Qt::Unchecked, usersNumber);
+  gridData.resize(usersNumber);
   for(int i = 0; i < usersNumber; ++i)
-  {
-    gridData.resize(usersNumber);
-    gridData[i].push_back(Qt::Unchecked);
     for(auto setting : settings[i])
       gridData[i].push_back(setting);
-  }
-//  const int usersNumber = settings.keys().size();
-//  gridData.resize(usersNumber);
-//  int i = 0;
-//  for(QString user : settings.keys())
-//  {
-//    gridData[i].push_back(Qt::Unchecked);
-//    gridData[i].push_back(user);
-//    for(auto settingName : settings[user].keys())
-//      gridData[i].push_back(settings[user][settingName]);
-//    ++i;
-//  }
   insertRows(0, usersNumber);
 }

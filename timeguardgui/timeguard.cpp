@@ -3,8 +3,6 @@
 #include <QCheckBox>
 #include "timeguard.h"
 #include "ui_timeguard.h"
-#include "userstablemodelheader.h"
-#include "checkboxcolumndelegate.h"
 
 TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
@@ -255,7 +253,6 @@ void TimeGuard::setUiLimitActive(bool active)
                 "</span></p></body></html>";
     buttonText = tr("Enable");
   }
-//  ui->limitEnabledDisabledLabel->setText(labelText);
   ui->enableDisableLimitButton->setText(buttonText);
 }
 
@@ -327,7 +324,6 @@ void TimeGuard::readUsersSettings()
   QStringList usersList = systemQuery->getUsersList();
  // tr("Username"), tr("Limit status"), tr("Today limit"), tr("Time used today")
   QVector<QVector<QVariant>> settings(usersList.size());
-//  QMap <QString, QMap<int, QString>> settings;
   for(int i = 0; i < usersList.size(); ++i)
   {
     QString user = usersList[i];
@@ -336,18 +332,13 @@ void TimeGuard::readUsersSettings()
     QString timeLimit = fileManager->readSettings(user, FileManager::TimeLimit);
     settings[i].push_back(timeLimit.isEmpty() ? "Not set" : timeLimit);
     settings[i].push_back("00:00:00");
-
-//    settings[user][0] = fileManager->readSettings(user, FileManager::LimitActive) == "1" ? "enabled" : "disabled";
-//    QString timeLimit = fileManager->readSettings(user, FileManager::TimeLimit);
-//    settings[user][2] = timeLimit.isEmpty() ? "Not set" : timeLimit;
-//    settings[user][3] = "00:00:00";
   }
   usersTableModel->setUsersData(settings);
 }
 
 void TimeGuard::on_applyChangedSettingsButton_clicked()
 {
-//  usersTableModel->
+
 }
 
 void TimeGuard::on_saveTimeLimitButton_clicked()
