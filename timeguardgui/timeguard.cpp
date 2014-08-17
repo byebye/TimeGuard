@@ -338,14 +338,21 @@ void TimeGuard::readUsersSettings()
 
 void TimeGuard::on_applyChangedSettingsButton_clicked()
 {
-
+  QString newDailyLimit = ui->dailyTimeEdit->time().toString("hh:mm:ss");
+//  QString newWeeklyLimit = ui->weeklyTimeEdit->time().toString("hh:mm:ss");
+//  QString newMonthlyLimit = ui->monthlyTimeEdit->time().toString("hh:mm:ss");
+  for(auto username : usersTableModel->getSelectedUsers())
+  {
+    fileManager->saveSettings(username, newDailyLimit, FileManager::TimeLimit);
+    emit userLimitChanged(username, newDailyLimit);
+  }
 }
 
-void TimeGuard::on_saveTimeLimitButton_clicked()
+void TimeGuard::on_undoSavedSettingsButton_clicked()
 {
-//  QString limit = ui->timeLimitEdit->time().toString("hh:mm:ss");
-//  fileManager->saveSettings(username, limit, FileManager::TimeLimit);
-//  emit userLimitChanged(username, limit);
+  ui->dailyTimeEdit->setTime(QTime(0, 0));
+  ui->weeklyTimeEdit->setTime(QTime(0, 0));
+  ui->monthlyTimeEdit->setTime(QTime(0, 0));
 }
 
 void TimeGuard::on_enableDisableLimitButton_clicked()

@@ -34,13 +34,12 @@ private slots:
   void on_logOffButton_clicked();
   void on_adminLoggingButton_clicked();
   void on_changePasswordButton_clicked();
-  void on_saveTimeLimitButton_clicked();
   void on_resetTimeButton_clicked();
   void on_resumePauseTimeButton_clicked();
   void on_enableDisableLimitButton_clicked();
   void on_deleteUserFilesButton_clicked();
-
   void on_applyChangedSettingsButton_clicked();
+  void on_undoSavedSettingsButton_clicked();
 
 signals:
   void programQuit();

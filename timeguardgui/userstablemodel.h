@@ -17,6 +17,7 @@ public:
   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
   Qt::ItemFlags flags(const QModelIndex &index) const;
   void setUsersData(QVector<QVector<QVariant>> &settings);
+  QStringList getSelectedUsers();
 signals:
 
 public slots:

@@ -52,7 +52,7 @@ QVariant UsersTableModel::data(const QModelIndex &index, int role) const
       break;
     case Qt::CheckStateRole:
       if(col == 0)
-        selectedRows[row];
+        return selectedRows[row];
       break;
   }
   return QVariant();
@@ -62,9 +62,9 @@ bool UsersTableModel::setData(const QModelIndex &index, const QVariant &value, i
 {
   int row = index.row();
   int col = index.column();
-  if(role == Qt::CheckStateRole)
+  if(col == 0 && role == Qt::CheckStateRole)
   {
-    if((Qt::CheckState) value.toInt() == Qt::Checked)
+    if(static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked)
       selectedRows[row] = Qt::Checked;
     else
       selectedRows[row] = Qt::Unchecked;
@@ -103,11 +103,19 @@ Qt::ItemFlags UsersTableModel::flags(const QModelIndex &index) const
 void UsersTableModel::setUsersData(QVector<QVector<QVariant>> &settings)
 {
   const int usersNumber = settings.size();
-  if(selectedRows.empty())
-    selectedRows.fill(Qt::Unchecked, usersNumber);
+  selectedRows.fill(Qt::Unchecked, usersNumber);
   gridData.resize(usersNumber);
   for(int i = 0; i < usersNumber; ++i)
     for(auto setting : settings[i])
       gridData[i].push_back(setting);
   insertRows(0, usersNumber);
+}
+
+QStringList UsersTableModel::getSelectedUsers()
+{
+  QStringList selectedUsers;
+  for(int i = 0; i < selectedRows.size(); ++i)
+    if(selectedRows[i] == Qt::Checked)
+      selectedUsers.push_back(gridData[i][0].toString());
+  return selectedUsers;
 }

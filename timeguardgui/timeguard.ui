@@ -1157,9 +1157,9 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_6">
                 <item>
-                 <widget class="QPushButton" name="abortChangedSettingsButton">
+                 <widget class="QPushButton" name="undoSavedSettingsButton">
                   <property name="text">
-                   <string>Abort</string>
+                   <string>Undo</string>
                   </property>
                  </widget>
                 </item>
