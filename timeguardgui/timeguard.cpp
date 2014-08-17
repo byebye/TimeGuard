@@ -1,7 +1,10 @@
 #include <QMenu>
 #include <QDebug>
+#include <QCheckBox>
 #include "timeguard.h"
 #include "ui_timeguard.h"
+#include "userstablemodelheader.h"
+#include "checkboxcolumndelegate.h"
 
 TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
@@ -17,12 +20,13 @@ TimeGuard::TimeGuard(QWidget *parent) :
   connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(QTime)), user, SLOT(saveTimeRemaining(QTime)));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()), this, SLOT(adminSuccesfullyLogged()));
   connect(ui->chooseUserBox, SIGNAL(currentTextChanged(QString)), this, SLOT(userChosenToSet()));
+  // init users table
   usersTableModel = new UsersTableModel();
   ui->tableView->setModel(usersTableModel);
+  // checkbox column
+  ui->tableView->setColumnWidth(0, 20);
+  ui->tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
   ui->tableView->show();
-//  ui->tableView->horizontalHeader()->setDefaultSectionSize(100);
-//  ui->tableView->verticalHeader()->setDefaultSectionSize(30);
-//  ui->tableView->setIndexWidget(usersTableModel->index(0, 0), new QPushButton);
 }
 
 TimeGuard::~TimeGuard()
@@ -428,4 +432,5 @@ void TimeGuard::on_deleteUserFilesButton_clicked()
 void TimeGuard::on_addRowButton_clicked()
 {
   usersTableModel->insertRow(usersTableModel->rowCount());
+//  ui->tableView->setIndexWidget(usersTableModel->index(usersTableModel->rowCount()-1, 0), new QCheckBox());
 }

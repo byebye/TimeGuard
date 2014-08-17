@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     user.cpp \
     messages.cpp \
     systemquery.cpp \
-    userstablemodel.cpp
+    userstablemodel.cpp \
+    checkboxcolumndelegate.cpp
 
 HEADERS  += \
     admin.h \
@@ -35,7 +36,8 @@ HEADERS  += \
     user.h \
     messages.h \
     systemquery.h \
-    userstablemodel.h
+    userstablemodel.h \
+    checkboxcolumndelegate.h
 
 FORMS    += timeguard.ui \
     adminlogindialog.ui

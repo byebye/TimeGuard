@@ -21,7 +21,8 @@ signals:
 public slots:
 
 private:
-  QVector<QVector<QString>> gridData;
+  QVector<QVector<QVariant>> gridData;
+  QVector<Qt::CheckState> selectedRows;
   QStringList headerValues;
   int rowsNumber;
   int columnsNumber;
