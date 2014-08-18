@@ -36,8 +36,6 @@ private slots:
   void on_changePasswordButton_clicked();
   void on_resetTimeButton_clicked();
   void on_resumePauseTimeButton_clicked();
-  void on_enableDisableLimitButton_clicked();
-  void on_deleteUserFilesButton_clicked();
   void on_applyChangedSettingsButton_clicked();
   void on_undoSavedSettingsButton_clicked();
   void on_dailyLimitCheckBox_clicked();

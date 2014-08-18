@@ -100,7 +100,8 @@ Qt::ItemFlags UsersTableModel::flags(const QModelIndex &index) const
 void UsersTableModel::setUsersData(QVector<QVector<QVariant>> &settings)
 {
   const int usersNumber = settings.size();
-  selectedRows.fill(Qt::Unchecked, usersNumber);
+  if(selectedRows.empty())
+    selectedRows.fill(Qt::Unchecked, usersNumber);
   gridData = settings;
   if(rowCount() > 0)
     removeRows(0, rowCount());

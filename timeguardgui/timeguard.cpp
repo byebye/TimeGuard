@@ -221,9 +221,9 @@ void TimeGuard::enableAdminUiElements()
   ui->enableRadioButton->setChecked(true);
   ui->dailyLimitCheckBox->setChecked(false);
   ui->dailyTimeEdit->setEnabled(false);
-  ui->weeklyLimitCheckBox->setEnabled(false);
+  ui->weeklyLimitCheckBox->setChecked(false);
   ui->weeklyTimeEdit->setEnabled(false);
-  ui->monthlyLimitCheckBox->setEnabled(false);
+  ui->monthlyLimitCheckBox->setChecked(false);
   ui->monthlyTimeEdit->setEnabled(false);
   setResumePauseButtonIcon();
 }
@@ -330,17 +330,61 @@ void TimeGuard::readUsersSettings()
 void TimeGuard::on_applyChangedSettingsButton_clicked()
 {
   beforeSaveSettings = usersTableModel->getData();
-  // save changed limit
-  QString newDailyLimit = ui->dailyTimeEdit->time().toString("hh:mm:ss");
-//  QString newWeeklyLimit = ui->weeklyTimeEdit->time().toString("hh:mm:ss");
-//  QString newMonthlyLimit = ui->monthlyTimeEdit->time().toString("hh:mm:ss");
   for(auto username : usersTableModel->getSelectedUsers())
   {
-    fileManager->saveSettings(username, newDailyLimit, FileManager::TimeLimit);
-    emit userLimitChanged(username, newDailyLimit);
+    if(ui->dailyLimitCheckBox->isChecked())
+    {
+      QString newDailyLimit = ui->dailyTimeEdit->time().toString("hh:mm:ss");
+      fileManager->saveSettings(username, newDailyLimit, FileManager::TimeLimit);
+      emit userLimitChanged(username, newDailyLimit);
+    }
+    //  if(ui->weeklyLimitCheckBox->isChecked())
+    //  {
+    //    QString newWeeklyLimit = ui->weeklyTimeEdit->time().toString("hh:mm:ss");
+    //  }
+    //  if(ui->monthlyLimitCheckBox->isChecked())
+    //  {
+    //    QString newMonthlyLimit = ui->monthlyTimeEdit->time().toString("hh:mm:ss");
+    //  }
+    if(ui->limitControlGroupBox->isChecked())
+    {
+      QString limitState;
+      if(ui->enableRadioButton->isChecked())
+      {
+        limitState = "1";
+        emit userLimitEnabled(username);
+      }
+      else
+      {
+        limitState = "0";
+        emit userLimitDisabled(username);
+      }
+      fileManager->saveSettings(username, limitState, FileManager::LimitActive);
+    }
+//    if(ui->deleteFilesCheckBox->isChecked())
+//    {
+//      if(messages->information(Messages::QuestionDeleteUserFiles,
+//                               QMessageBox::Ok | QMessageBox::Cancel)
+//         == QMessageBox::Ok)
+//      {
+//        if(fileManager->deleteLogFile(username)
+//           && fileManager->deleteSettingsFile(username))
+//        {
+//          messages->information(Messages::FilesDeleted);
+//          if(username == user->getName())
+//          {
+//            ui->timerLCD->resetTime();
+//            setResumePauseButtonIcon();
+//          }
+//        }
+//        else
+//        {
+//          messages->critical(Messages::UnableToDeleteFiles);
+//          return;
+//        }
+//      }
+//    }
   }
-  // save limit status (enabled/disabled)
-  // delete user files if option selected
   readUsersSettings();
   ui->undoSavedSettingsButton->setEnabled(true);
 }
@@ -351,9 +395,17 @@ void TimeGuard::on_undoSavedSettingsButton_clicked()
   for(int i = 0; i < beforeSaveSettings.size(); ++i)
   {
     QString username = beforeSaveSettings[i][0].toString();
+
     QString dailyLimit = beforeSaveSettings[i][2].toString();
     fileManager->saveSettings(username, dailyLimit, FileManager::TimeLimit);
     emit userLimitChanged(username, dailyLimit);
+
+    QString limitStatus = beforeSaveSettings[i][1].toString();
+    if(limitStatus == "1")
+      emit userLimitEnabled(username);
+    else
+      emit userLimitDisabled(username);
+    fileManager->saveSettings(username, limitStatus, FileManager::LimitActive);
   }
   readUsersSettings();
 }
@@ -374,53 +426,6 @@ void TimeGuard::on_monthlyLimitCheckBox_clicked()
 {
   bool status = ui->monthlyLimitCheckBox->isChecked();
   ui->monthlyTimeEdit->setEnabled(status);
-}
-
-void TimeGuard::on_enableDisableLimitButton_clicked()
-{
-//  QString username = ui->chooseUserBox->currentText();
-//  QString active;
-//  if(ui->enableDisableLimitButton->text() == tr("Enable"))
-//  {
-//    active = "1";
-//    emit userLimitActivated(username);
-//  }
-//  else
-//  {
-//    active = "0";
-//    emit userLimitDeactivated(username);
-//  }
-//  fileManager->saveSettings(username, active, FileManager::LimitActive);
-
-//  setUiLimitActive(active == "1");
-}
-
-void TimeGuard::on_deleteUserFilesButton_clicked()
-{
-//   QString username = ui->chooseUserBox->currentText();
-
-//   if(messages->information(Messages::QuestionDeleteUserFiles,
-//                            QMessageBox::Ok | QMessageBox::Cancel)
-//            == QMessageBox::Ok)
-//   {
-//     if(fileManager->deleteLogFile(username)
-//        && fileManager->deleteSettingsFile(username))
-//     {
-//       messages->information(Messages::FilesDeleted);
-//       userChosenToSet();
-//       setUiLimitActive(false);
-//       if(username == user->getName())
-//       {
-//         ui->timerLCD->resetTime();
-//         setResumePauseButtonIcon();
-//       }
-//     }
-//     else
-//     {
-//       messages->critical(Messages::UnableToDeleteFiles);
-//       return;
-//     }
-//   }
 }
 
 void TimeGuard::on_resetTimeButton_clicked()
