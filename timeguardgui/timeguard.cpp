@@ -213,7 +213,18 @@ void TimeGuard::enableAdminUiElements()
   ui->tabWidget->setCurrentIndex(SETTINGS_TAB);
   ui->resumePauseTimeButton->setEnabled(true);
   ui->resetTimeButton->setEnabled(true);
+  // users settings table
   ui->undoSavedSettingsButton->setEnabled(false);
+  // uncheck all checkboxes
+  ui->deleteFilesCheckBox->setChecked(false);
+  ui->limitControlGroupBox->setChecked(false);
+  ui->enableRadioButton->setChecked(true);
+  ui->dailyLimitCheckBox->setChecked(false);
+  ui->dailyTimeEdit->setEnabled(false);
+  ui->weeklyLimitCheckBox->setEnabled(false);
+  ui->weeklyTimeEdit->setEnabled(false);
+  ui->monthlyLimitCheckBox->setEnabled(false);
+  ui->monthlyTimeEdit->setEnabled(false);
   setResumePauseButtonIcon();
 }
 
@@ -347,6 +358,24 @@ void TimeGuard::on_undoSavedSettingsButton_clicked()
   readUsersSettings();
 }
 
+void TimeGuard::on_dailyLimitCheckBox_clicked()
+{
+  bool status = ui->dailyLimitCheckBox->isChecked();
+  ui->dailyTimeEdit->setEnabled(status);
+}
+
+void TimeGuard::on_weeklyLimitCheckBox_clicked()
+{
+  bool status = ui->weeklyLimitCheckBox->isChecked();
+  ui->weeklyTimeEdit->setEnabled(status);
+}
+
+void TimeGuard::on_monthlyLimitCheckBox_clicked()
+{
+  bool status = ui->monthlyLimitCheckBox->isChecked();
+  ui->monthlyTimeEdit->setEnabled(status);
+}
+
 void TimeGuard::on_enableDisableLimitButton_clicked()
 {
 //  QString username = ui->chooseUserBox->currentText();
@@ -427,18 +456,3 @@ void TimeGuard::on_resumePauseTimeButton_clicked()
   setResumePauseButtonIcon();
 }
 
-
-void TimeGuard::on_dailyLimitCheckBox_clicked()
-{
-
-}
-
-void TimeGuard::on_weeklyLimitCheckBox_clicked()
-{
-
-}
-
-void TimeGuard::on_monthlyLimitCheckBox_clicked()
-{
-
-}

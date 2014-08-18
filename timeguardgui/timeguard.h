@@ -40,11 +40,8 @@ private slots:
   void on_deleteUserFilesButton_clicked();
   void on_applyChangedSettingsButton_clicked();
   void on_undoSavedSettingsButton_clicked();
-
   void on_dailyLimitCheckBox_clicked();
-
   void on_weeklyLimitCheckBox_clicked();
-
   void on_monthlyLimitCheckBox_clicked();
 
 signals:
