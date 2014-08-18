@@ -41,6 +41,12 @@ private slots:
   void on_applyChangedSettingsButton_clicked();
   void on_undoSavedSettingsButton_clicked();
 
+  void on_dailyLimitCheckBox_clicked();
+
+  void on_weeklyLimitCheckBox_clicked();
+
+  void on_monthlyLimitCheckBox_clicked();
+
 signals:
   void programQuit();
   void adminLoggedIn();
@@ -49,8 +55,8 @@ signals:
   void userLoggedIn(QString username);
   void userLoggedOff(QString username);
   void userLimitChanged(QString username, QString limit);
-  void userLimitActivated(QString username);
-  void userLimitDeactivated(QString username);
+  void userLimitEnabled(QString username);
+  void userLimitDisabled(QString username);
   void userTimePaused(QString username, QString time);
   void userTimeStarted(QString username, QString time);
   void userTimeReset(QString username, QString time);
@@ -93,7 +99,6 @@ private:
   void setResumePauseButtonIcon();
   QStringList getUsersList();
   void readUsersSettings();
-  void setUiLimitActive(bool active);
   void enableAdminUiElements();
   void disableAdminUiElements();
 };

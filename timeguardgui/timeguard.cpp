@@ -99,8 +99,8 @@ void TimeGuard::setupLogger()
   connect(this, SIGNAL(adminPasswordChanged()), logger, SLOT(logAdminPasswordChanged()));
   connect(this, SIGNAL(userLoggedIn(QString)), logger, SLOT(logUserLoggedIn(QString)));
   connect(this, SIGNAL(userLoggedOff(QString)),logger, SLOT(logUserLoggedOff(QString)));
-  connect(this, SIGNAL(userLimitActivated(QString)), logger, SLOT(logUserLimitActivated(QString)));
-  connect(this, SIGNAL(userLimitDeactivated(QString)), logger, SLOT(logUserLimitDeactivated(QString)));
+  connect(this, SIGNAL(userLimitEnabled(QString)), logger, SLOT(logUserLimitActivated(QString)));
+  connect(this, SIGNAL(userLimitDisabled(QString)), logger, SLOT(logUserLimitDeactivated(QString)));
   connect(this, SIGNAL(userLimitChanged(QString,QString)), logger, SLOT(logUserLimitChanged(QString,QString)));
   connect(this, SIGNAL(userTimePaused(QString,QString)), logger, SLOT(logUserTimePaused(QString,QString)));
   connect(this, SIGNAL(userTimeStarted(QString,QString)), logger, SLOT(logUserTimeStarted(QString,QString)));
@@ -236,27 +236,6 @@ void TimeGuard::logOffAdmin()
   disableAdminUiElements();
 }
 
-void TimeGuard::setUiLimitActive(bool active)
-{
-  QString buttonText, labelText;
-  if(active)
-  {
-    labelText = "<html><head/><body><p><span style=\"font-size:10pt;"
-                "font-weight:600; text-decoration: underline; color:#65cb00;\">"
-                + tr("Active") +
-                "</span></p></body></html>";
-    buttonText = tr("Disable");
-  }
-  else
-  {
-    labelText = "<html><head/><body><p><span style=\"font-size:10pt; color:#ee0000;\">"
-                 + tr("Disabled") +
-                "</span></p></body></html>";
-    buttonText = tr("Enable");
-  }
-  ui->enableDisableLimitButton->setText(buttonText);
-}
-
 void TimeGuard::changeAdminPassword()
 {
   if(admin->isPasswordCorrect(ui->currentPasswordField->text()))
@@ -340,6 +319,7 @@ void TimeGuard::readUsersSettings()
 void TimeGuard::on_applyChangedSettingsButton_clicked()
 {
   beforeSaveSettings = usersTableModel->getData();
+  // save changed limit
   QString newDailyLimit = ui->dailyTimeEdit->time().toString("hh:mm:ss");
 //  QString newWeeklyLimit = ui->weeklyTimeEdit->time().toString("hh:mm:ss");
 //  QString newMonthlyLimit = ui->monthlyTimeEdit->time().toString("hh:mm:ss");
@@ -348,6 +328,8 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
     fileManager->saveSettings(username, newDailyLimit, FileManager::TimeLimit);
     emit userLimitChanged(username, newDailyLimit);
   }
+  // save limit status (enabled/disabled)
+  // delete user files if option selected
   readUsersSettings();
   ui->undoSavedSettingsButton->setEnabled(true);
 }
@@ -445,3 +427,18 @@ void TimeGuard::on_resumePauseTimeButton_clicked()
   setResumePauseButtonIcon();
 }
 
+
+void TimeGuard::on_dailyLimitCheckBox_clicked()
+{
+
+}
+
+void TimeGuard::on_weeklyLimitCheckBox_clicked()
+{
+
+}
+
+void TimeGuard::on_monthlyLimitCheckBox_clicked()
+{
+
+}

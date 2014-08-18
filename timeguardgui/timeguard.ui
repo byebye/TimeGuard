@@ -1073,9 +1073,9 @@
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_4">
                 <item>
-                 <widget class="QLabel" name="dailyLimitLabel">
+                 <widget class="QCheckBox" name="dailyLimitCheckBox">
                   <property name="text">
-                   <string>Daily Limit</string>
+                   <string>Daily limit</string>
                   </property>
                  </widget>
                 </item>
@@ -1087,9 +1087,9 @@
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_5">
                 <item>
-                 <widget class="QLabel" name="weeklyLimitLabel">
+                 <widget class="QCheckBox" name="weeklyLimitCheckBox">
                   <property name="text">
-                   <string>Weekly Limit</string>
+                   <string>Weekly limit</string>
                   </property>
                  </widget>
                 </item>
@@ -1101,9 +1101,9 @@
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_6">
                 <item>
-                 <widget class="QLabel" name="monthlyLimitLabel">
+                 <widget class="QCheckBox" name="monthlyLimitCheckBox">
                   <property name="text">
-                   <string>Monthly Limit</string>
+                   <string>Monthly limit</string>
                   </property>
                  </widget>
                 </item>
@@ -1115,18 +1115,40 @@
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
-                 <widget class="QPushButton" name="enableDisableLimitButton">
+                 <widget class="QCheckBox" name="deleteFilesCheckBox">
                   <property name="text">
-                   <string>Enable limit</string>
+                   <string>Delete user files</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="deleteUserFilesButton">
-                  <property name="text">
-                   <string>Delete files</string>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_10">
+                  <item>
+                   <widget class="QCheckBox" name="enableDisableLimitCheckBox">
+                    <property name="text">
+                     <string>Limit:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QVBoxLayout" name="verticalLayout_10">
+                    <item>
+                     <widget class="QRadioButton" name="disableRadioButton">
+                      <property name="text">
+                       <string>off</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="enableRadioButton">
+                      <property name="text">
+                       <string>on</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
                 </item>
                </layout>
               </item>
