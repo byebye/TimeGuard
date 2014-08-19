@@ -177,7 +177,7 @@ bool FileManager::settingsFileExists(QString filename)
   return fileExists(settingsDir + filename + settingsExt);
 }
 
-bool FileManager::historyFileExists(QString filename)
+bool FileManager::logFileExists(QString filename)
 {
   return fileExists(logDir + filename + logExt);
 }

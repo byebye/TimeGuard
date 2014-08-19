@@ -21,7 +21,7 @@ public:
   bool saveSettings(QString filename, QString data, SettingName setting);
   bool fileExists(QString filename);
   bool settingsFileExists(QString filename);
-  bool historyFileExists(QString filename);
+  bool logFileExists(QString filename);
   bool deleteFile(QString filename);
   bool deleteSettingsFile(QString filename);
   bool deleteLogFile(QString filename);

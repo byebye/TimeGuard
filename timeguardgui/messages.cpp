@@ -87,7 +87,7 @@ void Messages::getTitleAndText(QString &title, QString &text, Message message)
       break;
     case QuestionDeleteUserFiles:
       title = "";
-      text = tr("Limit will be deactivated and time will be stopped. "
-                "Are you sure?");
+      text = tr("Limit will be disabled and time will be stopped.\n"
+                "Are you sure (deleting files cannot be undone)?");
   }
 }

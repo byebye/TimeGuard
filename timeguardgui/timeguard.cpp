@@ -332,6 +332,10 @@ void TimeGuard::readUsersSettings()
 
 void TimeGuard::on_applyChangedSettingsButton_clicked()
 {
+  if(ui->deleteFilesCheckBox->isChecked() &&
+     messages->information(Messages::QuestionDeleteUserFiles, QMessageBox::Ok | QMessageBox::Cancel)
+     != QMessageBox::Ok)
+    return;
   beforeSaveSettings = usersTableModel->getData();
   for(auto username : usersTableModel->getSelectedUsers())
   {
@@ -389,25 +393,17 @@ void TimeGuard::setLimitEnabled(QString username, bool enable)
 
 void TimeGuard::deleteUserFiles(QString username)
 {
-//  if(messages->information(Messages::QuestionDeleteUserFiles,
-//                           QMessageBox::Ok | QMessageBox::Cancel)
-//     == QMessageBox::Ok)
-//  {
-//    if(fileManager->deleteLogFile(username) && fileManager->deleteSettingsFile(username))
-//    {
-//      messages->information(Messages::FilesDeleted);
-//      if(username == user->getName())
-//      {
-//        ui->timerLCD->resetTime();
-//        setResumePauseButtonIcon();
-//      }
-//    }
-//    else
-//    {
-//      messages->critical(Messages::UnableToDeleteFiles);
-//      return;
-//    }
-//  }
+  if(fileManager->deleteLogFile(username) && fileManager->deleteSettingsFile(username))
+  {
+//    messages->information(Messages::FilesDeleted);
+    if(username == user->getName())
+    {
+      ui->timerLCD->resetTime();
+      setResumePauseButtonIcon();
+    }
+  }
+//  else
+//    messages->critical(Messages::UnableToDeleteFiles);
 }
 
 void TimeGuard::on_undoSavedSettingsButton_clicked()
