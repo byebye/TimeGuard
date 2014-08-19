@@ -378,6 +378,11 @@ void TimeGuard::setLimitEnabled(QString username, bool enable)
   {
     limitStatus = "0";
     emit userLimitDisabled(username);
+    if(username == user->getName())
+    {
+      ui->timerLCD->resetTime();
+      setResumePauseButtonIcon();
+    }
   }
   fileManager->saveSettings(username, limitStatus, FileManager::LimitActive);
 }
