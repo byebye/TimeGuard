@@ -23,6 +23,8 @@ public:
   bool isTimeSet();
   bool isTimeActive();
   void displayDefaultTime();
+  static QString timeToString(QTime time);
+  const static QString ZERO_TIME;
 public slots:
   void startTimer();
   void setDisplay();

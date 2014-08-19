@@ -13,17 +13,20 @@ TimeGuard::TimeGuard(QWidget *parent) :
   setupUi();
   setupLogger();
   initLoggedUser();
+  initUsersTableModel();
 
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
   connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(QTime)), user, SLOT(saveTimeRemaining(QTime)));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()), this, SLOT(adminSuccesfullyLogged()));
+}
 
-  // init users table
+void TimeGuard::initUsersTableModel()
+{
   usersTableModel = new UsersTableModel();
   ui->tableView->setModel(usersTableModel);
-  // checkbox column
-  ui->tableView->setColumnWidth(0, 20);
-  ui->tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+  const int CHECKBOXES_COLUMN = 0;
+  ui->tableView->setColumnWidth(CHECKBOXES_COLUMN, 20);
+  ui->tableView->horizontalHeader()->setSectionResizeMode(CHECKBOXES_COLUMN, QHeaderView::Fixed);
   ui->tableView->show();
 }
 
@@ -63,8 +66,7 @@ void TimeGuard::initLoggedUser()
   if(user->isLimitActive())
   {
     ui->timerLCD->startTime();
-    emit userTimeStarted(user->getName(),
-                         user->getTimeRemaining().toString("hh:mm:ss"));
+    emit userTimeStarted(user->getName(), Timer::timeToString(user->getTimeRemaining()));
   }
 }
 
@@ -75,8 +77,6 @@ void TimeGuard::setupUi()
   logOffAdmin();
   ui->userNameLabel->setText(user->getName());
   ui->logBrowser->setPlainText(fileManager->readLog(user->getName()));
-  ui->tabWidget->setCurrentIndex(USER_TAB);
-  ui->tabWidget->setTabEnabled(ADMIN_TAB, false);
   ui->timerLCD->displayDefaultTime();
 
   this->setWindowIcon(programIcon);
@@ -99,8 +99,8 @@ void TimeGuard::setupLogger()
   connect(this, SIGNAL(adminPasswordChanged()), logger, SLOT(logAdminPasswordChanged()));
   connect(this, SIGNAL(userLoggedIn(QString)), logger, SLOT(logUserLoggedIn(QString)));
   connect(this, SIGNAL(userLoggedOff(QString)),logger, SLOT(logUserLoggedOff(QString)));
-  connect(this, SIGNAL(userLimitEnabled(QString)), logger, SLOT(logUserLimitActivated(QString)));
-  connect(this, SIGNAL(userLimitDisabled(QString)), logger, SLOT(logUserLimitDeactivated(QString)));
+  connect(this, SIGNAL(userLimitEnabled(QString)), logger, SLOT(logUserLimitEnabled(QString)));
+  connect(this, SIGNAL(userLimitDisabled(QString)), logger, SLOT(logUserLimitDisabled(QString)));
   connect(this, SIGNAL(userLimitChanged(QString,QString)), logger, SLOT(logUserLimitChanged(QString,QString)));
   connect(this, SIGNAL(userTimePaused(QString,QString)), logger, SLOT(logUserTimePaused(QString,QString)));
   connect(this, SIGNAL(userTimeStarted(QString,QString)), logger, SLOT(logUserTimeStarted(QString,QString)));
@@ -316,16 +316,16 @@ void TimeGuard::on_changePasswordButton_clicked()
 void TimeGuard::readUsersSettings()
 {
   QStringList usersList = systemQuery->getUsersList();
- // tr("Username"), tr("Limit status"), tr("Today limit"), tr("Time used today")
   QVector<QVector<QVariant>> settings(usersList.size());
   for(int i = 0; i < usersList.size(); ++i)
   {
+    settings[i].resize(usersTableModel->columnCount());
     QString user = usersList[i];
-    settings[i].push_back(user);
-    settings[i].push_back(fileManager->readSettings(user, FileManager::LimitActive) == "1" ? "enabled" : "disabled");
+    settings[i][UsersTableModel::Username] = user;
+    settings[i][UsersTableModel::LimitStatus] = fileManager->readSettings(user, FileManager::LimitActive) == "1" ? "enabled" : "disabled";
     QString timeLimit = fileManager->readSettings(user, FileManager::TimeLimit);
-    settings[i].push_back(timeLimit.isEmpty() ? "Not set" : timeLimit);
-    settings[i].push_back("00:00:00");
+    settings[i][UsersTableModel::TodayLimit] = timeLimit.isEmpty() ? "Not set" : timeLimit;
+    settings[i][UsersTableModel::TimeUsedToday] = "00:00:00";
   }
   usersTableModel->setUsersData(settings);
 }
@@ -336,15 +336,11 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
   for(auto username : usersTableModel->getSelectedUsers())
   {
     if(ui->dailyLimitCheckBox->isChecked())
-      setDailyLimit(username, ui->dailyTimeEdit->time().toString("hh:mm:ss"));
-    //  if(ui->weeklyLimitCheckBox->isChecked())
-    //  {
-    //    QString newWeeklyLimit = ui->weeklyTimeEdit->time().toString("hh:mm:ss");
-    //  }
-    //  if(ui->monthlyLimitCheckBox->isChecked())
-    //  {
-    //    QString newMonthlyLimit = ui->monthlyTimeEdit->time().toString("hh:mm:ss");
-    //  }
+      setDailyLimit(username, Timer::timeToString(ui->dailyTimeEdit->time()));
+    if(ui->weeklyLimitCheckBox->isChecked())
+      setWeeklyLimit(username, Timer::timeToString(ui->weeklyTimeEdit->time()));
+    if(ui->monthlyLimitCheckBox->isChecked())
+      setMonthlyLimit(username, Timer::timeToString(ui->monthlyTimeEdit->time()));
     if(ui->limitControlGroupBox->isChecked())
       setLimitEnabled(username, ui->enableRadioButton->isChecked());
     if(ui->deleteFilesCheckBox->isChecked())
@@ -356,8 +352,18 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
 
 void TimeGuard::setDailyLimit(QString username, QString limit)
 {
-  fileManager->saveSettings(username,  limit, FileManager::TimeLimit);
-  emit userLimitChanged(username,  limit);
+  fileManager->saveSettings(username, limit, FileManager::TimeLimit);
+  emit userLimitChanged(username, limit);
+}
+
+void TimeGuard::setWeeklyLimit(QString username, QString limit)
+{
+
+}
+
+void TimeGuard::setMonthlyLimit(QString username, QString limit)
+{
+
 }
 
 void TimeGuard::setLimitEnabled(QString username, bool enable)
@@ -441,7 +447,7 @@ void TimeGuard::on_resetTimeButton_clicked()
   user->resetTimeRemaining();
   QTime timeRemaining = user->readTimeLimit();
   ui->timerLCD->resetTime(timeRemaining);
-  emit userTimeReset(user->getName(), timeRemaining.toString("hh:mm:ss"));
+  emit userTimeReset(user->getName(), Timer::timeToString(timeRemaining));
 }
 
 void TimeGuard::on_resumePauseTimeButton_clicked()

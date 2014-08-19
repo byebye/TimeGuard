@@ -6,6 +6,7 @@
 #include "filemanager.h"
 #include "systemquery.h"
 #include "logger.h"
+#include "timer.h"
 
 class User : public QObject
 {

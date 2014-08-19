@@ -1,6 +1,8 @@
 #include "timer.h"
 #include "QMessageBox"
 
+const QString Timer::ZERO_TIME = "00:00:00";
+
 Timer::Timer(QWidget *parentWidget) : saveTimePeriod(10)
 {
   setParent(parentWidget);
@@ -20,7 +22,7 @@ Timer::~Timer()
 
 void Timer::displayDefaultTime()
 {
-  display("00:00:00");
+  display(ZERO_TIME);
 }
 
 void Timer::setTime(QTime timeLimit)
@@ -48,7 +50,7 @@ void Timer::resetTime()
 {
   timeSet = false;
   timer->stop();
-  display("00:00:00");
+  display(ZERO_TIME);
 }
 
 void Timer::resetTime(QTime timeLimit)
@@ -64,7 +66,7 @@ void Timer::resetTime(QTime timeLimit)
 
 QString Timer::getTimeRemaining()
 {
-  return timeRemaining->toString("hh:mm:ss");
+  return timeToString(*timeRemaining);
 }
 
 void Timer::startTimer()
@@ -77,9 +79,9 @@ void Timer::setDisplay()
   if(++secondsElapsedCounter % saveTimePeriod == 0)
     emit timeToSaveTimeRemaining(*timeRemaining);
 
-  QString timeString = timeRemaining->toString("hh:mm:ss");
+  QString timeString = getTimeRemaining();
   display(timeString);
-  if(timeString == "00:00:00")
+  if(timeString == ZERO_TIME)
   {
     timer->stop();
     emit timeout();
@@ -96,4 +98,9 @@ bool Timer::isTimeSet()
 bool Timer::isTimeActive()
 {
   return timer->isActive();
+}
+
+QString Timer::timeToString(QTime time)
+{
+  return time.toString("hh:mm:ss");
 }

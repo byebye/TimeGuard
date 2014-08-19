@@ -82,6 +82,7 @@ private:
   bool setTimeIfLimitIsSet();
   void initObjects();
   void initLoggedUser();
+  void initUsersTableModel();
   void setupLogger();
   void setupUi();
   void setupIcons();

@@ -30,12 +30,10 @@ QTime User::readTimeRemaining()
   {
     QTime timeLimit = readTimeLimit();
     fileManager->saveSettings(name, currentDate, FileManager::LastLogin);
-    fileManager->saveSettings(name, timeLimit.toString("hh:mm:ss"),
-                              FileManager::TimeRemaining);
+    fileManager->saveSettings(name, Timer::timeToString(timeLimit), FileManager::TimeRemaining);
     return timeLimit;
   }
-  return QTime::fromString(fileManager->readSettings(
-                                            name, FileManager::TimeRemaining));
+  return QTime::fromString(fileManager->readSettings(name, FileManager::TimeRemaining));
 }
 
 QTime User::readTimeLimit()
@@ -54,7 +52,7 @@ void User::resetTimeRemaining()
 void User::saveTimeRemaining(QTime time)
 {
   *timeRemaining = time;
-  fileManager->saveSettings(name, timeRemaining->toString(), FileManager::TimeRemaining);
+  fileManager->saveSettings(name, Timer::timeToString(*timeRemaining), FileManager::TimeRemaining);
 }
 
 bool User::readLimitActive()

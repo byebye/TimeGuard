@@ -21,65 +21,68 @@ QString Logger::getCurrentDateAndTime()
          QTime::currentTime().toString("hh:mm:ss");
 }
 
+void Logger::logAdmin(QString info)
+{
+  log(logFile, "Admin - " + info);
+}
+
+void Logger::logUserAndGlobal(QString username, QString info)
+{
+  log(username, username + " - " + info);
+  log(logFile, username + " - " + info);
+}
+
 void Logger::logAdminLoggedIn()
 {
-  log(logFile, "Admin - log in");
+  logAdmin("log in");
 }
 
 void Logger::logAdminLoggedOff()
 {
-  log(logFile, "Admin - log off");
+  logAdmin("log off");
 }
 
 void Logger::logAdminPasswordChanged()
 {
-  log(logFile, "Admin - password changed");
+  logAdmin("password changed");
 }
 
 void Logger::logUserLoggedIn(QString username)
 {
-  log(username, username + " - log in");
-  log(logFile, username + " - log in");
+  logUserAndGlobal(username, "log in");
 }
 
 void Logger::logUserLoggedOff(QString username)
 {
-  log(username, username + " - log off");
-  log(logFile, username + " - log off");
+  logUserAndGlobal(username, "log off");
 }
 
-void Logger::logUserLimitActivated(QString username)
+void Logger::logUserLimitEnabled(QString username)
 {
-  log(username, username + " - limit activated");
-  log(logFile, username + " - limit activated");
+  logUserAndGlobal(username, "limit enabled");
 }
 
-void Logger::logUserLimitDeactivated(QString username)
+void Logger::logUserLimitDisabled(QString username)
 {
-  log(username, username + " - limit deactivated");
-  log(logFile, username + " - limit deactivated");
+  logUserAndGlobal(username, "limit disabled");
 }
 
 void Logger::logUserLimitChanged(QString username, QString limit)
 {
-  log(username, username + " - limit changed to " + limit);
-  log(logFile, username + " - limit changed to " + limit);
+  logUserAndGlobal(username, "limit changed to " + limit);
 }
 
 void Logger::logUserTimePaused(QString username, QString time)
 {
-  log(username, username + " - time paused " + time);
-  log(logFile, username + " - time paused " + time);
+  logUserAndGlobal(username, "time paused " + time);
 }
 
 void Logger::logUserTimeStarted(QString username, QString time)
 {
-  log(username, username + " - time started " + time);
-  log(logFile, username + " - time started " + time);
+  logUserAndGlobal(username, "time started " + time);
 }
 
 void Logger::logUserTimeReset(QString username, QString time)
 {
-  log(username, username + " - time reset to " + time);
-  log(logFile, username + " - time reset to " + time);
+  logUserAndGlobal(username, "time reset to " + time);
 }

@@ -21,14 +21,17 @@ public slots:
   void logUserLoggedIn(QString username);
   void logUserLoggedOff(QString username);
   void logUserLimitChanged(QString username, QString limit);
-  void logUserLimitActivated(QString username);
-  void logUserLimitDeactivated(QString username);
+  void logUserLimitEnabled(QString username);
+  void logUserLimitDisabled(QString username);
   void logUserTimePaused(QString username, QString time);
   void logUserTimeStarted(QString username, QString time);
   void logUserTimeReset(QString username, QString time);
 private:
   FileManager *fileManager;
   QString const logFile;
+
+  void logAdmin(QString info);
+  void logUserAndGlobal(QString username, QString info);
 };
 
 #endif // LOGGER_H
