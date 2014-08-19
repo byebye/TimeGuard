@@ -20,7 +20,7 @@ public slots:
   void logAdminPasswordChanged();
   void logUserLoggedIn(QString username);
   void logUserLoggedOff(QString username);
-  void logUserLimitChanged(QString username, QString limit);
+  void logUserLimitChanged(QString username, QString limit, FileManager::SettingName whichLimit);
   void logUserLimitEnabled(QString username);
   void logUserLimitDisabled(QString username);
   void logUserTimePaused(QString username, QString time);

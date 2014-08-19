@@ -10,7 +10,7 @@ public:
   FileManager();
   ~FileManager();
 
-  enum SettingName { TimeRemaining, TimeLimit, LastLogin, LimitActive };
+  enum SettingName { TimeRemaining, DailyLimit, WeeklyLimit, MonthlyLimit, LastLogin, LimitEnabled };
 
   QString readFromFile(QString filename);
   bool saveToFile(QString filename, QString data,

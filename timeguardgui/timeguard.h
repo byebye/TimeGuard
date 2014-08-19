@@ -49,7 +49,7 @@ signals:
   void adminPasswordChanged();
   void userLoggedIn(QString username);
   void userLoggedOff(QString username);
-  void userLimitChanged(QString username, QString limit);
+  void userLimitChanged(QString username, QString limit, FileManager::SettingName whichLimit);
   void userLimitEnabled(QString username);
   void userLimitDisabled(QString username);
   void userTimePaused(QString username, QString time);

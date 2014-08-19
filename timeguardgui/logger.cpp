@@ -67,9 +67,23 @@ void Logger::logUserLimitDisabled(QString username)
   logUserAndGlobal(username, "limit disabled");
 }
 
-void Logger::logUserLimitChanged(QString username, QString limit)
+void Logger::logUserLimitChanged(QString username, QString limit, FileManager::SettingName whichLimit)
 {
-  logUserAndGlobal(username, "limit changed to " + limit);
+  QString limitName;
+  switch(whichLimit)
+  {
+    case FileManager::DailyLimit:
+      limitName = "daily";
+      break;
+    case FileManager::WeeklyLimit:
+      limitName = "weekly";
+      break;
+    case FileManager::MonthlyLimit:
+      limitName = "monthly";
+      break;
+  }
+
+  logUserAndGlobal(username, limitName + " limit changed to " + limit);
 }
 
 void Logger::logUserTimePaused(QString username, QString time)

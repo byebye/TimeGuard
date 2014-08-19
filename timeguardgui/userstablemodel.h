@@ -20,7 +20,7 @@ public:
   QStringList getSelectedUsers();
   QVector<QVector<QVariant>> getData();
 
-  enum TableColumns { Username = 0, LimitStatus = 1, TodayLimit = 2, TimeUsedToday = 3 };
+  enum TableColumns { Username, LimitStatus, DailyLimit, WeeklyLimit, MonthlyLimit };
 signals:
 
 public slots:

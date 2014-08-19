@@ -4,6 +4,7 @@
 #include <QXmlStreamWriter>
 #include <QDate>
 #include <QDebug>
+#include "timer.h"
 
 FileManager::FileManager() :
   settingsDir("settings/"), logDir("log/"),
@@ -58,7 +59,6 @@ QString FileManager::readSettingsFromXML(QString filename, SettingName setting)
     if(xmlReader.qualifiedName() == tag)
     {
       xmlReader.readNext();
-//      qDebug() << xmlReader.text();
       return xmlReader.text().toString();
     }
   }
@@ -120,12 +120,16 @@ QString FileManager::getStringTag(SettingName setting)
   {
     case TimeRemaining:
       return "time-remaining";
-    case TimeLimit:
-      return "time-limit";
+    case DailyLimit:
+      return "daily-limit";
+    case WeeklyLimit:
+      return "weekly-limit";
+    case MonthlyLimit:
+      return "monthly-limit";
     case LastLogin:
       return "last-login";
-    case LimitActive:
-      return "limit-active";
+    case LimitEnabled:
+      return "limit-enabled";
     default:
       return "";
   }
@@ -136,12 +140,13 @@ QString FileManager::getDefaultContent(SettingName setting)
   switch(setting)
   {
     case TimeRemaining:
-      return "00:00:00";
-    case TimeLimit:
-      return "00:00:00";
+    case DailyLimit:
+    case WeeklyLimit:
+    case MonthlyLimit:
+      return Timer::ZERO_TIME;
     case LastLogin:
       return "0000.00.00";
-    case LimitActive:
+    case LimitEnabled:
       return "0";
     default:
       return "";
@@ -156,7 +161,7 @@ QString FileManager::generateDefaultSettingsXML()
   xml.writeStartDocument();
   xml.writeStartElement("TimeGuard");
   QString tag, content;
-  for(int setting = TimeRemaining; setting <= LimitActive; ++setting)
+  for(int setting = TimeRemaining; setting <= LimitEnabled; ++setting)
   {
     tag = getStringTag(static_cast<SettingName>(setting));
     content = getDefaultContent(static_cast<SettingName>(setting));

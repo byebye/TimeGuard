@@ -101,7 +101,8 @@ void TimeGuard::setupLogger()
   connect(this, SIGNAL(userLoggedOff(QString)),logger, SLOT(logUserLoggedOff(QString)));
   connect(this, SIGNAL(userLimitEnabled(QString)), logger, SLOT(logUserLimitEnabled(QString)));
   connect(this, SIGNAL(userLimitDisabled(QString)), logger, SLOT(logUserLimitDisabled(QString)));
-  connect(this, SIGNAL(userLimitChanged(QString,QString)), logger, SLOT(logUserLimitChanged(QString,QString)));
+  connect(this, SIGNAL(userLimitChanged(QString,QString,FileManager::SettingName)),
+          logger, SLOT(logUserLimitChanged(QString,QString,FileManager::SettingName)));
   connect(this, SIGNAL(userTimePaused(QString,QString)), logger, SLOT(logUserTimePaused(QString,QString)));
   connect(this, SIGNAL(userTimeStarted(QString,QString)), logger, SLOT(logUserTimeStarted(QString,QString)));
   connect(this, SIGNAL(userTimeReset(QString,QString)), logger, SLOT(logUserTimeReset(QString,QString)));
@@ -322,10 +323,10 @@ void TimeGuard::readUsersSettings()
     settings[i].resize(usersTableModel->columnCount());
     QString user = usersList[i];
     settings[i][UsersTableModel::Username] = user;
-    settings[i][UsersTableModel::LimitStatus] = fileManager->readSettings(user, FileManager::LimitActive) == "1" ? "enabled" : "disabled";
-    QString timeLimit = fileManager->readSettings(user, FileManager::TimeLimit);
-    settings[i][UsersTableModel::TodayLimit] = timeLimit.isEmpty() ? "Not set" : timeLimit;
-    settings[i][UsersTableModel::TimeUsedToday] = "00:00:00";
+    settings[i][UsersTableModel::LimitStatus] = fileManager->readSettings(user, FileManager::LimitEnabled);
+    settings[i][UsersTableModel::DailyLimit] = fileManager->readSettings(user, FileManager::DailyLimit);
+    settings[i][UsersTableModel::WeeklyLimit] = fileManager->readSettings(user, FileManager::WeeklyLimit);
+    settings[i][UsersTableModel::MonthlyLimit] = fileManager->readSettings(user, FileManager::MonthlyLimit);
   }
   usersTableModel->setUsersData(settings);
 }
@@ -356,18 +357,20 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
 
 void TimeGuard::setDailyLimit(QString username, QString limit)
 {
-  fileManager->saveSettings(username, limit, FileManager::TimeLimit);
-  emit userLimitChanged(username, limit);
+  fileManager->saveSettings(username, limit, FileManager::DailyLimit);
+  emit userLimitChanged(username, limit, FileManager::DailyLimit);
 }
 
 void TimeGuard::setWeeklyLimit(QString username, QString limit)
 {
-
+  fileManager->saveSettings(username, limit, FileManager::WeeklyLimit);
+  emit userLimitChanged(username, limit,  FileManager::WeeklyLimit);
 }
 
 void TimeGuard::setMonthlyLimit(QString username, QString limit)
 {
-
+  fileManager->saveSettings(username, limit, FileManager::MonthlyLimit);
+  emit userLimitChanged(username, limit, FileManager::MonthlyLimit);
 }
 
 void TimeGuard::setLimitEnabled(QString username, bool enable)
@@ -388,7 +391,7 @@ void TimeGuard::setLimitEnabled(QString username, bool enable)
       setResumePauseButtonIcon();
     }
   }
-  fileManager->saveSettings(username, limitStatus, FileManager::LimitActive);
+  fileManager->saveSettings(username, limitStatus, FileManager::LimitEnabled);
 }
 
 void TimeGuard::deleteUserFiles(QString username)
@@ -412,10 +415,10 @@ void TimeGuard::on_undoSavedSettingsButton_clicked()
   for(int i = 0; i < beforeSaveSettings.size(); ++i)
   {
     QString username = beforeSaveSettings[i][UsersTableModel::Username].toString();
-    QString dailyLimit = beforeSaveSettings[i][UsersTableModel::TodayLimit].toString();
-    setDailyLimit(username, dailyLimit);
-    QString limitStatus = beforeSaveSettings[i][UsersTableModel::LimitStatus].toString();
-    setLimitEnabled(username, limitStatus == "enabled");
+    setDailyLimit(username, beforeSaveSettings[i][UsersTableModel::DailyLimit].toString());
+    setWeeklyLimit(username, beforeSaveSettings[i][UsersTableModel::WeeklyLimit].toString());
+    setMonthlyLimit(username, beforeSaveSettings[i][UsersTableModel::MonthlyLimit].toString());
+    setLimitEnabled(username, beforeSaveSettings[i][UsersTableModel::LimitStatus].toString() == "1");
   }
   readUsersSettings();
 }

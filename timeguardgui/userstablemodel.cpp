@@ -1,10 +1,11 @@
 #include "userstablemodel.h"
 #include <QPushButton>
 #include <QDebug>
+#include "timer.h"
 
 UsersTableModel::UsersTableModel(QObject *parent) :
   QAbstractTableModel(parent),
-  headerValues({"", tr("Username"), tr("Limit status"), tr("Today limit"), tr("Time used today")}),
+  headerValues({"", tr("Username"), tr("Limit status"), tr("Daily limit"), tr("Weekly limit"), tr("Monthly Limit")}),
   rowsNumber(0),
   columnsNumber(headerValues.size())
 {
@@ -39,9 +40,24 @@ QVariant UsersTableModel::data(const QModelIndex &index, int role) const
   switch(role)
   {
     case Qt::DisplayRole:
-      if(col >= 1)
-        return gridData[row][col-1];
-      break;
+      switch(col-1)
+      {
+        case Username:
+          return gridData[row][col-1];
+        case DailyLimit:
+        case WeeklyLimit:
+        case MonthlyLimit:
+        {
+          QString limit = gridData[row][col-1].toString();
+          if(limit == Timer::ZERO_TIME || limit.isEmpty())
+            return "not set";
+          else
+            return limit;
+        }
+        case LimitStatus:
+          return gridData[row][col-1] == "1" ? "enabled" : "disabled";
+        default: break;
+      }
     case Qt::FontRole:
       break;
     case Qt::BackgroundRole:

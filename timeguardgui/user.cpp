@@ -38,9 +38,9 @@ QTime User::readTimeRemaining()
 
 QTime User::readTimeLimit()
 {
-  QString timeString = fileManager->readSettings(name, FileManager::TimeLimit);
+  QString timeString = fileManager->readSettings(name, FileManager::DailyLimit);
   if(timeString.isEmpty())
-    timeString = "00:00:00";
+    timeString = Timer::ZERO_TIME;
   return QTime::fromString(timeString);
 }
 
@@ -57,7 +57,7 @@ void User::saveTimeRemaining(QTime time)
 
 bool User::readLimitActive()
 {
-  return fileManager->readSettings(name, FileManager::LimitActive) == "1";
+  return fileManager->readSettings(name, FileManager::LimitEnabled) == "1";
 }
 
 bool User::isLimitActive()
@@ -69,9 +69,9 @@ void User::setLimitActive(bool active)
 {
   limitActive = active;
   if(limitActive)
-    fileManager->saveSettings(name, "1", FileManager::LimitActive);
+    fileManager->saveSettings(name, "1", FileManager::LimitEnabled);
   else
-    fileManager->saveSettings(name, "0", FileManager::LimitActive);
+    fileManager->saveSettings(name, "0", FileManager::LimitEnabled);
 }
 
 void User::logOff()
