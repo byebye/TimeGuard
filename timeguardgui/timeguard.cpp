@@ -213,9 +213,13 @@ void TimeGuard::enableAdminUiElements()
   ui->tabWidget->setCurrentIndex(SETTINGS_TAB);
   ui->resumePauseTimeButton->setEnabled(true);
   ui->resetTimeButton->setEnabled(true);
-  // users settings table
+  uncheckSettingsCheckBoxes();
+  setResumePauseButtonIcon();
+}
+
+void TimeGuard::uncheckSettingsCheckBoxes()
+{
   ui->undoSavedSettingsButton->setEnabled(false);
-  // uncheck all checkboxes
   ui->deleteFilesCheckBox->setChecked(false);
   ui->limitControlGroupBox->setChecked(false);
   ui->enableRadioButton->setChecked(true);
@@ -225,7 +229,6 @@ void TimeGuard::enableAdminUiElements()
   ui->weeklyTimeEdit->setEnabled(false);
   ui->monthlyLimitCheckBox->setChecked(false);
   ui->monthlyTimeEdit->setEnabled(false);
-  setResumePauseButtonIcon();
 }
 
 void TimeGuard::disableAdminUiElements()
@@ -333,11 +336,7 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
   for(auto username : usersTableModel->getSelectedUsers())
   {
     if(ui->dailyLimitCheckBox->isChecked())
-    {
-      QString newDailyLimit = ui->dailyTimeEdit->time().toString("hh:mm:ss");
-      fileManager->saveSettings(username, newDailyLimit, FileManager::TimeLimit);
-      emit userLimitChanged(username, newDailyLimit);
-    }
+      setDailyLimit(username, ui->dailyTimeEdit->time().toString("hh:mm:ss"));
     //  if(ui->weeklyLimitCheckBox->isChecked())
     //  {
     //    QString newWeeklyLimit = ui->weeklyTimeEdit->time().toString("hh:mm:ss");
@@ -347,46 +346,57 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
     //    QString newMonthlyLimit = ui->monthlyTimeEdit->time().toString("hh:mm:ss");
     //  }
     if(ui->limitControlGroupBox->isChecked())
-    {
-      QString limitState;
-      if(ui->enableRadioButton->isChecked())
-      {
-        limitState = "1";
-        emit userLimitEnabled(username);
-      }
-      else
-      {
-        limitState = "0";
-        emit userLimitDisabled(username);
-      }
-      fileManager->saveSettings(username, limitState, FileManager::LimitActive);
-    }
-//    if(ui->deleteFilesCheckBox->isChecked())
-//    {
-//      if(messages->information(Messages::QuestionDeleteUserFiles,
-//                               QMessageBox::Ok | QMessageBox::Cancel)
-//         == QMessageBox::Ok)
-//      {
-//        if(fileManager->deleteLogFile(username)
-//           && fileManager->deleteSettingsFile(username))
-//        {
-//          messages->information(Messages::FilesDeleted);
-//          if(username == user->getName())
-//          {
-//            ui->timerLCD->resetTime();
-//            setResumePauseButtonIcon();
-//          }
-//        }
-//        else
-//        {
-//          messages->critical(Messages::UnableToDeleteFiles);
-//          return;
-//        }
-//      }
-//    }
+      setLimitEnabled(username, ui->enableRadioButton->isChecked());
+    if(ui->deleteFilesCheckBox->isChecked())
+      deleteUserFiles(username);
   }
   readUsersSettings();
   ui->undoSavedSettingsButton->setEnabled(true);
+}
+
+void TimeGuard::setDailyLimit(QString username, QString limit)
+{
+  fileManager->saveSettings(username,  limit, FileManager::TimeLimit);
+  emit userLimitChanged(username,  limit);
+}
+
+void TimeGuard::setLimitEnabled(QString username, bool enable)
+{
+  QString limitStatus;
+  if(enable)
+  {
+    limitStatus = "1";
+    emit userLimitEnabled(username);
+  }
+  else
+  {
+    limitStatus = "0";
+    emit userLimitDisabled(username);
+  }
+  fileManager->saveSettings(username, limitStatus, FileManager::LimitActive);
+}
+
+void TimeGuard::deleteUserFiles(QString username)
+{
+//  if(messages->information(Messages::QuestionDeleteUserFiles,
+//                           QMessageBox::Ok | QMessageBox::Cancel)
+//     == QMessageBox::Ok)
+//  {
+//    if(fileManager->deleteLogFile(username) && fileManager->deleteSettingsFile(username))
+//    {
+//      messages->information(Messages::FilesDeleted);
+//      if(username == user->getName())
+//      {
+//        ui->timerLCD->resetTime();
+//        setResumePauseButtonIcon();
+//      }
+//    }
+//    else
+//    {
+//      messages->critical(Messages::UnableToDeleteFiles);
+//      return;
+//    }
+//  }
 }
 
 void TimeGuard::on_undoSavedSettingsButton_clicked()
@@ -394,18 +404,11 @@ void TimeGuard::on_undoSavedSettingsButton_clicked()
   ui->undoSavedSettingsButton->setEnabled(false);
   for(int i = 0; i < beforeSaveSettings.size(); ++i)
   {
-    QString username = beforeSaveSettings[i][0].toString();
-
-    QString dailyLimit = beforeSaveSettings[i][2].toString();
-    fileManager->saveSettings(username, dailyLimit, FileManager::TimeLimit);
-    emit userLimitChanged(username, dailyLimit);
-
-    QString limitStatus = beforeSaveSettings[i][1].toString();
-    if(limitStatus == "1")
-      emit userLimitEnabled(username);
-    else
-      emit userLimitDisabled(username);
-    fileManager->saveSettings(username, limitStatus, FileManager::LimitActive);
+    QString username = beforeSaveSettings[i][UsersTableModel::Username].toString();
+    QString dailyLimit = beforeSaveSettings[i][UsersTableModel::TodayLimit].toString();
+    setDailyLimit(username, dailyLimit);
+    QString limitStatus = beforeSaveSettings[i][UsersTableModel::LimitStatus].toString();
+    setLimitEnabled(username, limitStatus == "enabled");
   }
   readUsersSettings();
 }

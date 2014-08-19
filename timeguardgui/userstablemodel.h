@@ -19,6 +19,8 @@ public:
   void setUsersData(QVector<QVector<QVariant>> &settings);
   QStringList getSelectedUsers();
   QVector<QVector<QVariant>> getData();
+
+  enum TableColumns { Username = 0, LimitStatus = 1, TodayLimit = 2, TimeUsedToday = 3 };
 signals:
 
 public slots:
