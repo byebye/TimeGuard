@@ -1031,22 +1031,17 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="userTab">
        <attribute name="title">
         <string>User</string>
        </attribute>
-       <widget class="QTextBrowser" name="logBrowser">
-        <property name="geometry">
-         <rect>
-          <x>2</x>
-          <y>2</y>
-          <width>250</width>
-          <height>240</height>
-         </rect>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_10">
+        <item>
+         <widget class="QTextBrowser" name="logBrowser"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="settingsTab">
        <attribute name="title">
@@ -1172,7 +1167,6 @@
                     </widget>
                    </item>
                   </layout>
-                  <zorder></zorder>
                   <zorder>disableRadioButton</zorder>
                   <zorder>enableRadioButton</zorder>
                  </widget>

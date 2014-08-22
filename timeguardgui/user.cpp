@@ -1,4 +1,6 @@
 #include "user.h"
+#include <algorithm>
+#include <QDebug>
 
 User::User(QObject *parent, FileManager *fileManager,
            SystemQuery *systemQuery, Logger *logger) :
@@ -8,10 +10,10 @@ User::User(QObject *parent, FileManager *fileManager,
   logger(logger),
   name(systemQuery->getCurrentUserName())
 {
-  limitActive = readLimitActive();
+  limitEnabled = readLimitEnabled();
   timeRemaining = new QTime();
 
-  if(limitActive)
+  if(limitEnabled)
     readTimeRemaining();
 }
 
@@ -25,50 +27,68 @@ User::~User()
 
 QTime User::readTimeRemaining()
 {
-  QString currentDate = QDate::currentDate().toString("yyyy.MM.dd");
-  if(fileManager->readSettings(name, FileManager::LastLogin) != currentDate)
-  {
-    QTime timeLimit = readTimeLimit();
-    fileManager->saveSettings(name, currentDate, FileManager::LastLogin);
-    fileManager->saveSettings(name, Timer::timeToString(timeLimit), FileManager::TimeRemaining);
-    return timeLimit;
-  }
-  return QTime::fromString(fileManager->readSettings(name, FileManager::TimeRemaining));
+  QDate currentDate = QDate::currentDate();
+  QDate lastLoginDate = QDate::fromString(fileManager->readSettings(name, FileManager::LastLogin));
+  QTime dailyLimit = readLimit(FileManager::DailyLimit);
+  QTime weeklyLimit = readLimit(FileManager::WeeklyLimit);
+  QTime monthlyLimit = readLimit(FileManager::MonthlyLimit);
+  fileManager->saveSettings(name, currentDate.toString("yyyy.MM.dd"), FileManager::LastLogin);
+  if(lastLoginDate != currentDate)
+    saveLimit(dailyLimit, FileManager::TimeRemaining);
+  if(lastLoginDate.weekNumber() != currentDate.weekNumber())
+    saveLimit(weeklyLimit, FileManager::WeeklyTimeRemaining);
+  if(lastLoginDate.month() != currentDate.month())
+    saveLimit(monthlyLimit, FileManager::MonthlyTimeRemaining);
+  QTime timeRemaining = std::min({dailyLimit, weeklyLimit, monthlyLimit});
+  qDebug() << dailyLimit.toString() << ", " << weeklyLimit.toString() << ", " << monthlyLimit.toString() << " -> " << timeRemaining.toString();
+  return timeRemaining;
 }
 
-QTime User::readTimeLimit()
+QTime User::readLimit(FileManager::SettingName limitName)
 {
-  QString timeString = fileManager->readSettings(name, FileManager::DailyLimit);
+  QString timeString = fileManager->readSettings(name, limitName);
   if(timeString.isEmpty())
     timeString = Timer::ZERO_TIME;
   return QTime::fromString(timeString);
 }
 
+void User::saveLimit(QTime limit, FileManager::SettingName limitName)
+{
+  fileManager->saveSettings(name, Timer::timeToString(limit), limitName);
+}
+
+void User::saveLimit(QString limit, FileManager::SettingName limitName)
+{
+  fileManager->saveSettings(name, limit, limitName);
+}
+
 void User::resetTimeRemaining()
 {
-  *timeRemaining = readTimeLimit();
+  *timeRemaining = readLimit(FileManager::DailyLimit); // TODO correct!
 }
 
 void User::saveTimeRemaining(QTime time)
 {
   *timeRemaining = time;
   fileManager->saveSettings(name, Timer::timeToString(*timeRemaining), FileManager::TimeRemaining);
+//  fileManager->saveSettings(name, Timer::timeToString(), FileManager::WeeklyTimeRemaining);
+//  fileManager->saveSettings(name, Timer::timeToString(), FileManager::MonthlyTimeRemaining);
 }
 
-bool User::readLimitActive()
+bool User::readLimitEnabled()
 {
   return fileManager->readSettings(name, FileManager::LimitEnabled) == "1";
 }
 
-bool User::isLimitActive()
+bool User::isLimitEnabled()
 {
-  return limitActive;
+  return limitEnabled;
 }
 
-void User::setLimitActive(bool active)
+void User::setLimitEnabled(bool enabled)
 {
-  limitActive = active;
-  if(limitActive)
+  limitEnabled = enabled;
+  if(limitEnabled)
     fileManager->saveSettings(name, "1", FileManager::LimitEnabled);
   else
     fileManager->saveSettings(name, "0", FileManager::LimitEnabled);

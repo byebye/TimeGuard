@@ -120,6 +120,10 @@ QString FileManager::getStringTag(SettingName setting)
   {
     case TimeRemaining:
       return "time-remaining";
+    case WeeklyTimeRemaining:
+      return "weekly-time-remaining";
+    case MonthlyTimeRemaining:
+      return "monthly-time-remaining";
     case DailyLimit:
       return "daily-limit";
     case WeeklyLimit:
@@ -140,6 +144,8 @@ QString FileManager::getDefaultContent(SettingName setting)
   switch(setting)
   {
     case TimeRemaining:
+    case WeeklyTimeRemaining:
+    case MonthlyTimeRemaining:
     case DailyLimit:
     case WeeklyLimit:
     case MonthlyLimit:

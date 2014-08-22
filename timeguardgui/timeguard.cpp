@@ -63,7 +63,7 @@ void TimeGuard::initLoggedUser()
 {
   emit userLoggedIn(user->getName());
   setTimeIfLimitIsSet();
-  if(user->isLimitActive())
+  if(user->isLimitEnabled())
   {
     ui->timerLCD->startTime();
     emit userTimeStarted(user->getName(), Timer::timeToString(user->getTimeRemaining()));
@@ -449,7 +449,7 @@ void TimeGuard::on_resetTimeButton_clicked()
     return;
   }
   user->resetTimeRemaining();
-  QTime timeRemaining = user->readTimeLimit();
+  QTime timeRemaining = user->readLimit(FileManager::DailyLimit); // TODO correct!
   ui->timerLCD->resetTime(timeRemaining);
   emit userTimeReset(user->getName(), Timer::timeToString(timeRemaining));
 }

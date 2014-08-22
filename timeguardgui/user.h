@@ -20,11 +20,13 @@ public:
 
   QString getName();
   QTime getTimeRemaining();
-  QTime readTimeLimit();
+  QTime readLimit(FileManager::SettingName limitName);
+  void saveLimit(QTime limit, FileManager::SettingName limitName);
+  void saveLimit(QString limit, FileManager::SettingName limitName);
   void resetTimeRemaining();
   int getSaveTimePeriod();
-  bool isLimitActive();
-  void setLimitActive(bool active);
+  bool isLimitEnabled();
+  void setLimitEnabled(bool active);
 signals:
   
 public slots:
@@ -35,11 +37,11 @@ private:
   Logger *logger;
   QString const name;
   QTime *timeRemaining;
-  bool limitActive;
+  bool limitEnabled;
 
   QString getSystemUsername();
   QTime readTimeRemaining();
-  bool readLimitActive();
+  bool readLimitEnabled();
 };
 
 #endif // USER_H
