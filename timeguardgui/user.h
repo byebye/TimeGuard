@@ -7,6 +7,7 @@
 #include "systemquery.h"
 #include "logger.h"
 #include "timer.h"
+#include "timelimit.h"
 
 class User : public QObject
 {
@@ -19,9 +20,9 @@ public:
   bool lengthenTime();
 
   QString getName();
-  QTime getTimeRemaining();
-  QTime readLimit(FileManager::SettingName limitName);
-  void saveLimit(QTime limit, FileManager::SettingName limitName);
+  TimeLimit getTimeRemaining();
+  TimeLimit readLimit(FileManager::SettingName limitName);
+  void saveLimit(TimeLimit limit, FileManager::SettingName limitName);
   void saveLimit(QString limit, FileManager::SettingName limitName);
   void resetTimeRemaining();
   int getSaveTimePeriod();
@@ -30,17 +31,17 @@ public:
 signals:
   
 public slots:
-  void saveTimeRemaining(QTime time);
+  void saveTimeRemaining(TimeLimit time);
 private:
   FileManager *fileManager;
   SystemQuery *systemQuery;
   Logger *logger;
   QString const name;
-  QTime *timeRemaining;
+  TimeLimit *timeRemaining;
   bool limitEnabled;
 
   QString getSystemUsername();
-  QTime readTimeRemaining();
+  TimeLimit readTimeRemaining();
   bool readLimitEnabled();
 };
 

@@ -98,9 +98,9 @@ private:
   void enableAdminUiElements();
   void disableAdminUiElements();
   void uncheckSettingsCheckBoxes();
-  void setDailyLimit(QString username, QString limit);
-  void setWeeklyLimit(QString username, QString limit);
-  void setMonthlyLimit(QString username, QString limit);
+  void setDailyLimit(QString username, TimeLimit limit);
+  void setWeeklyLimit(QString username, TimeLimit limit);
+  void setMonthlyLimit(QString username, TimeLimit limit);
   void setLimitEnabled(QString username, bool state);
   void deleteUserFiles(QString username);
 };

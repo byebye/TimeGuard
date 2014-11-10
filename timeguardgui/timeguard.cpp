@@ -16,7 +16,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   initUsersTableModel();
 
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
-  connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(QTime)), user, SLOT(saveTimeRemaining(QTime)));
+  connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(TimeLimit)), user, SLOT(saveTimeRemaining(TimeLimit)));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()), this, SLOT(adminSuccesfullyLogged()));
 }
 
@@ -66,7 +66,7 @@ void TimeGuard::initLoggedUser()
   if(user->isLimitEnabled())
   {
     ui->timerLCD->startTime();
-    emit userTimeStarted(user->getName(), Timer::timeToString(user->getTimeRemaining()));
+    emit userTimeStarted(user->getName(), user->getTimeRemaining().toString());
   }
 }
 
@@ -341,11 +341,11 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
   for(auto username : usersTableModel->getSelectedUsers())
   {
     if(ui->dailyLimitCheckBox->isChecked())
-      setDailyLimit(username, Timer::timeToString(ui->dailyTimeEdit->time()));
+      setDailyLimit(username, TimeLimit("00:" + Timer::timeToString(ui->dailyTimeEdit->time())));
     if(ui->weeklyLimitCheckBox->isChecked())
-      setWeeklyLimit(username, Timer::timeToString(ui->weeklyTimeEdit->time()));
+      setWeeklyLimit(username, TimeLimit(ui->weeklyTimeEdit->time()));
     if(ui->monthlyLimitCheckBox->isChecked())
-      setMonthlyLimit(username, Timer::timeToString(ui->monthlyTimeEdit->time()));
+      setMonthlyLimit(username, TimeLimit(ui->monthlyTimeEdit->time()));
     if(ui->limitControlGroupBox->isChecked())
       setLimitEnabled(username, ui->enableRadioButton->isChecked());
     if(ui->deleteFilesCheckBox->isChecked())
@@ -355,22 +355,22 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
   ui->undoSavedSettingsButton->setEnabled(true);
 }
 
-void TimeGuard::setDailyLimit(QString username, QString limit)
+void TimeGuard::setDailyLimit(QString username, TimeLimit limit)
 {
-  fileManager->saveSettings(username, limit, FileManager::DailyLimit);
-  emit userLimitChanged(username, limit, FileManager::DailyLimit);
+  fileManager->saveSettings(username, limit.toString(), FileManager::DailyLimit);
+  emit userLimitChanged(username, limit.toString(), FileManager::DailyLimit);
 }
 
-void TimeGuard::setWeeklyLimit(QString username, QString limit)
+void TimeGuard::setWeeklyLimit(QString username, TimeLimit limit)
 {
-  fileManager->saveSettings(username, limit, FileManager::WeeklyLimit);
-  emit userLimitChanged(username, limit,  FileManager::WeeklyLimit);
+  fileManager->saveSettings(username, limit.toString(), FileManager::WeeklyLimit);
+  emit userLimitChanged(username, limit.toString(),  FileManager::WeeklyLimit);
 }
 
-void TimeGuard::setMonthlyLimit(QString username, QString limit)
+void TimeGuard::setMonthlyLimit(QString username, TimeLimit limit)
 {
-  fileManager->saveSettings(username, limit, FileManager::MonthlyLimit);
-  emit userLimitChanged(username, limit, FileManager::MonthlyLimit);
+  fileManager->saveSettings(username, limit.toString(), FileManager::MonthlyLimit);
+  emit userLimitChanged(username, limit.toString(), FileManager::MonthlyLimit);
 }
 
 void TimeGuard::setLimitEnabled(QString username, bool enable)
@@ -449,23 +449,23 @@ void TimeGuard::on_resetTimeButton_clicked()
     return;
   }
   user->resetTimeRemaining();
-  QTime timeRemaining = user->readLimit(FileManager::DailyLimit); // TODO correct!
+  TimeLimit timeRemaining = user->readLimit(FileManager::DailyLimit); // TODO consider all limit types
   ui->timerLCD->resetTime(timeRemaining);
-  emit userTimeReset(user->getName(), Timer::timeToString(timeRemaining));
+  emit userTimeReset(user->getName(), timeRemaining.toString());
 }
 
 void TimeGuard::on_resumePauseTimeButton_clicked()
 {
   if(ui->timerLCD->isTimeActive())
   {
-    emit userTimePaused(user->getName(), ui->timerLCD->getTimeRemaining());
+    emit userTimePaused(user->getName(), ui->timerLCD->getTimeRemaining().toString());
     ui->timerLCD->pauseTime();
   }
   else
   {
     if(setTimeIfLimitIsSet())
     {
-      emit userTimeStarted(user->getName(), ui->timerLCD->getTimeRemaining());
+      emit userTimeStarted(user->getName(), ui->timerLCD->getTimeRemaining().toString());
       ui->timerLCD->resumeTime();
     }
     else

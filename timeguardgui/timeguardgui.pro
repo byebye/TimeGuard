@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     user.cpp \
     messages.cpp \
     systemquery.cpp \
-    userstablemodel.cpp
+    userstablemodel.cpp \
+    timelimit.cpp
 
 HEADERS  += \
     admin.h \
@@ -35,7 +36,8 @@ HEADERS  += \
     user.h \
     messages.h \
     systemquery.h \
-    userstablemodel.h
+    userstablemodel.h \
+    timelimit.h
 
 FORMS    += timeguard.ui \
     adminlogindialog.ui

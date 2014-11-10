@@ -5,6 +5,7 @@
 #include <QDate>
 #include <QDebug>
 #include "timer.h"
+#include "timelimit.h"
 
 FileManager::FileManager() :
   settingsDir("settings/"), logDir("log/"),
@@ -149,7 +150,7 @@ QString FileManager::getDefaultContent(SettingName setting)
     case DailyLimit:
     case WeeklyLimit:
     case MonthlyLimit:
-      return Timer::ZERO_TIME;
+      return TimeLimit(0).toString();
     case LastLogin:
       return "0000.00.00";
     case LimitEnabled:

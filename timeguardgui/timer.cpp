@@ -8,7 +8,7 @@ Timer::Timer(QWidget *parentWidget) : saveTimePeriod(10)
   setParent(parentWidget);
   setDigitCount(8);
   timeSet = false;
-  timeRemaining = new QTime();
+  timeRemaining = new TimeLimit();
   timer = new QTimer();
   timer->setInterval(1000);
   connect(timer, SIGNAL(timeout()), this, SLOT(setDisplay()));
@@ -25,7 +25,7 @@ void Timer::displayDefaultTime()
   display(ZERO_TIME);
 }
 
-void Timer::setTime(QTime timeLimit)
+void Timer::setTime(TimeLimit timeLimit)
 {
   timeSet = true;
   resetTime(timeLimit);
@@ -53,7 +53,7 @@ void Timer::resetTime()
   display(ZERO_TIME);
 }
 
-void Timer::resetTime(QTime timeLimit)
+void Timer::resetTime(TimeLimit timeLimit)
 {
   bool timerActive = timer->isActive();
   timer->stop();
@@ -64,9 +64,9 @@ void Timer::resetTime(QTime timeLimit)
     startTimer();
 }
 
-QString Timer::getTimeRemaining()
+TimeLimit Timer::getTimeRemaining()
 {
-  return timeToString(*timeRemaining);
+  return *timeRemaining;
 }
 
 void Timer::startTimer()
@@ -79,15 +79,14 @@ void Timer::setDisplay()
   if(++secondsElapsedCounter % saveTimePeriod == 0)
     emit timeToSaveTimeRemaining(*timeRemaining);
 
-  QString timeString = getTimeRemaining();
-  display(timeString);
-  if(timeString == ZERO_TIME)
+  display(timeRemaining->toString());
+  if(timeRemaining->isTimeOut())
   {
     timer->stop();
     emit timeout();
   }
   else
-    *timeRemaining = timeRemaining->addSecs(-1);
+    timeRemaining->secondsElapsed(1);
 }
 
 bool Timer::isTimeSet()

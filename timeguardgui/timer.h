@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QString>
+#include "timelimit.h"
 
 class Timer : public QLCDNumber
 {
@@ -13,28 +14,28 @@ public:
   Timer(QWidget *parentWidget);
   ~Timer();
 
-  void setTime(QTime timeLimit);
+  void setTime(TimeLimit timeLimit);
   void startTime();
   void pauseTime();
   void resumeTime();
-  void resetTime(QTime timeLimit);
+  void resetTime(TimeLimit timeLimit);
   void resetTime();
-  QString getTimeRemaining();
+  TimeLimit getTimeRemaining();
   bool isTimeSet();
   bool isTimeActive();
   void displayDefaultTime();
-  static QString timeToString(QTime time);
   const static QString ZERO_TIME;
+  static QString timeToString(QTime qtime);
 public slots:
   void startTimer();
   void setDisplay();
 signals:
   void timeout();
-  void timeToSaveTimeRemaining(QTime time);
+  void timeToSaveTimeRemaining(TimeLimit time);
 private:
   QTimer *timer;
-  QTime *timeRemaining;
-  int saveTimePeriod;
+  TimeLimit *timeRemaining;
+  const int saveTimePeriod;
   int secondsElapsedCounter;
   bool timeSet;
 
