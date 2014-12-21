@@ -175,7 +175,6 @@ QString FileManager::generateDefaultSettingsXML()
     xml.writeTextElement(tag, content);
   }
   xml.writeEndElement();
-//  qDebug() << "Generated settings file:" << endl << settings;
   return settings;
 }
 

@@ -397,16 +397,11 @@ void TimeGuard::setLimitEnabled(QString username, bool enable)
 void TimeGuard::deleteUserFiles(QString username)
 {
   if(fileManager->deleteLogFile(username) && fileManager->deleteSettingsFile(username))
-  {
-//    messages->information(Messages::FilesDeleted);
     if(username == user->getName())
     {
       ui->timerLCD->resetTime();
       setResumePauseButtonIcon();
     }
-  }
-//  else
-//    messages->critical(Messages::UnableToDeleteFiles);
 }
 
 void TimeGuard::on_undoSavedSettingsButton_clicked()
