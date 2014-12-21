@@ -12,14 +12,16 @@ User::User(QObject *parent, FileManager *fileManager,
 {
   limitEnabled = readLimitEnabled();
   timeRemaining = new TimeLimit();
+  initialTimeRemaining = new TimeLimit();
 
   if(limitEnabled)
-    readTimeRemaining();
+    *initialTimeRemaining = readTimeRemaining();
 }
 
 User::~User()
 {
   delete timeRemaining;
+  delete initialTimeRemaining;
   fileManager = NULL;
   systemQuery = NULL;
   logger = NULL;
@@ -119,4 +121,8 @@ TimeLimit User::getTimeRemaining()
 {
   *timeRemaining = readTimeRemaining();
   return *timeRemaining;
+}
+
+TimeLimit User::getInitialTimeRemaining() {
+  return *initialTimeRemaining;
 }

@@ -21,6 +21,7 @@ public:
 
   QString getName();
   TimeLimit getTimeRemaining();
+  TimeLimit getInitialTimeRemaining();
   TimeLimit readLimit(FileManager::SettingName limitName);
   void saveLimit(TimeLimit limit, FileManager::SettingName limitName);
   void saveLimit(QString limit, FileManager::SettingName limitName);
@@ -38,6 +39,7 @@ private:
   Logger *logger;
   QString const name;
   TimeLimit *timeRemaining;
+  TimeLimit *initialTimeRemaining;
   bool limitEnabled;
 
   QString getSystemUsername();

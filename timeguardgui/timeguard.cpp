@@ -449,7 +449,7 @@ void TimeGuard::on_resetTimeButton_clicked()
     return;
   }
   user->resetTimeRemaining();
-  TimeLimit timeRemaining = user->readLimit(FileManager::DailyLimit); // TODO consider all limit types
+  TimeLimit timeRemaining = user->getInitialTimeRemaining();
   ui->timerLCD->resetTime(timeRemaining);
   emit userTimeReset(user->getName(), timeRemaining.toString());
 }
