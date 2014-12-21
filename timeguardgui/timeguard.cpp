@@ -6,8 +6,7 @@
 
 TimeGuard::TimeGuard(QWidget *parent) :
   QMainWindow(parent),
-  ui(new Ui::TimeGuard),
-  USER_TAB(0), SETTINGS_TAB(1), ADMIN_TAB(2)
+  ui(new Ui::TimeGuard)
 {
   initObjects();
   setupUi();
@@ -209,9 +208,9 @@ void TimeGuard::enableAdminUiElements()
                                        + "</span></p></body></html>");
   ui->adminLoggingButton->setText(tr("Log off"));
   readUsersSettings();
-  ui->tabWidget->setTabEnabled(SETTINGS_TAB, true);
-  ui->tabWidget->setTabEnabled(ADMIN_TAB, true);
-  ui->tabWidget->setCurrentIndex(SETTINGS_TAB);
+  ui->tabWidget->setTabEnabled(UiTabs::SettingsTab, true);
+  ui->tabWidget->setTabEnabled(UiTabs::AdminTab, true);
+  ui->tabWidget->setCurrentIndex(UiTabs::SettingsTab);
   ui->resumePauseTimeButton->setEnabled(true);
   ui->resetTimeButton->setEnabled(true);
   uncheckSettingsCheckBoxes();
@@ -236,9 +235,9 @@ void TimeGuard::disableAdminUiElements()
 {
   ui->adminLoggedNotification->setText(tr("Log in as Admin"));
   ui->adminLoggingButton->setText(tr("Log in"));
-  ui->tabWidget->setCurrentIndex(USER_TAB);
-  ui->tabWidget->setTabEnabled(SETTINGS_TAB, false);
-  ui->tabWidget->setTabEnabled(ADMIN_TAB, false);
+  ui->tabWidget->setCurrentIndex(UiTabs::UserTab);
+  ui->tabWidget->setTabEnabled(UiTabs::SettingsTab, false);
+  ui->tabWidget->setTabEnabled(UiTabs::AdminTab, false);
   ui->resumePauseTimeButton->setDisabled(true);
   ui->resetTimeButton->setDisabled(true);
   setResumePauseButtonIcon();

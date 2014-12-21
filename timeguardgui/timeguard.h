@@ -74,9 +74,7 @@ private:
   bool closeFromTrayMenu;
   bool loggedAsAdmin;
   AdminLoginDialog *adminLoginDialog;
-  const int USER_TAB;
-  const int SETTINGS_TAB;
-  const int ADMIN_TAB;
+  enum UiTabs { UserTab = 0, SettingsTab = 1, AdminTab = 2 };
   QVector<QVector<QVariant>> beforeSaveSettings;
 
   bool setTimeIfLimitIsSet();
