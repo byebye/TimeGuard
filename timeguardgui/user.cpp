@@ -30,8 +30,8 @@ User::~User()
 TimeLimit User::readTimeRemaining()
 {
   QDate currentDate = QDate::currentDate();
-  QDate lastLoginDate = QDate::fromString(fileManager->readSettings(name, FileManager::LastLogin));
-  fileManager->saveSettings(name, currentDate.toString("yyyy.MM.dd"), FileManager::LastLogin);
+  QDate lastLoginDate = QDate::fromString(fileManager->readSettings(name, FileManager::LastLoginDate), "yyyy.MM.dd");
+  fileManager->saveSettings(name, currentDate.toString("yyyy.MM.dd"), FileManager::LastLoginDate);
   if(lastLoginDate != currentDate)
     refreshDailyTimeRemaining();
   if(lastLoginDate.weekNumber() != currentDate.weekNumber())
@@ -77,15 +77,22 @@ void User::saveLimit(QString limit, FileManager::SettingName limitName)
 
 void User::resetTimeRemaining()
 {
-  *timeRemaining = readLimit(FileManager::DailyLimit); // TODO consider all limit types
+  const int secondsSinceLogIn = initialTimeRemaining->getTimeRemaining() - timeRemaining->getTimeRemaining();
+  TimeLimit weeklyTimeRemaining = readLimit(FileManager::WeeklyTimeRemaining);
+  TimeLimit monthlyTimeRemaining = readLimit(FileManager::MonthlyTimeRemaining);
+  saveLimit(*initialTimeRemaining, FileManager::TimeRemaining);
+  saveLimit(weeklyTimeRemaining.secondsElapsed(-secondsSinceLogIn), FileManager::WeeklyTimeRemaining);
+  saveLimit(monthlyTimeRemaining.secondsElapsed(-secondsSinceLogIn), FileManager::MonthlyTimeRemaining);
+  *timeRemaining = *initialTimeRemaining;
 }
 
-void User::saveTimeRemaining(TimeLimit time)
+void User::saveTimeRemaining(int secondsElapsed)
 {
-  *timeRemaining = time;
-  fileManager->saveSettings(name, timeRemaining->toString(), FileManager::TimeRemaining);
-  //fileManager->saveSettings(name, Timer::timeToString(), FileManager::WeeklyTimeRemaining);
-  //fileManager->saveSettings(name, Timer::timeToString(), FileManager::MonthlyTimeRemaining);
+  TimeLimit weeklyTimeRemaining = readLimit(FileManager::WeeklyTimeRemaining);
+  TimeLimit monthlyTimeRemaining = readLimit(FileManager::MonthlyTimeRemaining);
+  saveLimit(timeRemaining->secondsElapsed(secondsElapsed), FileManager::TimeRemaining);
+  saveLimit(weeklyTimeRemaining.secondsElapsed(secondsElapsed), FileManager::WeeklyTimeRemaining);
+  saveLimit(monthlyTimeRemaining.secondsElapsed(secondsElapsed), FileManager::MonthlyTimeRemaining);
 }
 
 bool User::readLimitEnabled()
@@ -121,8 +128,4 @@ TimeLimit User::getTimeRemaining()
 {
   *timeRemaining = readTimeRemaining();
   return *timeRemaining;
-}
-
-TimeLimit User::getInitialTimeRemaining() {
-  return *initialTimeRemaining;
 }

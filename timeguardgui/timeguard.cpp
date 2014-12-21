@@ -16,7 +16,7 @@ TimeGuard::TimeGuard(QWidget *parent) :
   initUsersTableModel();
 
   connect(ui->timerLCD, SIGNAL(timeout()), this, SLOT(userTimeout()));
-  connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(TimeLimit)), user, SLOT(saveTimeRemaining(TimeLimit)));
+  connect(ui->timerLCD, SIGNAL(timeToSaveTimeRemaining(int)), user, SLOT(saveTimeRemaining(int)));
   connect(adminLoginDialog, SIGNAL(passwordAccepted()), this, SLOT(adminSuccesfullyLogged()));
 }
 
@@ -449,9 +449,8 @@ void TimeGuard::on_resetTimeButton_clicked()
     return;
   }
   user->resetTimeRemaining();
-  TimeLimit timeRemaining = user->getInitialTimeRemaining();
-  ui->timerLCD->resetTime(timeRemaining);
-  emit userTimeReset(user->getName(), timeRemaining.toString());
+  ui->timerLCD->resetTime(user->getTimeRemaining());
+  emit userTimeReset(user->getName(), user->getTimeRemaining().toString());
 }
 
 void TimeGuard::on_resumePauseTimeButton_clicked()

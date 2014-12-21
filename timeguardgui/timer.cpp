@@ -77,7 +77,7 @@ void Timer::startTimer()
 void Timer::setDisplay()
 {
   if(++secondsElapsedCounter % saveTimePeriod == 0)
-    emit timeToSaveTimeRemaining(*timeRemaining);
+    emit timeToSaveTimeRemaining(saveTimePeriod);
 
   display(timeRemaining->toString());
   if(timeRemaining->isTimeOut())

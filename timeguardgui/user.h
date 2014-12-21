@@ -21,7 +21,6 @@ public:
 
   QString getName();
   TimeLimit getTimeRemaining();
-  TimeLimit getInitialTimeRemaining();
   TimeLimit readLimit(FileManager::SettingName limitName);
   void saveLimit(TimeLimit limit, FileManager::SettingName limitName);
   void saveLimit(QString limit, FileManager::SettingName limitName);
@@ -32,7 +31,7 @@ public:
 signals:
   
 public slots:
-  void saveTimeRemaining(TimeLimit time);
+  void saveTimeRemaining(int secondsElapsed);
 private:
   FileManager *fileManager;
   SystemQuery *systemQuery;

@@ -50,9 +50,10 @@ bool TimeLimit::isTimeOut()
   return timeRemaining <= 0;
 }
 
-void TimeLimit::secondsElapsed(int seconds)
+TimeLimit TimeLimit::secondsElapsed(int seconds)
 {
   timeRemaining -= seconds;
+  return *this;
 }
 
 int TimeLimit::fromString(QString timeString)

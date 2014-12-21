@@ -31,7 +31,7 @@ public slots:
   void setDisplay();
 signals:
   void timeout();
-  void timeToSaveTimeRemaining(TimeLimit time);
+  void timeToSaveTimeRemaining(int secondsElapsed);
 private:
   QTimer *timer;
   TimeLimit *timeRemaining;

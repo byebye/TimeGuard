@@ -131,8 +131,8 @@ QString FileManager::getStringTag(SettingName setting)
       return "weekly-limit";
     case MonthlyLimit:
       return "monthly-limit";
-    case LastLogin:
-      return "last-login";
+    case LastLoginDate:
+      return "last-login-date";
     case LimitEnabled:
       return "limit-enabled";
     default:
@@ -151,7 +151,7 @@ QString FileManager::getDefaultContent(SettingName setting)
     case WeeklyLimit:
     case MonthlyLimit:
       return TimeLimit(0).toString();
-    case LastLogin:
+    case LastLoginDate:
       return "0000.00.00";
     case LimitEnabled:
       return "0";

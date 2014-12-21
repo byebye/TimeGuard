@@ -20,7 +20,7 @@ public:
   TimeLimit convertToMonthlyTimeRemaining(int daysInMonth);
   void setTimeRemaining(int timeLimit);
   bool isTimeOut();
-  void secondsElapsed(int seconds);
+  TimeLimit secondsElapsed(int seconds);
   int fromString(QString timeString);
   QString toString();
   QString toString(int timeSeconds);
