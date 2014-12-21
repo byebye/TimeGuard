@@ -16,6 +16,8 @@ public:
   TimeLimit(const TimeLimit &timeLimit, QObject *parent = 0);
 
   int getTimeRemaining() const;
+  TimeLimit convertToWeeklyTimeRemaining(int daysInWeek = 7);
+  TimeLimit convertToMonthlyTimeRemaining(int daysInMonth);
   void setTimeRemaining(int timeLimit);
   bool isTimeOut();
   void secondsElapsed(int seconds);

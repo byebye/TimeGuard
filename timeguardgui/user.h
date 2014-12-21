@@ -43,6 +43,9 @@ private:
   QString getSystemUsername();
   TimeLimit readTimeRemaining();
   bool readLimitEnabled();
+  void refreshDailyTimeRemaining();
+  void refreshWeeklyTimeRemaining();
+  void refreshMonthlyTimeRemaining();
 };
 
 #endif // USER_H

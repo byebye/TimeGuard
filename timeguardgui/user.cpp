@@ -29,19 +29,33 @@ TimeLimit User::readTimeRemaining()
 {
   QDate currentDate = QDate::currentDate();
   QDate lastLoginDate = QDate::fromString(fileManager->readSettings(name, FileManager::LastLogin));
-  TimeLimit dailyLimit = readLimit(FileManager::DailyLimit);
-  TimeLimit weeklyLimit = readLimit(FileManager::WeeklyLimit);
-  TimeLimit monthlyLimit = readLimit(FileManager::MonthlyLimit);
   fileManager->saveSettings(name, currentDate.toString("yyyy.MM.dd"), FileManager::LastLogin);
   if(lastLoginDate != currentDate)
-    saveLimit(dailyLimit, FileManager::TimeRemaining);
+    refreshDailyTimeRemaining();
   if(lastLoginDate.weekNumber() != currentDate.weekNumber())
-    saveLimit(weeklyLimit, FileManager::WeeklyTimeRemaining);
+    refreshWeeklyTimeRemaining();
   if(lastLoginDate.month() != currentDate.month())
-    saveLimit(monthlyLimit, FileManager::MonthlyTimeRemaining);
-  TimeLimit timeRemaining = std::min({dailyLimit, weeklyLimit, monthlyLimit});
-  qDebug() << "Time remaining: '" << dailyLimit.toString() << "', '" << weeklyLimit.toString() << "', '" << monthlyLimit.toString() << "' -> " << timeRemaining.toString();
+    refreshMonthlyTimeRemaining();
+  TimeLimit dailyTimeRemaining = readLimit(FileManager::TimeRemaining);
+  TimeLimit weeklyTimeRemaining = readLimit(FileManager::WeeklyTimeRemaining);
+  TimeLimit monthlyTimeRemaining = readLimit(FileManager::MonthlyTimeRemaining);
+  TimeLimit timeRemaining = std::min({dailyTimeRemaining, weeklyTimeRemaining, monthlyTimeRemaining});
   return timeRemaining;
+}
+
+void User::refreshDailyTimeRemaining() {
+  TimeLimit dailyTimeRemaining = readLimit(FileManager::DailyLimit);
+  saveLimit(dailyTimeRemaining, FileManager::TimeRemaining);
+}
+
+void User::refreshWeeklyTimeRemaining() {
+  TimeLimit weeklyTimeRemaining = readLimit(FileManager::WeeklyLimit).convertToWeeklyTimeRemaining();
+  saveLimit(weeklyTimeRemaining, FileManager::WeeklyTimeRemaining);
+}
+
+void User::refreshMonthlyTimeRemaining() {
+  TimeLimit monthlyTimeRemaining = readLimit(FileManager::MonthlyLimit).convertToMonthlyTimeRemaining(QDate::currentDate().daysInMonth());
+  saveLimit(monthlyTimeRemaining, FileManager::MonthlyTimeRemaining);
 }
 
 TimeLimit User::readLimit(FileManager::SettingName limitName)
@@ -68,8 +82,8 @@ void User::saveTimeRemaining(TimeLimit time)
 {
   *timeRemaining = time;
   fileManager->saveSettings(name, timeRemaining->toString(), FileManager::TimeRemaining);
-//  fileManager->saveSettings(name, Timer::timeToString(), FileManager::WeeklyTimeRemaining);
-//  fileManager->saveSettings(name, Timer::timeToString(), FileManager::MonthlyTimeRemaining);
+  //fileManager->saveSettings(name, Timer::timeToString(), FileManager::WeeklyTimeRemaining);
+  //fileManager->saveSettings(name, Timer::timeToString(), FileManager::MonthlyTimeRemaining);
 }
 
 bool User::readLimitEnabled()

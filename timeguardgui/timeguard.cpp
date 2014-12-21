@@ -341,7 +341,7 @@ void TimeGuard::on_applyChangedSettingsButton_clicked()
   for(auto username : usersTableModel->getSelectedUsers())
   {
     if(ui->dailyLimitCheckBox->isChecked())
-      setDailyLimit(username, TimeLimit("00:" + Timer::timeToString(ui->dailyTimeEdit->time())));
+      setDailyLimit(username, TimeLimit(ui->dailyTimeEdit->time()));
     if(ui->weeklyLimitCheckBox->isChecked())
       setWeeklyLimit(username, TimeLimit(ui->weeklyTimeEdit->time()));
     if(ui->monthlyLimitCheckBox->isChecked())

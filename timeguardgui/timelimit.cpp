@@ -30,6 +30,16 @@ int TimeLimit::getTimeRemaining() const {
   return timeRemaining;
 }
 
+TimeLimit TimeLimit::convertToWeeklyTimeRemaining(int daysInWeek) {
+  timeRemaining *= daysInWeek;
+  return *this;
+}
+
+TimeLimit TimeLimit::convertToMonthlyTimeRemaining(int daysInMonth) {
+  timeRemaining *= daysInMonth;
+  return *this;
+}
+
 void TimeLimit::setTimeRemaining(int timeLimit)
 {
   timeRemaining = timeLimit;
@@ -47,7 +57,7 @@ void TimeLimit::secondsElapsed(int seconds)
 
 int TimeLimit::fromString(QString timeString)
 {
-  const int multipliers[] = { DAY, HOUR, MINUTE, SECOND};
+  const int multipliers[] = { HOUR, MINUTE, SECOND };
   QStringList timeParts = timeString.split(":", QString::SkipEmptyParts);
   int timeSeconds = 0;
   for(int i = 0; i < timeParts.size(); ++i)
@@ -57,15 +67,12 @@ int TimeLimit::fromString(QString timeString)
 
 QString TimeLimit::toString(int timeSeconds)
 {
-  int days = timeSeconds / DAY;
-  timeSeconds %= DAY;
   int hours = timeSeconds / HOUR;
   timeSeconds %= HOUR;
   int minutes = timeSeconds / MINUTE;
   timeSeconds %= MINUTE;
   int seconds = timeSeconds;
-  return QString("%1:%2:%3:%4")
-      .arg(days, 2, 10, QChar('0'))
+  return QString("%1:%2:%3")
       .arg(hours, 2, 10, QChar('0'))
       .arg(minutes, 2, 10, QChar('0'))
       .arg(seconds, 2, 10, QChar('0'));
