@@ -47,13 +47,7 @@ QVariant UsersTableModel::data(const QModelIndex &index, int role) const
         case DailyLimit:
         case WeeklyLimit:
         case MonthlyLimit:
-        {
-          QString limit = gridData[row][col-1].toString();
-          if(limit == Timer::ZERO_TIME || limit.isEmpty())
-            return "not set";
-          else
-            return limit;
-        }
+          return gridData[row][col-1].toString();
         case LimitStatus:
           return gridData[row][col-1] == "1" ? "enabled" : "disabled";
         default: break;
