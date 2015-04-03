@@ -15,4 +15,8 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 include(QtService/qtservice.pri)
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    timeguardservice.cpp
+
+HEADERS += \
+    timeguardservice.h
