@@ -1,8 +1,7 @@
-#include <QCoreApplication>
+#include "timeguardservice.h"
 
 int main(int argc, char *argv[])
 {
-   QCoreApplication a(argc, argv);
-
-   return a.exec();
+   TimeGuardService timeGuardService(argc, argv);
+   return timeGuardService.exec();
 }

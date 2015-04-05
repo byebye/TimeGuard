@@ -16,7 +16,17 @@ TEMPLATE = app
 
 include(QtService/qtservice.pri)
 SOURCES += main.cpp \
-    timeguardservice.cpp
+   timeguardservice.cpp \
+    userslimitcontroller.cpp \
+    user.cpp \
+    userlimittimer.cpp \
+    limitsettingsmanager.cpp
+
 
 HEADERS += \
-    timeguardservice.h
+   timeguardservice.h \
+    userslimitcontroller.h \
+    user.h \
+    userlimittimer.h \
+    limitsettingsmanager.h
+

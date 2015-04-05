@@ -1,4 +1,4 @@
-include(../common.pri)
+#include(../common.pri)
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 !win32:QT += network
@@ -19,3 +19,7 @@ win32 {
     qtservice-buildlib:shared:DEFINES += QT_QTSERVICE_EXPORT
     else:qtservice-uselib:DEFINES += QT_QTSERVICE_IMPORT
 }
+
+HEADERS +=
+
+SOURCES +=
