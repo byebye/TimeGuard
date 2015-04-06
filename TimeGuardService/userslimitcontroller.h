@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QtNetwork>
 #include "userlimittimer.h"
 #include "limitsettingsmanager.h"
 
@@ -16,10 +17,11 @@ public:
 signals:
 
 public slots:
-
+   void collectData();
 private:
   QHash<QString, UserLimitTimer> *usersLimitTimer;
   LimitSettingsManager *limitSettingsManager;
+  QLocalServer *server;
 };
 
 #endif // USERSLIMITCONTROLLER_H
