@@ -16,10 +16,10 @@ ServiceCommunicationSocket::~ServiceCommunicationSocket()
 
 bool ServiceCommunicationSocket::createIndividualCommunicationChannel()
 {
-   generateIndividualChannelName();
+   individualChannelName = generateIndividualChannelName();
    sendIndividualChannelName();
    socket->disconnectFromServer();
-   socket->connectToServer(channelName);
+   socket->connectToServer(individualChannelName);
    return socket->waitForConnected(20000);
 }
 
@@ -31,7 +31,7 @@ bool ServiceCommunicationSocket::sendIndividualChannelName()
       QDataStream globalSocketStream(globalSocket);
       globalSocketStream.setVersion(QDataStream::Qt_5_4);
       // TODO - protocol to distinguish consistent data chunks
-      globalSocketStream << channelName;
+      globalSocketStream << individualChannelName;
       return true;
    }
    return false;
@@ -39,9 +39,15 @@ bool ServiceCommunicationSocket::sendIndividualChannelName()
 
 QString ServiceCommunicationSocket::generateIndividualChannelName()
 {
+   QUuid uuid = QUuid::createUuid();
+   return "s" + QString::number(getSessionId()) + uuid.toString();
+}
+
+unsigned long ServiceCommunicationSocket::getSessionId()
+{
+   unsigned long sessionId = 0;
    LPTSTR data = nullptr;
    DWORD bytesReturned = 0;
-   unsigned long sessionId = 0;
    if (WTSQuerySessionInformation(WTS_CURRENT_SERVER_HANDLE,
                               WTS_CURRENT_SESSION,
                               WTSSessionId,
@@ -53,12 +59,10 @@ QString ServiceCommunicationSocket::generateIndividualChannelName()
    else {
       // TODO - action when unable to retrieve session id
    }
-   QUuid uuid = QUuid::createUuid();
-   channelName = "s" + QString::number(sessionId) + uuid.toString();
-   return channelName;
+   return sessionId;
 }
 
 QString ServiceCommunicationSocket::getChannelName() const
 {
-   return channelName;
+   return individualChannelName;
 }

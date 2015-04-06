@@ -23,7 +23,6 @@ private:
    ServiceCommunicationSocket *communicationSocket;
 
    void initializeConnectionWithService();
-   QString generateChannelName();
 };
 
 #endif // TIMEGUARDMAINWINDOW_H

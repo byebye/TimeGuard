@@ -7,21 +7,25 @@ TimeGuardMainWindow::TimeGuardMainWindow(QWidget *parent) :
    ui(new Ui::TimeGuardMainWindow)
 {
    ui->setupUi(this);
+   communicationSocket = new ServiceCommunicationSocket();
    initializeConnectionWithService();
 }
 
 TimeGuardMainWindow::~TimeGuardMainWindow()
 {
    delete ui;
+   delete communicationSocket;
 }
 
 void TimeGuardMainWindow::on_connectWithService_clicked()
 {
-   ui->communicationStatus->setText(communicationSocket->getChannelName());
+   initializeConnectionWithService();
 }
 
 void TimeGuardMainWindow::initializeConnectionWithService()
 {
-   communicationSocket = new ServiceCommunicationSocket();
-   communicationSocket->createIndividualCommunicationChannel();
+   QString status = "Connection failed!";
+   if (communicationSocket->createIndividualCommunicationChannel())
+      status = communicationSocket->getChannelName();
+   ui->communicationStatus->setText(communicationSocket->getChannelName());
 }

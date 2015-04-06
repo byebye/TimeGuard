@@ -20,9 +20,10 @@ public slots:
 private:
    static QString globalSocketName;
    QLocalSocket *socket;
-   QString channelName;
+   QString individualChannelName;
 
    QString generateIndividualChannelName();
+   unsigned long getSessionId();
    bool sendIndividualChannelName();
 };
 

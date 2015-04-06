@@ -10,13 +10,18 @@ GUICommunicationSocket::GUICommunicationSocket(QObject *parent) : QObject(parent
    logFileStream = new QTextStream(logFile);
    (*logFileStream) << "Creating server: " << QTime::currentTime().toString("hh:mm") << "\n";
    logFileStream->flush();
+   individualSockets = new QHash<QString, QLocalServer*>();
    createGlobalServer();
+
 }
 
 GUICommunicationSocket::~GUICommunicationSocket()
 {
    logFile->close();
    delete logFile;
+   delete logFileStream;
+   delete individualSockets;
+   delete globalServer;
 }
 
 void GUICommunicationSocket::createGlobalServer()
@@ -46,11 +51,21 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
       in >> individualChannelName;
       (*logFileStream) << "Channel name to create: " << individualChannelName << "\n";
       logFileStream->flush();
+      createIndividualServer(individualChannelName);
    }
    else {
       (*logFileStream) << "No data received\n";
       logFileStream->flush();
    }
+}
+
+void GUICommunicationSocket::createIndividualServer(const QString &individualChannelName)
+{
+   QLocalServer *individualServer = new QLocalServer();
+   individualServer->listen(individualChannelName);
+   individualSockets->insert(individualChannelName, individualServer);
+   (*logFileStream) << "Channel \"" << individualChannelName << "\" created\n";
+   logFileStream->flush();
 }
 
 
