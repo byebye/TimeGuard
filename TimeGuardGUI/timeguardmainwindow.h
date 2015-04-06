@@ -2,7 +2,7 @@
 #define TIMEGUARDMAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtNetwork>
+#include "servicecommunicationsocket.h"
 
 namespace Ui {
 class TimeGuardMainWindow;
@@ -18,14 +18,12 @@ public:
 
 private slots:
    void on_connectWithService_clicked();
-   void initialConnectionEstablished();
-   void connectionWithServiceError(QLocalSocket::LocalSocketError socketError);
 private:
-   static QString serviceServerName;
    Ui::TimeGuardMainWindow *ui;
-   QLocalSocket *socket;
+   ServiceCommunicationSocket *communicationSocket;
 
-   void makeInitialConnectionWithService();
+   void initializeConnectionWithService();
+   QString generateChannelName();
 };
 
 #endif // TIMEGUARDMAINWINDOW_H
