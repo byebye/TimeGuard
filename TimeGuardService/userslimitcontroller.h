@@ -3,9 +3,9 @@
 
 #include <QObject>
 #include <QHash>
-#include <QtNetwork>
 #include "userlimittimer.h"
 #include "limitsettingsmanager.h"
+#include "guicommunicationsocket.h"
 
 class UsersLimitController : public QObject
 {
@@ -17,11 +17,11 @@ public:
 signals:
 
 public slots:
-   void collectData();
+
 private:
-  QHash<QString, UserLimitTimer> *usersLimitTimer;
-  LimitSettingsManager *limitSettingsManager;
-  QLocalServer *server;
+   GUICommunicationSocket *communicationSocket;
+   QHash<QString, UserLimitTimer> *usersLimitTimer;
+   LimitSettingsManager *limitSettingsManager;
 };
 
 #endif // USERSLIMITCONTROLLER_H

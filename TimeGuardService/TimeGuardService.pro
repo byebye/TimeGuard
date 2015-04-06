@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     userslimitcontroller.cpp \
     user.cpp \
     userlimittimer.cpp \
-    limitsettingsmanager.cpp
+    limitsettingsmanager.cpp \
+    guicommunicationsocket.cpp
 
 
 HEADERS += \
@@ -28,5 +29,6 @@ HEADERS += \
     userslimitcontroller.h \
     user.h \
     userlimittimer.h \
-    limitsettingsmanager.h
+    limitsettingsmanager.h \
+    guicommunicationsocket.h
 

@@ -2,6 +2,9 @@
 #define GUICOMMUNICATIONSOCKET_H
 
 #include <QObject>
+#include <QtNetwork>
+#include <QFile>
+#include <QTextStream>
 
 class GUICommunicationSocket : public QObject
 {
@@ -13,6 +16,14 @@ public:
 signals:
 
 public slots:
+   void collectDataFromGlobalConnection();
+private:
+   static QString globalSocketName;
+   QLocalServer *globalServer;
+   QFile *logFile;
+   QTextStream *logFileStream;
+
+   void createGlobalServer();
 };
 
 #endif // GUICOMMUNICATIONSOCKET_H
