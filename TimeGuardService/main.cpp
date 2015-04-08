@@ -10,9 +10,7 @@ int main(int argc, char *argv[])
    logger.setLoggingLevel(QsLogging::DebugLevel);
    QsLogging::DestinationPtr logFileDestination(QsLogging::DestinationFactory::MakeFileDestination("D:/timeguard.log",
                                                 QsLogging::DisableLogRotation));
-   QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
    logger.addDestination(logFileDestination);
-   logger.addDestination(debugDestination);
 
    return timeGuardService.exec();
 }

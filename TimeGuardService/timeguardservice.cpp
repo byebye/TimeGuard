@@ -33,5 +33,7 @@ void TimeGuardService::resume()
 void TimeGuardService::stop()
 {
    QLOG_INFO() << "Service stopped";
+   delete usersLimitController;
+   usersLimitController = nullptr;
 }
 
