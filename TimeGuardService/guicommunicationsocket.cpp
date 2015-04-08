@@ -6,34 +6,33 @@ QString GUICommunicationSocket::globalSocketName = "TimeGuardGlobalSocket";
 
 GUICommunicationSocket::GUICommunicationSocket(QObject *parent) : QObject(parent)
 {
-   individualSockets = new QHash<QString, QLocalServer*>();
-   createGlobalServer();
-
+   individualChannels = new QHash<QString, QPointer<IndividualCommunicationChannel>>();
+   createGlobalChannel();
 }
 
 GUICommunicationSocket::~GUICommunicationSocket()
 {
-   delete individualSockets;
-   delete globalServer;
+   delete individualChannels;
+   delete globalChannel;
 }
 
-void GUICommunicationSocket::createGlobalServer()
+void GUICommunicationSocket::createGlobalChannel()
 {
-   globalServer = new QLocalServer(this);
-   globalServer->setSocketOptions(QLocalServer::WorldAccessOption);
-   if(!globalServer->listen(globalSocketName)) {
+   globalChannel = new QLocalServer(this);
+   globalChannel->setSocketOptions(QLocalServer::WorldAccessOption);
+   if(!globalChannel->listen(globalSocketName)) {
       QLOG_FATAL() << "Unable to create global communication channel";
       return;
    }
-   connect(globalServer, SIGNAL(newConnection()),
+   connect(globalChannel, SIGNAL(newConnection()),
            this, SLOT(collectDataFromGlobalConnection()));
    QLOG_INFO() << "Global communication channel created";
 }
 
 void GUICommunicationSocket::collectDataFromGlobalConnection()
 {
-   QLOG_INFO() << "New connection detected";
-   QLocalSocket *clientConnection = globalServer->nextPendingConnection();
+   QLOG_INFO() << "New global channel connection detected";
+   QLocalSocket *clientConnection = globalChannel->nextPendingConnection();
    connect(clientConnection, SIGNAL(disconnected()),
            clientConnection, SLOT(deleteLater()));
    if (clientConnection->waitForReadyRead(30000)) {
@@ -41,7 +40,7 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
       in.setVersion(QDataStream::Qt_5_4);
       QString individualChannelName;
       in >> individualChannelName;
-      in << createIndividualServer(individualChannelName);
+      in << createIndividualChannel(individualChannelName);
    }
    else {
       QLOG_WARN() << "New connection detected, but no data received - client will be disconnected";
@@ -49,17 +48,25 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
    }
 }
 
-bool GUICommunicationSocket::createIndividualServer(const QString &individualChannelName)
+bool GUICommunicationSocket::createIndividualChannel(const QString &individualChannelName)
 {
-   QLocalServer *individualServer = new QLocalServer(this);
-   individualServer->setSocketOptions(QLocalServer::WorldAccessOption);
-   if(!individualServer->listen(individualChannelName)) {
-      QLOG_FATAL() << "Unable to create individual communication channel";
+   QLocalServer *individualChannel = new QLocalServer(this);
+   individualChannel->setSocketOptions(QLocalServer::WorldAccessOption);
+   if (!individualChannel->listen(individualChannelName)) {
+      QLOG_ERROR() << "Unable to create individual communication channel: " << individualChannel->errorString();
       return false;
    }
-   individualSockets->insert(individualChannelName, individualServer);
+   QPointer<IndividualCommunicationChannel> channel = new IndividualCommunicationChannel(individualChannel, this);
+   connect(channel.data(), SIGNAL(disconnected(QString)), this, SLOT(removeIndividualChannel(QString)));
+   individualChannels->insert(individualChannelName, channel);
    QLOG_INFO() << "Individual communication channel created: " << individualChannelName;
    return true;
+}
+
+void GUICommunicationSocket::removeIndividualChannel(const QString &individualChannelName)
+{
+   individualChannels->remove(individualChannelName);
+   QLOG_INFO() << "Individual communication channel removed: " << individualChannelName;
 }
 
 

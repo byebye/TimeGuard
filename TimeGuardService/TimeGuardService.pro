@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     user.cpp \
     userlimittimer.cpp \
     limitsettingsmanager.cpp \
-    guicommunicationsocket.cpp
+    guicommunicationsocket.cpp \
+    individualcommunicationchannel.cpp
 
 
 HEADERS += \
@@ -31,7 +32,8 @@ HEADERS += \
     user.h \
     userlimittimer.h \
     limitsettingsmanager.h \
-    guicommunicationsocket.h
+    guicommunicationsocket.h \
+    individualcommunicationchannel.h
 
 
 unix|win32: LIBS += -L$$PWD/../libs/QsLog/ -lQsLog2

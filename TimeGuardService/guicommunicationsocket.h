@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QtNetwork>
 #include <QHash>
-#include <QFile>
-#include <QTextStream>
+#include <QPointer>
+#include "individualcommunicationchannel.h"
 
 class GUICommunicationSocket : public QObject
 {
@@ -18,13 +18,14 @@ signals:
 
 public slots:
    void collectDataFromGlobalConnection();
+   void removeIndividualChannel(const QString &individualChannelName);
 private:
    static QString globalSocketName;
-   QLocalServer *globalServer;
-   QHash<QString, QLocalServer*> *individualSockets;
+   QLocalServer *globalChannel;
+   QHash<QString, QPointer<IndividualCommunicationChannel>> *individualChannels;
 
-   void createGlobalServer();
-   bool createIndividualServer(const QString &individualChannelName);
+   void createGlobalChannel();
+   bool createIndividualChannel(const QString &individualChannelName);
 };
 
 #endif // GUICOMMUNICATIONSOCKET_H
