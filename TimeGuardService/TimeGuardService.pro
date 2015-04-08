@@ -15,6 +15,7 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 include(QtService/qtservice.pri)
+
 SOURCES += main.cpp \
    timeguardservice.cpp \
     userslimitcontroller.cpp \
@@ -32,3 +33,8 @@ HEADERS += \
     limitsettingsmanager.h \
     guicommunicationsocket.h
 
+
+unix|win32: LIBS += -L$$PWD/../libs/QsLog/ -lQsLog2
+
+INCLUDEPATH += $$PWD/../libs/QsLog
+DEPENDPATH += $$PWD/../libs/QsLog

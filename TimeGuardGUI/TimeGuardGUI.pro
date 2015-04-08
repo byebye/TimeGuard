@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TimeGuardGUI
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         timeguardmainwindow.cpp \
     servicecommunicationsocket.cpp
@@ -22,3 +21,8 @@ HEADERS  += timeguardmainwindow.h \
 FORMS    += timeguardmainwindow.ui
 
 win32: LIBS += -lwtsapi32
+
+unix|win32: LIBS += -L$$PWD/../libs/QsLog/ -lQsLog2
+
+INCLUDEPATH += $$PWD/../libs/QsLog
+DEPENDPATH += $$PWD/../libs/QsLog
