@@ -24,8 +24,7 @@ void GUICommunicationSocket::createGlobalChannel()
       QLOG_FATAL() << "Unable to create global communication channel";
       return;
    }
-   connect(globalChannel, SIGNAL(newConnection()),
-           this, SLOT(collectDataFromGlobalConnection()));
+   connect(globalChannel, SIGNAL(newConnection()), this, SLOT(collectDataFromGlobalConnection()));
    QLOG_INFO() << "Global communication channel created";
 }
 
@@ -33,8 +32,7 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
 {
    QLOG_INFO() << "New global channel connection detected";
    QLocalSocket *clientConnection = globalChannel->nextPendingConnection();
-   connect(clientConnection, SIGNAL(disconnected()),
-           clientConnection, SLOT(deleteLater()));
+   connect(clientConnection, SIGNAL(disconnected()), clientConnection, SLOT(deleteLater()));
    if (clientConnection->waitForReadyRead(30000)) {
       QDataStream in(clientConnection);
       in.setVersion(QDataStream::Qt_5_4);
@@ -56,8 +54,8 @@ bool GUICommunicationSocket::createIndividualChannel(const QString &individualCh
       QLOG_ERROR() << "Unable to create individual communication channel: " << individualChannel->errorString();
       return false;
    }
-   QPointer<IndividualCommunicationChannel> channel = new IndividualCommunicationChannel(individualChannel, this);
-   connect(channel.data(), SIGNAL(disconnected(QString)), this, SLOT(removeIndividualChannel(QString)));
+   QPointer<IndividualCommunicationChannel> channel(new IndividualCommunicationChannel(individualChannel, this));
+   connect(channel, SIGNAL(noActiveConnections(QString)), this, SLOT(removeIndividualChannel(QString)));
    individualChannels->insert(individualChannelName, channel);
    QLOG_INFO() << "Individual communication channel created: " << individualChannelName;
    return true;
@@ -65,7 +63,7 @@ bool GUICommunicationSocket::createIndividualChannel(const QString &individualCh
 
 void GUICommunicationSocket::removeIndividualChannel(const QString &individualChannelName)
 {
-   individualChannels->remove(individualChannelName);
+   individualChannels->take(individualChannelName)->deleteLater();
    QLOG_INFO() << "Individual communication channel removed: " << individualChannelName;
 }
 

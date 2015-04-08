@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QTimer>
 
 class IndividualCommunicationChannel : public QObject
 {
@@ -13,13 +14,15 @@ public:
    ~IndividualCommunicationChannel();
 
 signals:
-   void disconnected(const QString &channelName);
+   void noActiveConnections(const QString &channelName);
 public slots:
    void clientConnected();
    void clientDisconnected();
+   void noActiveConnections();
 private:
    QLocalServer *channel;
    QLocalSocket *clientConnection;
+   QTimer *waitForConnectionTimer;
 };
 
 #endif // INDIVIDUALCOMMUNICATIONCHANNEL_H

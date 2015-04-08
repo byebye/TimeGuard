@@ -22,6 +22,7 @@ bool ServiceCommunicationSocket::createIndividualCommunicationChannel()
    while(!connected && --connectionAttempts >= 0) {
       individualChannelName = generateIndividualChannelName();
       sendIndividualChannelName();
+      socket->disconnectFromServer();
       socket->connectToServer(individualChannelName);
       connected = socket->waitForConnected(30000);
    }

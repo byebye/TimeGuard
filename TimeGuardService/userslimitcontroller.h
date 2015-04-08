@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QPointer>
 #include "userlimittimer.h"
 #include "limitsettingsmanager.h"
 #include "guicommunicationsocket.h"
@@ -20,7 +21,7 @@ public slots:
 
 private:
    GUICommunicationSocket *communicationSocket;
-   QHash<QString, UserLimitTimer> *usersLimitTimer;
+   QHash<QString, QPointer<UserLimitTimer>> *usersLimitTimer;
    LimitSettingsManager *limitSettingsManager;
 };
 
