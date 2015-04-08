@@ -2,7 +2,7 @@
 #include <QTime>
 #include "QsLog.h"
 
-QString GUICommunicationSocket::globalSocketName = "TimeGuardGlobalSocket";
+QString GUICommunicationSocket::globalChannelName = "\\\\.\\pipe\\TimeGuardGlobalSocket";
 
 GUICommunicationSocket::GUICommunicationSocket(QObject *parent) : QObject(parent)
 {
@@ -20,7 +20,7 @@ void GUICommunicationSocket::createGlobalChannel()
 {
    globalChannel = new QLocalServer(this);
    globalChannel->setSocketOptions(QLocalServer::WorldAccessOption);
-   if(!globalChannel->listen(globalSocketName)) {
+   if(!globalChannel->listen(globalChannelName)) {
       QLOG_FATAL() << "Unable to create global communication channel";
       return;
    }

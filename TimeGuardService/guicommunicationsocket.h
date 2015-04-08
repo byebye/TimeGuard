@@ -20,7 +20,7 @@ public slots:
    void collectDataFromGlobalConnection();
    void removeIndividualChannel(const QString &individualChannelName);
 private:
-   static QString globalSocketName;
+   static QString globalChannelName;
    QLocalServer *globalChannel;
    QHash<QString, QPointer<IndividualCommunicationChannel>> *individualChannels;
 

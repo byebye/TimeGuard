@@ -18,7 +18,7 @@ signals:
 
 public slots:
 private:
-   static QString globalSocketName;
+   static QString globalChannelName;
    QLocalSocket *socket;
    QString individualChannelName;
 

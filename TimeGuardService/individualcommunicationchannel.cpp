@@ -12,6 +12,7 @@ IndividualCommunicationChannel::IndividualCommunicationChannel(QLocalServer *cha
 
 IndividualCommunicationChannel::~IndividualCommunicationChannel()
 {
+   channel->close();
    delete channel;
 }
 

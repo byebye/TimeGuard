@@ -3,7 +3,7 @@
 #include "wtsapi32.h"
 #include "QsLog.h"
 
-QString ServiceCommunicationSocket::globalSocketName = "TimeGuardGlobalSocket";
+QString ServiceCommunicationSocket::globalChannelName = "\\\\.\\pipe\\TimeGuardGlobalSocket";
 
 ServiceCommunicationSocket::ServiceCommunicationSocket(QObject *parent) : QObject(parent)
 {
@@ -20,7 +20,7 @@ bool ServiceCommunicationSocket::createIndividualCommunicationChannel()
    int connectionAttempts = 3;
    bool connected = false;
    while(!connected && --connectionAttempts >= 0) {
-      individualChannelName = generateIndividualChannelName();
+      individualChannelName = QString("\\\\.\\pipe\\") + generateIndividualChannelName();
       sendIndividualChannelName();
       socket->disconnectFromServer();
       socket->connectToServer(individualChannelName);
@@ -37,7 +37,7 @@ bool ServiceCommunicationSocket::createIndividualCommunicationChannel()
 bool ServiceCommunicationSocket::sendIndividualChannelName()
 {
    QLocalSocket *globalSocket = new QLocalSocket(this);
-   globalSocket->connectToServer(globalSocketName);
+   globalSocket->connectToServer(globalChannelName);
    if (globalSocket->waitForConnected(30000)) {
       QDataStream globalSocketStream(globalSocket);
       globalSocketStream.setVersion(QDataStream::Qt_5_4);
