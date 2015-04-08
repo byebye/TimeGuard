@@ -1,6 +1,7 @@
 #include "servicecommunicationsocket.h"
 #include "windows.h"
 #include "wtsapi32.h"
+#include "QsLog.h"
 
 QString ServiceCommunicationSocket::globalSocketName = "TimeGuardGlobalSocket";
 
@@ -16,31 +17,50 @@ ServiceCommunicationSocket::~ServiceCommunicationSocket()
 
 bool ServiceCommunicationSocket::createIndividualCommunicationChannel()
 {
-   individualChannelName = generateIndividualChannelName();
-   sendIndividualChannelName();
-   socket->disconnectFromServer();
-   socket->connectToServer(individualChannelName);
-   return socket->waitForConnected(20000);
+   int connectionAttempts = 3;
+   bool connected = false;
+   while(!connected && --connectionAttempts >= 0) {
+      individualChannelName = generateIndividualChannelName();
+      sendIndividualChannelName();
+      socket->connectToServer(individualChannelName);
+      connected = socket->waitForConnected(30000);
+   }
+   if(connected)
+      QLOG_INFO() << "Connection through individual communication channel established";
+   else
+      QLOG_FATAL() << "Unable to connect with service through individual communication channel: "
+                   << socket->errorString();
+   return connected;
 }
 
 bool ServiceCommunicationSocket::sendIndividualChannelName()
 {
    QLocalSocket *globalSocket = new QLocalSocket(this);
    globalSocket->connectToServer(globalSocketName);
-   if (globalSocket->waitForConnected(20000)) {
+   if (globalSocket->waitForConnected(30000)) {
       QDataStream globalSocketStream(globalSocket);
       globalSocketStream.setVersion(QDataStream::Qt_5_4);
       // TODO - protocol to distinguish consistent data chunks
       globalSocketStream << individualChannelName;
-      return true;
+
+      if (globalSocket->waitForReadyRead(30000)) {
+         QDataStream globalSocketStream(globalSocket);
+         globalSocketStream.setVersion(QDataStream::Qt_5_4);
+         bool individualChannelCreated = false;
+         globalSocketStream >> individualChannelCreated;
+         return individualChannelCreated;
+      }
+      QLOG_ERROR() << "No information received about individual communication channel being created";
+      return false;
    }
+   QLOG_FATAL() << "Unable to connect with service through global communication channel";
    return false;
 }
 
 QString ServiceCommunicationSocket::generateIndividualChannelName()
 {
    QUuid uuid = QUuid::createUuid();
-   return "s" + QString::number(getSessionId()) + uuid.toString();
+   return "TimeGuard_s" + QString::number(getSessionId()) + uuid.toString();
 }
 
 unsigned long ServiceCommunicationSocket::getSessionId()
@@ -58,6 +78,7 @@ unsigned long ServiceCommunicationSocket::getSessionId()
    }
    else {
       // TODO - action when unable to retrieve session id
+      QLOG_FATAL() << "Unable to retrieve current session id";
    }
    return sessionId;
 }

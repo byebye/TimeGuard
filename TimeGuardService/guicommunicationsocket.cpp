@@ -1,15 +1,11 @@
 #include "guicommunicationsocket.h"
 #include <QTime>
+#include "QsLog.h"
 
 QString GUICommunicationSocket::globalSocketName = "TimeGuardGlobalSocket";
 
 GUICommunicationSocket::GUICommunicationSocket(QObject *parent) : QObject(parent)
 {
-   logFile = new QFile("D:/timeguard.log");
-   logFile->open(QFile::ReadWrite | QFile::Text);
-   logFileStream = new QTextStream(logFile);
-   (*logFileStream) << "Creating server: " << QTime::currentTime().toString("hh:mm") << "\n";
-   logFileStream->flush();
    individualSockets = new QHash<QString, QLocalServer*>();
    createGlobalServer();
 
@@ -17,9 +13,6 @@ GUICommunicationSocket::GUICommunicationSocket(QObject *parent) : QObject(parent
 
 GUICommunicationSocket::~GUICommunicationSocket()
 {
-   logFile->close();
-   delete logFile;
-   delete logFileStream;
    delete individualSockets;
    delete globalServer;
 }
@@ -29,18 +22,17 @@ void GUICommunicationSocket::createGlobalServer()
    globalServer = new QLocalServer(this);
    globalServer->setSocketOptions(QLocalServer::WorldAccessOption);
    if(!globalServer->listen(globalSocketName)) {
-      (*logFileStream) << "Unable to start server\n";
-      logFileStream->flush();
+      QLOG_FATAL() << "Unable to create global communication channel";
       return;
    }
-   (*logFileStream) << "Server started\n";
-   logFileStream->flush();
    connect(globalServer, SIGNAL(newConnection()),
            this, SLOT(collectDataFromGlobalConnection()));
+   QLOG_INFO() << "Global communication channel created";
 }
 
 void GUICommunicationSocket::collectDataFromGlobalConnection()
 {
+   QLOG_INFO() << "New connection detected";
    QLocalSocket *clientConnection = globalServer->nextPendingConnection();
    connect(clientConnection, SIGNAL(disconnected()),
            clientConnection, SLOT(deleteLater()));
@@ -49,23 +41,25 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
       in.setVersion(QDataStream::Qt_5_4);
       QString individualChannelName;
       in >> individualChannelName;
-      (*logFileStream) << "Channel name to create: " << individualChannelName << "\n";
-      logFileStream->flush();
-      createIndividualServer(individualChannelName);
+      in << createIndividualServer(individualChannelName);
    }
    else {
-      (*logFileStream) << "No data received\n";
-      logFileStream->flush();
+      QLOG_WARN() << "New connection detected, but no data received - client will be disconnected";
+      clientConnection->disconnectFromServer();
    }
 }
 
-void GUICommunicationSocket::createIndividualServer(const QString &individualChannelName)
+bool GUICommunicationSocket::createIndividualServer(const QString &individualChannelName)
 {
-   QLocalServer *individualServer = new QLocalServer();
-   individualServer->listen(individualChannelName);
+   QLocalServer *individualServer = new QLocalServer(this);
+   individualServer->setSocketOptions(QLocalServer::WorldAccessOption);
+   if(!individualServer->listen(individualChannelName)) {
+      QLOG_FATAL() << "Unable to create individual communication channel";
+      return false;
+   }
    individualSockets->insert(individualChannelName, individualServer);
-   (*logFileStream) << "Channel \"" << individualChannelName << "\" created\n";
-   logFileStream->flush();
+   QLOG_INFO() << "Individual communication channel created: " << individualChannelName;
+   return true;
 }
 
 

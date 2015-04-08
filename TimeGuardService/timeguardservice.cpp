@@ -1,5 +1,6 @@
 #include "timeguardservice.h"
 #include <QObject>
+#include "QsLog.h"
 
 TimeGuardService::TimeGuardService(int argc, char **argv)
    : QtService<QCoreApplication>(argc, argv, "TimeGuard Service")
@@ -14,24 +15,23 @@ TimeGuardService::~TimeGuardService()
 
 void TimeGuardService::start()
 {
+   QLOG_INFO() << "Service started";
    QCoreApplication *app = application();
    usersLimitController = new UsersLimitController(app);
-//   QObject::connect(userManager, SIGNAL(timeout()),
-//           app, SLOT(quit()));
 }
 
 void TimeGuardService::pause()
 {
-
+   QLOG_INFO() << "Service paused";
 }
 
 void TimeGuardService::resume()
 {
-
+   QLOG_INFO() << "Service resumed";
 }
 
 void TimeGuardService::stop()
 {
-
+   QLOG_INFO() << "Service stopped";
 }
 

@@ -22,12 +22,9 @@ private:
    static QString globalSocketName;
    QLocalServer *globalServer;
    QHash<QString, QLocalServer*> *individualSockets;
-   QFile *logFile;
-   QTextStream *logFileStream;
-
 
    void createGlobalServer();
-   void createIndividualServer(const QString &individualChannelName);
+   bool createIndividualServer(const QString &individualChannelName);
 };
 
 #endif // GUICOMMUNICATIONSOCKET_H

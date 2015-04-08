@@ -27,5 +27,5 @@ void TimeGuardMainWindow::initializeConnectionWithService()
    QString status = "Connection failed!";
    if (communicationSocket->createIndividualCommunicationChannel())
       status = communicationSocket->getChannelName();
-   ui->communicationStatus->setText(communicationSocket->getChannelName());
+   ui->communicationStatus->setText(status);
 }
