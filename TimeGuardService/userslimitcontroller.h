@@ -18,7 +18,7 @@ public:
 signals:
 
 public slots:
-
+   void newUserSessionStarted(ulong sessionId, QString userName);
 private:
    GUICommunicationSocket *communicationSocket;
    QHash<QString, QPointer<UserLimitTimer>> *usersLimitTimer;

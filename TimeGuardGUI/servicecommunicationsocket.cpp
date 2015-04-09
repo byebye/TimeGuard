@@ -20,7 +20,7 @@ bool ServiceCommunicationSocket::createIndividualCommunicationChannel()
    int connectionAttempts = 3;
    bool connected = false;
    while(!connected && --connectionAttempts >= 0) {
-      individualChannelName = QString("\\\\.\\pipe\\") + generateIndividualChannelName();
+      individualChannelName = QString("\\\\.\\pipe\\") + generateIndividualChannelName(getSessionId());
       sendIndividualChannelName();
       socket->disconnectFromServer();
       socket->connectToServer(individualChannelName);
@@ -42,8 +42,7 @@ bool ServiceCommunicationSocket::sendIndividualChannelName()
       QDataStream globalSocketStream(globalSocket);
       globalSocketStream.setVersion(QDataStream::Qt_5_4);
       // TODO - protocol to distinguish consistent data chunks
-      globalSocketStream << individualChannelName << getUserName();
-
+      globalSocketStream << individualChannelName << (qint32) getSessionId() << getUserName();
       if (globalSocket->waitForReadyRead(30000)) {
          QDataStream globalSocketStream(globalSocket);
          globalSocketStream.setVersion(QDataStream::Qt_5_4);
@@ -58,10 +57,10 @@ bool ServiceCommunicationSocket::sendIndividualChannelName()
    return false;
 }
 
-QString ServiceCommunicationSocket::generateIndividualChannelName()
+QString ServiceCommunicationSocket::generateIndividualChannelName(unsigned long sessionId)
 {
    QUuid uuid = QUuid::createUuid();
-   return "TimeGuard_s" + QString::number(getSessionId()) + uuid.toString();
+   return "TimeGuard_s" + QString::number(sessionId) + uuid.toString();
 }
 
 unsigned long ServiceCommunicationSocket::getSessionId()

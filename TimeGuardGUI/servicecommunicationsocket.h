@@ -22,7 +22,7 @@ private:
    QLocalSocket *socket;
    QString individualChannelName;
 
-   QString generateIndividualChannelName();
+   QString generateIndividualChannelName(unsigned long sessionId);
    unsigned long getSessionId();
    QString getUserName();
    bool sendIndividualChannelName();

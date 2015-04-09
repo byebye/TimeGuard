@@ -37,9 +37,11 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
       QDataStream in(clientConnection);
       in.setVersion(QDataStream::Qt_5_4);
       QString individualChannelName, userName;
-      in >> individualChannelName >> userName;
-      QLOG_DEBUG() << "User" << userName << "connected";
+      ulong sessionId = 0;
+      in >> individualChannelName >> (qint32&) sessionId >> userName;
+      QLOG_DEBUG() << "User" << sessionId << "-" << userName << "connected";
       in << createIndividualChannel(individualChannelName);
+      emit newUserSessionStarted(sessionId, userName);
    }
    else {
       QLOG_WARN() << "New connection detected, but no data received - client will be disconnected";

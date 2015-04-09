@@ -15,7 +15,7 @@ public:
    ~GUICommunicationSocket();
 
 signals:
-
+   void newUserSessionStarted(ulong sessionId, QString userName);
 public slots:
    void collectDataFromGlobalConnection();
    void removeIndividualChannel(const QString &individualChannelName);
