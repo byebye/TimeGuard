@@ -7,16 +7,20 @@ class User : public QObject
 {
    Q_OBJECT
 public:
-   explicit User(const QString &name, const QString &GUID, int sessionId, QObject *parent = 0);
+   explicit User(const QString &name, int sessionId, QObject *parent = 0);
    ~User();
+
+   int getSessionId() const;
+   void setSessionId(int value);
 
 signals:
 
 public slots:
 private:
    QString name;
-   QString GUID;
    int sessionId;
+
+   bool isActive() const;
 };
 
 #endif // USER_H

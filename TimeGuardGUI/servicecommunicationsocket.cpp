@@ -42,7 +42,7 @@ bool ServiceCommunicationSocket::sendIndividualChannelName()
       QDataStream globalSocketStream(globalSocket);
       globalSocketStream.setVersion(QDataStream::Qt_5_4);
       // TODO - protocol to distinguish consistent data chunks
-      globalSocketStream << individualChannelName;
+      globalSocketStream << individualChannelName << getUserName();
 
       if (globalSocket->waitForReadyRead(30000)) {
          QDataStream globalSocketStream(globalSocket);
@@ -51,7 +51,7 @@ bool ServiceCommunicationSocket::sendIndividualChannelName()
          globalSocketStream >> individualChannelCreated;
          return individualChannelCreated;
       }
-      QLOG_ERROR() << "No information received about individual communication channel being created";
+      QLOG_WARN() << "No information received about individual communication channel being created";
       return false;
    }
    QLOG_FATAL() << "Unable to connect with service through global communication channel";
@@ -82,6 +82,24 @@ unsigned long ServiceCommunicationSocket::getSessionId()
       QLOG_FATAL() << "Unable to retrieve current session id";
    }
    return sessionId;
+}
+
+QString ServiceCommunicationSocket::getUserName()
+{
+   QString userName;
+   LPTSTR data = nullptr;
+   DWORD bytesReturned = 0;
+   if (WTSQuerySessionInformation(WTS_CURRENT_SERVER_HANDLE,
+                              WTS_CURRENT_SESSION,
+                              WTSUserName,
+                              &data,
+                              &bytesReturned)) {
+      userName = QString::fromWCharArray(data);
+      WTSFreeMemory(data);
+   }
+   else
+      QLOG_ERROR() << "Unable to retrieve current user name";
+   return userName;
 }
 
 QString ServiceCommunicationSocket::getChannelName() const

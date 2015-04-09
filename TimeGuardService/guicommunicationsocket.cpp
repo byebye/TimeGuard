@@ -36,8 +36,9 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
    if (clientConnection->waitForReadyRead(30000)) {
       QDataStream in(clientConnection);
       in.setVersion(QDataStream::Qt_5_4);
-      QString individualChannelName;
-      in >> individualChannelName;
+      QString individualChannelName, userName;
+      in >> individualChannelName >> userName;
+      QLOG_DEBUG() << "User" << userName << "connected";
       in << createIndividualChannel(individualChannelName);
    }
    else {
@@ -51,20 +52,20 @@ bool GUICommunicationSocket::createIndividualChannel(const QString &individualCh
    QLocalServer *individualChannel = new QLocalServer(this);
    individualChannel->setSocketOptions(QLocalServer::WorldAccessOption);
    if (!individualChannel->listen(individualChannelName)) {
-      QLOG_ERROR() << "Unable to create individual communication channel: " << individualChannel->errorString();
+      QLOG_ERROR() << "Unable to create individual communication channel:" << individualChannel->errorString();
       return false;
    }
    QPointer<IndividualCommunicationChannel> channel(new IndividualCommunicationChannel(individualChannel, this));
    connect(channel, SIGNAL(noActiveConnections(QString)), this, SLOT(removeIndividualChannel(QString)));
    individualChannels->insert(individualChannelName, channel);
-   QLOG_INFO() << "Individual communication channel created: " << individualChannelName;
+   QLOG_INFO() << "Individual communication channel created:" << individualChannelName;
    return true;
 }
 
 void GUICommunicationSocket::removeIndividualChannel(const QString &individualChannelName)
 {
    individualChannels->take(individualChannelName)->deleteLater();
-   QLOG_INFO() << "Individual communication channel removed: " << individualChannelName;
+   QLOG_INFO() << "Individual communication channel removed:" << individualChannelName;
 }
 
 

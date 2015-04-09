@@ -24,6 +24,7 @@ private:
 
    QString generateIndividualChannelName();
    unsigned long getSessionId();
+   QString getUserName();
    bool sendIndividualChannelName();
 };
 

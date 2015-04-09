@@ -40,3 +40,5 @@ unix|win32: LIBS += -L$$PWD/../libs/QsLog/ -lQsLog2
 
 INCLUDEPATH += $$PWD/../libs/QsLog
 DEPENDPATH += $$PWD/../libs/QsLog
+
+win32: LIBS += -lwtsapi32
