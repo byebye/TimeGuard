@@ -7,6 +7,7 @@
 #include "userlimittimer.h"
 #include "limitsettingsmanager.h"
 #include "guicommunicationsocket.h"
+#include "usersessionmanager.h"
 
 class UsersLimitController : public QObject
 {
@@ -18,11 +19,12 @@ public:
 signals:
 
 public slots:
-   void newUserSessionStarted(ulong sessionId, QString userName);
+   void newUserSessionStarted(const User &user);
 private:
    GUICommunicationSocket *communicationSocket;
    QHash<QString, QPointer<UserLimitTimer>> *usersLimitTimer;
    LimitSettingsManager *limitSettingsManager;
+   UsersSessionManager *usersSessionManager;
 };
 
 #endif // USERSLIMITCONTROLLER_H

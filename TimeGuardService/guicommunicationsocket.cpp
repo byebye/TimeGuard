@@ -41,7 +41,7 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
       in >> individualChannelName >> (qint32&) sessionId >> userName;
       QLOG_DEBUG() << "User" << sessionId << "-" << userName << "connected";
       in << createIndividualChannel(individualChannelName);
-      emit newUserSessionStarted(sessionId, userName);
+      emit newUserSessionStarted(User(userName, sessionId));
    }
    else {
       QLOG_WARN() << "New connection detected, but no data received - client will be disconnected";

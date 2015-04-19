@@ -6,6 +6,7 @@
 #include <QHash>
 #include <QPointer>
 #include "individualcommunicationchannel.h"
+#include "user.h"
 
 class GUICommunicationSocket : public QObject
 {
@@ -15,7 +16,7 @@ public:
    ~GUICommunicationSocket();
 
 signals:
-   void newUserSessionStarted(ulong sessionId, QString userName);
+   void newUserSessionStarted(const User &user);
 public slots:
    void collectDataFromGlobalConnection();
    void removeIndividualChannel(const QString &individualChannelName);

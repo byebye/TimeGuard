@@ -3,13 +3,12 @@
 
 #include <QObject>
 #include <QTimer>
-#include "user.h"
 
 class UserLimitTimer : public QObject
 {
    Q_OBJECT
 public:
-   explicit UserLimitTimer(User *user, QObject *parent = 0);
+   explicit UserLimitTimer(QObject *parent = 0);
    ~UserLimitTimer();
 
    void startTimer(int minutes);
@@ -21,7 +20,6 @@ signals:
 public slots:
 
 private:
-   User *controlledUser;
    QTimer *timer;
 };
 

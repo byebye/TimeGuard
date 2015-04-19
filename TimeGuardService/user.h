@@ -1,26 +1,23 @@
 #ifndef USER_H
 #define USER_H
 
-#include <QObject>
+#include <QString>
 
-class User : public QObject
+class User
 {
-   Q_OBJECT
 public:
-   explicit User(const QString &name, int sessionId, QObject *parent = 0);
+   explicit User(const QString &name, ulong sessionId);
+   User(const User &user);
    ~User();
 
-   int getSessionId() const;
-   void setSessionId(int value);
+   QString getName() const;
+   ulong getSessionId() const;
+   bool isActive() const;
 
-signals:
-
-public slots:
+   bool operator==(const User &user) const;
 private:
    QString name;
-   int sessionId;
-
-   bool isActive() const;
+   ulong sessionId;
 };
 
 #endif // USER_H

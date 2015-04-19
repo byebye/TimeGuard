@@ -3,10 +3,16 @@
 #include "wtsapi32.h"
 #include "QsLog.h"
 
-User::User(const QString &name, int sessionId, QObject *parent) : QObject(parent),
+User::User(const QString &name, ulong sessionId) :
    name(name), sessionId(sessionId)
 {
 
+}
+
+User::User(const User &user)
+{
+   name = user.name;
+   sessionId = user.sessionId;
 }
 
 User::~User()
@@ -14,15 +20,20 @@ User::~User()
 
 }
 
+QString User::getName() const
+{
+   return name;
+}
 
-int User::getSessionId() const
+
+ulong User::getSessionId() const
 {
    return sessionId;
 }
 
-void User::setSessionId(int sid)
+bool User::operator==(const User &user) const
 {
-   sessionId = sid;
+   return name == user.name && sessionId == user.sessionId;
 }
 
 bool User::isActive() const

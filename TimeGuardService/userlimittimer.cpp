@@ -1,7 +1,6 @@
 #include "userlimittimer.h"
 
-UserLimitTimer::UserLimitTimer(User *user, QObject *parent) : QObject(parent),
-   controlledUser(user)
+UserLimitTimer::UserLimitTimer(QObject *parent) : QObject(parent)
 {
    timer = new QTimer();
 }
