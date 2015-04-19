@@ -2,6 +2,7 @@
 #define LIMITSETTINGSMANAGER_H
 
 #include <QObject>
+#include <QJsonDocument>
 #include "user.h"
 
 class LimitSettingsManager : public QObject
@@ -14,14 +15,20 @@ public:
    ~LimitSettingsManager();
 
    int readLimit(const User &user, LimitType limitType);
-   void saveLimit(const User &user, LimitType limitType, int limitSeconds);
-   void enableLimit(const User &user);
-   void disableLimit(const User &user);
+   bool saveLimit(const User &user, LimitType limitType, int limitSeconds);
+   bool enableLimit(const User &user);
+   bool disableLimit(const User &user);
    bool isLimitEnabled(const User &user);
-
+   void generateDefaultSettingsFile(const User &user);
 signals:
 
 public slots:
+   QJsonDocument readSettings(const User &user);
+   bool writeSettings(const User &user, const QJsonDocument &settings);
+   QString optionToStringName(LimitType limitType);
+   QString generateSettingsFileName(const QString &userName);
+private:
+
 };
 
 #endif // LIMITSETTINGSMANAGER_H

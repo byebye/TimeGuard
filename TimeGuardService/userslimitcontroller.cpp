@@ -19,6 +19,7 @@ UsersLimitController::~UsersLimitController()
 
 void UsersLimitController::newUserSession(const User &user)
 {
+   limitSettingsManager->generateDefaultSettingsFile(user);
    const int limitSeconds = limitSettingsManager->readLimit(user, LimitSettingsManager::DailyLimit);
    usersSessionManager->monitorUserSession(user, limitSeconds);
 }

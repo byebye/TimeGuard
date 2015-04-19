@@ -24,7 +24,7 @@ void UserLimitTimer::startTimer(int seconds)
 
 void UserLimitTimer::stopTimer()
 {
-   QLOG_DEBUG() << "Timer stopped:" << seconds << "for user" << controlledUser;
+   QLOG_DEBUG() << "Timer stopped for user" << controlledUser;
    timer->stop();
 }
 
