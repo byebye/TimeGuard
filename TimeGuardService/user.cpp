@@ -9,12 +9,6 @@ User::User(const QString &name, ulong sessionId) :
 
 }
 
-User::User(const User &user)
-{
-   name = user.name;
-   sessionId = user.sessionId;
-}
-
 User::~User()
 {
 

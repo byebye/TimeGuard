@@ -2,6 +2,7 @@
 #define LIMITSETTINGSMANAGER_H
 
 #include <QObject>
+#include "user.h"
 
 class LimitSettingsManager : public QObject
 {
@@ -12,11 +13,11 @@ public:
    explicit LimitSettingsManager(QObject *parent = 0);
    ~LimitSettingsManager();
 
-   void readLimit(const QString &username, LimitType limitType);
-   void saveLimit(const QString &username, LimitType limitType, int limitMinutes);
-   void enableLimit(const QString &username);
-   void disableLimit(const QString &username);
-   bool isLimitEnabled(const QString &username);
+   int readLimit(const User &user, LimitType limitType);
+   void saveLimit(const User &user, LimitType limitType, int limitMinutes);
+   void enableLimit(const User &user);
+   void disableLimit(const User &user);
+   bool isLimitEnabled(const User &user);
 
 signals:
 

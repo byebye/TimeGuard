@@ -8,7 +8,7 @@ class UserLimitTimer : public QObject
 {
    Q_OBJECT
 public:
-   explicit UserLimitTimer(QObject *parent = 0);
+   explicit UserLimitTimer(int minutes = -1, QObject *parent = 0);
    ~UserLimitTimer();
 
    void startTimer(int minutes);
@@ -16,9 +16,9 @@ public:
    void pauseTimer();
    void resumeTimer();
 signals:
-
+   void timeout();
 public slots:
-
+   void timeoutReceived();
 private:
    QTimer *timer;
 };

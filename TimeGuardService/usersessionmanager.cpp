@@ -1,9 +1,10 @@
 #include "usersessionmanager.h"
+#include "QsLog.h"
 
 UsersSessionManager::UsersSessionManager(QObject *parent) : QObject(parent)
 {
    monitorSessionTimer = new QTimer();
-   activeUsers = new QList<User>();
+   activeUsers = new QHash<User, QPointer<UserLimitTimer>>();
    connect(monitorSessionTimer, SIGNAL(timeout()),
            this, SLOT(monitorSessions()));
    monitorSessionTimer->start(30000);
@@ -15,28 +16,30 @@ UsersSessionManager::~UsersSessionManager()
    delete monitorSessionTimer;
 }
 
-void UsersSessionManager::monitorUserSession(const User &user)
+void UsersSessionManager::monitorUserSession(const User &user, int limitMinutes)
 {
-   if(!activeUsers->contains(user))
-      activeUsers->push_back(user);
+   if(!activeUsers->contains(user)) {
+      QLOG_DEBUG() << "Monitor user session:" << user.getName() << " with session id =" << user.getSessionId();
+      QPointer<UserLimitTimer> timer = new UserLimitTimer(limitMinutes);
+      activeUsers->insert(user, timer);
+   }
 }
 
 void UsersSessionManager::stopUserSession(const User &user)
 {
-   QMutableListIterator<User> it(*activeUsers);
-   if(it.findNext(user)) {
-      emit userLoggedOut(user);
-      it.remove();
-   }
+   QLOG_DEBUG() << "Stop monitoring user session: " << user.getName() << " with session id =" << user.getSessionId();
+   activeUsers->remove(user);
 }
 
 void UsersSessionManager::monitorSessions()
 {
-   QMutableListIterator<User> it(*activeUsers);
-   while(it.hasNext()) {
-      User &user = it.next();
-      if(!user.isActive())
+   auto it = activeUsers->begin();
+   while(it != activeUsers->end()) {
+     const User &user = it.key();
+      if(!user.isActive()) {
+         ++it;
          stopUserSession(user);
+      }
    }
 }
 

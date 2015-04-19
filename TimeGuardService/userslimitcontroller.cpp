@@ -3,24 +3,23 @@
 
 UsersLimitController::UsersLimitController(QObject *parent) : QObject(parent)
 {
-   usersLimitTimer = new QHash<QString, QPointer<UserLimitTimer>>();
    limitSettingsManager = new LimitSettingsManager();
    usersSessionManager = new UsersSessionManager();
    communicationSocket = new GUICommunicationSocket();
    connect(communicationSocket, SIGNAL(newUserSessionStarted(User)),
-           this, SLOT(newUserSessionStarted(User)));
+           this, SLOT(newUserSession()));
 }
 
 UsersLimitController::~UsersLimitController()
 {
-   delete usersLimitTimer;
    delete limitSettingsManager;
    delete communicationSocket;
    delete usersSessionManager;
 }
 
-void UsersLimitController::newUserSessionStarted(const User &user)
+void UsersLimitController::newUserSession(const User &user)
 {
-   QLOG_DEBUG() << "New user session" << user.getSessionId() << "-" << user.getName();
+   const int limitMinutes = limitSettingsManager->readLimit(user, LimitSettingsManager::DailyLimit);
+   usersSessionManager->monitorUserSession(user, limitMinutes);
 }
 

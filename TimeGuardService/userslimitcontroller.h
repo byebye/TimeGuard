@@ -2,8 +2,6 @@
 #define USERSLIMITCONTROLLER_H
 
 #include <QObject>
-#include <QHash>
-#include <QPointer>
 #include "userlimittimer.h"
 #include "limitsettingsmanager.h"
 #include "guicommunicationsocket.h"
@@ -19,10 +17,9 @@ public:
 signals:
 
 public slots:
-   void newUserSessionStarted(const User &user);
+   void newUserSession(const User &user);
 private:
    GUICommunicationSocket *communicationSocket;
-   QHash<QString, QPointer<UserLimitTimer>> *usersLimitTimer;
    LimitSettingsManager *limitSettingsManager;
    UsersSessionManager *usersSessionManager;
 };

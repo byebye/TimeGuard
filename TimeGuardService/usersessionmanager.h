@@ -4,8 +4,10 @@
 #include <QObject>
 #include <QString>
 #include <QTimer>
-#include <QList>
+#include <QHash>
+#include <QPointer>
 #include "user.h"
+#include "userlimittimer.h"
 
 class UsersSessionManager : public QObject
 {
@@ -14,15 +16,16 @@ public:
    explicit UsersSessionManager(QObject *parent = 0);
    ~UsersSessionManager();
 
-   void monitorUserSession(const User &user);
    void stopUserSession(const User &user);
 signals:
    void userLoggedOut(User user);
 public slots:
-   void monitorSessions();
+   void monitorUserSession(const User &user, int limitMinutes);
 private:
    QTimer *monitorSessionTimer;
-   QList<User> *activeUsers;
+   QHash<User, QPointer<UserLimitTimer>> *activeUsers;
+
+   void monitorSessions();
 };
 
 #endif // USERSESSIONMANAGER_H
