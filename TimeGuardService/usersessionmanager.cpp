@@ -16,19 +16,21 @@ UsersSessionManager::~UsersSessionManager()
    delete monitorSessionTimer;
 }
 
-void UsersSessionManager::monitorUserSession(const User &user, int limitMinutes)
+void UsersSessionManager::monitorUserSession(const User &user, int limitSeconds)
 {
    if(!activeUsers->contains(user)) {
-      QLOG_DEBUG() << "Monitor user session:" << user.getName() << " with session id =" << user.getSessionId();
-      QPointer<UserLimitTimer> timer = new UserLimitTimer(limitMinutes);
+      QLOG_DEBUG() << "Monitor user session:" << user;
+      QPointer<UserLimitTimer> timer = new UserLimitTimer(user, limitSeconds);
+      connect(timer, SIGNAL(timeout(User)),
+              this, SLOT(stopUserSession(User)));
       activeUsers->insert(user, timer);
    }
 }
 
 void UsersSessionManager::stopUserSession(const User &user)
 {
-   QLOG_DEBUG() << "Stop monitoring user session: " << user.getName() << " with session id =" << user.getSessionId();
-   activeUsers->remove(user);
+   QLOG_DEBUG() << "Stop monitoring user session:" << user;
+   delete activeUsers->take(user);
 }
 
 void UsersSessionManager::monitorSessions()
@@ -36,10 +38,9 @@ void UsersSessionManager::monitorSessions()
    auto it = activeUsers->begin();
    while(it != activeUsers->end()) {
      const User &user = it.key();
-      if(!user.isActive()) {
-         ++it;
-         stopUserSession(user);
-      }
+     ++it;
+     if(!user.isActive())
+        stopUserSession(user);
    }
 }
 

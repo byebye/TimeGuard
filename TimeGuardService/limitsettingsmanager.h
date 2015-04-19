@@ -14,7 +14,7 @@ public:
    ~LimitSettingsManager();
 
    int readLimit(const User &user, LimitType limitType);
-   void saveLimit(const User &user, LimitType limitType, int limitMinutes);
+   void saveLimit(const User &user, LimitType limitType, int limitSeconds);
    void enableLimit(const User &user);
    void disableLimit(const User &user);
    bool isLimitEnabled(const User &user);

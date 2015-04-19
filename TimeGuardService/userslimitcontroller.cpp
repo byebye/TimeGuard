@@ -7,7 +7,7 @@ UsersLimitController::UsersLimitController(QObject *parent) : QObject(parent)
    usersSessionManager = new UsersSessionManager();
    communicationSocket = new GUICommunicationSocket();
    connect(communicationSocket, SIGNAL(newUserSessionStarted(User)),
-           this, SLOT(newUserSession()));
+           this, SLOT(newUserSession(User)));
 }
 
 UsersLimitController::~UsersLimitController()
@@ -19,7 +19,7 @@ UsersLimitController::~UsersLimitController()
 
 void UsersLimitController::newUserSession(const User &user)
 {
-   const int limitMinutes = limitSettingsManager->readLimit(user, LimitSettingsManager::DailyLimit);
-   usersSessionManager->monitorUserSession(user, limitMinutes);
+   const int limitSeconds = limitSettingsManager->readLimit(user, LimitSettingsManager::DailyLimit);
+   usersSessionManager->monitorUserSession(user, limitSeconds);
 }
 

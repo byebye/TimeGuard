@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QHash>
+#include <QDebug>
 
 class User
 {
@@ -15,6 +16,7 @@ public:
    bool isActive() const;
 
    bool operator==(const User &user) const;
+   friend QDebug operator <<(QDebug stream, const User &user);
 private:
    QString name;
    ulong sessionId;

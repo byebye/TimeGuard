@@ -16,11 +16,11 @@ public:
    explicit UsersSessionManager(QObject *parent = 0);
    ~UsersSessionManager();
 
-   void stopUserSession(const User &user);
 signals:
    void userLoggedOut(User user);
 public slots:
-   void monitorUserSession(const User &user, int limitMinutes);
+   void monitorUserSession(const User &user, int limitSeconds);
+   void stopUserSession(const User &user);
 private:
    QTimer *monitorSessionTimer;
    QHash<User, QPointer<UserLimitTimer>> *activeUsers;

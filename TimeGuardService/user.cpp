@@ -44,7 +44,13 @@ bool User::isActive() const
       WTSFreeMemory(data);
    }
    else
-      QLOG_WARN() << "Unable to check if user " << name << " is still active - session is about to close";
+      QLOG_WARN() << "Unable to check if user" << *this << "is still active - session is about to close";
 
    return active;
+}
+
+QDebug operator <<(QDebug stream, const User &user)
+{
+   stream << "name:" << user.name << ", session id:" << user.sessionId;
+   return stream;
 }

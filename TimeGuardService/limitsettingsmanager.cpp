@@ -15,7 +15,7 @@ int LimitSettingsManager::readLimit(const User &user, LimitSettingsManager::Limi
    return 0;
 }
 
-void LimitSettingsManager::saveLimit(const User &user, LimitSettingsManager::LimitType limitType, int limitMinutes)
+void LimitSettingsManager::saveLimit(const User &user, LimitSettingsManager::LimitType limitType, int limitSeconds)
 {
 
 }

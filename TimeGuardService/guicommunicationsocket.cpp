@@ -39,7 +39,7 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
       QString individualChannelName, userName;
       ulong sessionId = 0;
       in >> individualChannelName >> (qint32&) sessionId >> userName;
-      QLOG_DEBUG() << "User" << sessionId << "-" << userName << "connected";
+      QLOG_DEBUG() << "User" << User(userName, sessionId) << "connected";
       in << createIndividualChannel(individualChannelName);
       emit newUserSessionStarted(User(userName, sessionId));
    }
