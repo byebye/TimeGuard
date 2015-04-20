@@ -1,8 +1,5 @@
 #include "guicommunicationsocket.h"
-#include <QTime>
 #include "QsLog.h"
-
-QString GUICommunicationSocket::globalChannelName = "\\\\.\\pipe\\TimeGuardGlobalSocket";
 
 GUICommunicationSocket::GUICommunicationSocket(QObject *parent) : QObject(parent)
 {
@@ -20,7 +17,7 @@ void GUICommunicationSocket::createGlobalChannel()
 {
    globalChannel = new QLocalServer(this);
    globalChannel->setSocketOptions(QLocalServer::WorldAccessOption);
-   if(!globalChannel->listen(globalChannelName)) {
+   if(!globalChannel->listen(CommunicationSocket::globalChannelName)) {
       QLOG_FATAL() << "Unable to create global communication channel";
       return;
    }
@@ -36,17 +33,33 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
    if (clientConnection->waitForReadyRead(30000)) {
       QDataStream in(clientConnection);
       in.setVersion(QDataStream::Qt_5_4);
-      QString individualChannelName, userName;
-      ulong sessionId = 0;
-      in >> individualChannelName >> (qint32&) sessionId >> userName;
-      QLOG_DEBUG() << "User" << User(userName, sessionId) << "connected";
-      in << createIndividualChannel(individualChannelName);
-      emit newUserSessionStarted(User(userName, sessionId));
+      QVariantMap package;
+      in >> package;
+      bool success = processReceivedDataPackage(package);
+      QVariantMap feedback{
+         {"command", "feedback"},
+         {"username", package["username"]},
+         {"success", success}
+      };
+      in << feedback;
    }
    else {
       QLOG_WARN() << "New connection detected, but no data received - client will be disconnected";
       clientConnection->disconnectFromServer();
    }
+}
+
+bool GUICommunicationSocket::processReceivedDataPackage(const QVariantMap &package)
+{
+   QString command = package["command"].toString();
+   if(command == "create_channel") {
+      QString userName = package["username"].toString();
+      ulong sessionId = package["session_id"].toInt();
+      emit newUserSessionStarted(User(userName, sessionId));
+      return createIndividualChannel(package["channel_name"].toString());
+   }
+   QLOG_ERROR() << command << "couldn't be recognized as a command";
+   return false;
 }
 
 bool GUICommunicationSocket::createIndividualChannel(const QString &individualChannelName)
@@ -69,5 +82,4 @@ void GUICommunicationSocket::removeIndividualChannel(const QString &individualCh
    individualChannels->take(individualChannelName)->deleteLater();
    QLOG_INFO() << "Individual communication channel removed:" << individualChannelName;
 }
-
 

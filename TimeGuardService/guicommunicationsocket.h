@@ -5,6 +5,7 @@
 #include <QtNetwork>
 #include <QHash>
 #include <QPointer>
+#include <QVariantMap>
 #include "individualcommunicationchannel.h"
 #include "user.h"
 
@@ -21,12 +22,17 @@ public slots:
    void collectDataFromGlobalConnection();
    void removeIndividualChannel(const QString &individualChannelName);
 private:
-   static QString globalChannelName;
    QLocalServer *globalChannel;
    QHash<QString, QPointer<IndividualCommunicationChannel>> *individualChannels;
 
+   bool processReceivedDataPackage(const QVariantMap &package);
    void createGlobalChannel();
    bool createIndividualChannel(const QString &individualChannelName);
 };
+
+namespace CommunicationSocket {
+   const QString pipeNamePrefix = "\\\\.\\pipe\\";
+   const QString globalChannelName = pipeNamePrefix + "TimeGuardGlobalSocket";
+}
 
 #endif // GUICOMMUNICATIONSOCKET_H

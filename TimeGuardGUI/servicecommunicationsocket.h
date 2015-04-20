@@ -18,14 +18,18 @@ signals:
 
 public slots:
 private:
-   static QString globalChannelName;
    QLocalSocket *socket;
    QString individualChannelName;
 
-   QString generateIndividualChannelName(unsigned long sessionId);
-   unsigned long getSessionId();
+   QString generateIndividualChannelName(ulong sessionId);
+   ulong getSessionId();
    QString getUserName();
    bool sendIndividualChannelName();
 };
+
+namespace CommunicationSocket {
+   const QString pipeNamePrefix = "\\\\.\\pipe\\";
+   const QString globalChannelName = pipeNamePrefix + "TimeGuardGlobalSocket";
+}
 
 #endif // SERVICECOMMUNICATIONSOCKET_H
