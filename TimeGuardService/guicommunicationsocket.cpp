@@ -35,7 +35,13 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
       in.setVersion(QDataStream::Qt_5_4);
       QVariantMap package;
       in >> package;
-      bool success = processReceivedDataPackage(package);
+      bool success = false;
+      if (in.status() != QDataStream::Ok) {
+         QLOG_ERROR() << "Received data package corrupted";
+         success = false;
+      }
+      else
+         success = processDataPackage(package);
       QVariantMap feedback{
          {"command", "feedback"},
          {"username", package["username"]},
@@ -49,7 +55,7 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
    }
 }
 
-bool GUICommunicationSocket::processReceivedDataPackage(const QVariantMap &package)
+bool GUICommunicationSocket::processDataPackage(const QVariantMap &package)
 {
    QString command = package["command"].toString();
    if(command == "create_channel") {

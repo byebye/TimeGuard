@@ -25,7 +25,7 @@ private:
    QLocalServer *globalChannel;
    QHash<QString, QPointer<IndividualCommunicationChannel>> *individualChannels;
 
-   bool processReceivedDataPackage(const QVariantMap &package);
+   bool processDataPackage(const QVariantMap &package);
    void createGlobalChannel();
    bool createIndividualChannel(const QString &individualChannelName);
 };
