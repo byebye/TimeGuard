@@ -30,7 +30,7 @@ void GUICommunicationSocket::collectDataFromGlobalConnection()
    QLOG_INFO() << "New global channel connection detected";
    QLocalSocket *clientConnection = globalChannel->nextPendingConnection();
    connect(clientConnection, SIGNAL(disconnected()), clientConnection, SLOT(deleteLater()));
-   if (clientConnection->waitForReadyRead(30000)) {
+   if (clientConnection->waitForReadyRead(1000)) {
       QDataStream in(clientConnection);
       in.setVersion(QDataStream::Qt_5_4);
       QVariantMap package;

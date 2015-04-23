@@ -7,7 +7,7 @@ IndividualCommunicationChannel::IndividualCommunicationChannel(QLocalServer *cha
    connect(channel, SIGNAL(newConnection()), this, SLOT(clientConnected()));
    waitForConnectionTimer = new QTimer(this);
    connect(waitForConnectionTimer, SIGNAL(timeout()), this, SLOT(noActiveConnections()));
-   waitForConnectionTimer->start(50000);
+   waitForConnectionTimer->start(5000);
 }
 
 IndividualCommunicationChannel::~IndividualCommunicationChannel()

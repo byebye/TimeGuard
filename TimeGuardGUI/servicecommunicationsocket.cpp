@@ -23,7 +23,7 @@ bool ServiceCommunicationSocket::createIndividualCommunicationChannel()
       if (sendIndividualChannelName()) {
          socket->disconnectFromServer();
          socket->connectToServer(individualChannelName);
-         connected = socket->waitForConnected(30000);
+         connected = socket->waitForConnected(500);
       }
       else
          QLOG_ERROR() << "Individual channel:" << individualChannelName << "could not be created";
@@ -40,7 +40,7 @@ bool ServiceCommunicationSocket::sendIndividualChannelName()
 {
    QLocalSocket *globalSocket = new QLocalSocket(this);
    globalSocket->connectToServer(CommunicationSocket::globalChannelName);
-   if (globalSocket->waitForConnected(30000)) {
+   if (globalSocket->waitForConnected(1000)) {
       QDataStream globalSocketStream(globalSocket);
       globalSocketStream.setVersion(QDataStream::Qt_5_4);
       QString userName = getUserName();
@@ -52,7 +52,7 @@ bool ServiceCommunicationSocket::sendIndividualChannelName()
          {"session_id", static_cast<qint32>(sessionId)}
       };
       globalSocketStream << createChannelPackage;
-      if (globalSocket->waitForReadyRead(30000)) {
+      if (globalSocket->waitForReadyRead(1000)) {
          QVariantMap feedback;
          globalSocketStream >> feedback;
          // TODO - action when package is not adressed to me
