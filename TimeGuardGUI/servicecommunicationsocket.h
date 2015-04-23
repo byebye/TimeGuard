@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtNetwork>
+#include <QVariantMap>
 
 class ServiceCommunicationSocket : public QObject
 {
@@ -13,7 +14,7 @@ public:
 
    bool createIndividualCommunicationChannel();
    QString getChannelName() const;
-
+   bool sendPackage(const QVariantMap &package);
 signals:
 
 public slots:
@@ -25,6 +26,7 @@ private:
    ulong getSessionId();
    QString getUserName();
    bool sendIndividualChannelName();
+   bool sendPackage(QLocalSocket *socket, const QVariantMap &package);
 };
 
 namespace CommunicationSocket {

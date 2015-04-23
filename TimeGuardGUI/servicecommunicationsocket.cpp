@@ -36,32 +36,40 @@ bool ServiceCommunicationSocket::createIndividualCommunicationChannel()
    return connected;
 }
 
+bool ServiceCommunicationSocket::sendPackage(const QVariantMap &package)
+{
+   return sendPackage(socket, package);
+}
+
+bool ServiceCommunicationSocket::sendPackage(QLocalSocket *socket, const QVariantMap &package)
+{
+   QDataStream socketStream(socket);
+   socketStream.setVersion(QDataStream::Qt_5_4);
+   socketStream << package;
+   if (socket->waitForReadyRead(500)) {
+      QVariantMap feedback;
+      socketStream >> feedback;
+      if (socketStream.status() != QDataStream::Ok)
+         return false;
+      // TODO - action when package is not adressed to me
+      if (feedback["command"] == "feedback" && feedback["username"] == getUserName())
+         return feedback["success"].toBool();
+   }
+   return false;
+}
+
 bool ServiceCommunicationSocket::sendIndividualChannelName()
 {
    QLocalSocket *globalSocket = new QLocalSocket(this);
    globalSocket->connectToServer(CommunicationSocket::globalChannelName);
    if (globalSocket->waitForConnected(1000)) {
-      QDataStream globalSocketStream(globalSocket);
-      globalSocketStream.setVersion(QDataStream::Qt_5_4);
-      QString userName = getUserName();
-      ulong sessionId = getSessionId();
       QVariantMap createChannelPackage{
          {"command", "create_channel"},
          {"channel_name", individualChannelName},
-         {"username", userName},
-         {"session_id", static_cast<qint32>(sessionId)}
+         {"username", getUserName()},
+         {"session_id", static_cast<qint32>(getSessionId())}
       };
-      globalSocketStream << createChannelPackage;
-      if (globalSocket->waitForReadyRead(1000)) {
-         QVariantMap feedback;
-         globalSocketStream >> feedback;
-         // TODO - action when package is not adressed to me
-         if (feedback["command"] == "feedback" && feedback["username"] == getUserName())
-            return feedback["success"].toBool();
-         return false;
-      }
-      QLOG_WARN() << "No information received about individual communication channel being created";
-      return false;
+      return sendPackage(globalSocket, createChannelPackage);
    }
    QLOG_FATAL() << "Unable to connect with service through global communication channel";
    return false;
