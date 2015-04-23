@@ -18,6 +18,7 @@ signals:
 
 public slots:
    void newUserSession(const User &user);
+   void processSettingsPackage(const QStringList &users, const QVariant &settings);
 private:
    GUICommunicationSocket *communicationSocket;
    LimitSettingsManager *limitSettingsManager;

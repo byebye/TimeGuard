@@ -5,6 +5,8 @@
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QTimer>
+#include <QStringList>
+#include "limitsettingsmanager.h"
 
 class IndividualCommunicationChannel : public QObject
 {
@@ -15,14 +17,18 @@ public:
 
 signals:
    void noActiveConnections(const QString &channelName);
+   void packageReceived(const QStringList &users, const QVariant &values);
 public slots:
    void clientConnected();
    void clientDisconnected();
    void noActiveConnections();
+   bool collectData();
 private:
    QLocalServer *channel;
    QLocalSocket *clientConnection;
    QTimer *waitForConnectionTimer;
+
+   bool processDataPackage(const QVariantMap &package);
 };
 
 #endif // INDIVIDUALCOMMUNICATIONCHANNEL_H

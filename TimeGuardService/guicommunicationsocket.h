@@ -18,9 +18,11 @@ public:
 
 signals:
    void newUserSessionStarted(const User &user);
+   void settingsPackageReceived(const QStringList &users, const QVariant &settings);
 public slots:
    void collectDataFromGlobalConnection();
    void removeIndividualChannel(const QString &individualChannelName);
+   void passReceivedPackage(const QStringList &users, const QVariant &values);
 private:
    QLocalServer *globalChannel;
    QHash<QString, QPointer<IndividualCommunicationChannel>> *individualChannels;

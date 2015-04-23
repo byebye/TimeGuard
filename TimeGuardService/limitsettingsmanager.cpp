@@ -14,66 +14,75 @@ LimitSettingsManager::~LimitSettingsManager()
 
 }
 
-int LimitSettingsManager::readLimit(const User &user, LimitSettingsManager::LimitType limitType)
+int LimitSettingsManager::readLimit(const User &user, LimitType limitType)
 {
-   QJsonObject settings = readSettings(user).object();
+   QJsonObject settings = readSettings(user);
    return settings[optionToStringName(limitType)].toInt();
 }
 
-bool LimitSettingsManager::saveLimit(const User &user, LimitSettingsManager::LimitType limitType, int limitSeconds)
+bool LimitSettingsManager::save(const User &user, const QString &option, const QVariant &value)
 {
-   QJsonDocument settings = readSettings(user);
-   settings.object()[optionToStringName(limitType)] = limitSeconds;
+   QJsonObject settings = readSettings(user);
+   if (option == "daily_limit")
+      settings[option] = value.toInt();
+   return writeSettings(user, settings);
+}
+
+bool LimitSettingsManager::saveLimit(const User &user, LimitType limitType, int limitSeconds)
+{
+   QJsonObject settings = readSettings(user);
+   settings[optionToStringName(limitType)] = limitSeconds;
    return writeSettings(user, settings);
 }
 
 bool LimitSettingsManager::enableLimit(const User &user)
 {
-   QJsonDocument settings = readSettings(user);
-   settings.object()["limit_enabled"] = true;
+   QJsonObject settings = readSettings(user);
+   settings["limit_enabled"] = true;
    return writeSettings(user, settings);
 }
 
 bool LimitSettingsManager::disableLimit(const User &user)
 {
-   QJsonDocument settings = readSettings(user);
-   settings.object()["limit_enabled"] = false;
+   QJsonObject settings = readSettings(user);
+   settings["limit_enabled"] = false;
    return writeSettings(user, settings);
 }
 
 bool LimitSettingsManager::isLimitEnabled(const User &user)
 {
-   return false;
+   QJsonObject settings = readSettings(user);
+   return settings["limit_enabled"].toBool();
 }
 
-QJsonDocument LimitSettingsManager::readSettings(const User &user)
+QJsonObject LimitSettingsManager::readSettings(const User &user)
 {
    QFile settingsFile(generateSettingsFileName(user.getName()));
    if(!settingsFile.open(QFile::ReadOnly | QFile::Text)) {
       QLOG_ERROR() << "Couldn't open settings file" << settingsFile.fileName() << "for reading";
-      return QJsonDocument();
+      return QJsonObject();
    }
    QByteArray settingsData = settingsFile.readAll();
-   return QJsonDocument(QJsonDocument::fromJson(settingsData));
+   return QJsonDocument::fromJson(settingsData).object();
 }
 
-bool LimitSettingsManager::writeSettings(const User &user, const QJsonDocument &settings)
+bool LimitSettingsManager::writeSettings(const User &user, const QJsonObject &settings)
 {
    QFile settingsFile(generateSettingsFileName(user.getName()));
    if(!settingsFile.open(QFile::WriteOnly | QFile::Text)) {
       QLOG_ERROR() << "Couldn't open settings file" << settingsFile.fileName() << "for writing";
       return false;
    }
-   settingsFile.write(settings.toJson());
+   settingsFile.write(QJsonDocument(settings).toJson());
    return true;
 }
 
-QString LimitSettingsManager::optionToStringName(LimitSettingsManager::LimitType limitType)
+QString LimitSettingsManager::optionToStringName(LimitType limitType)
 {
    switch(limitType)
    {
-      case DailyLimit: return "daily_limit";
-      case WeekDayLimit: return "weekday_limit";
+      case LimitType::DailyLimit: return "daily_limit";
+      case LimitType::WeekDayLimit: return "weekday_limit";
    }
    return "";
 }
@@ -97,9 +106,9 @@ void LimitSettingsManager::generateDefaultSettingsFile(const User &user)
    QJsonObject settings
    {
       {"limit_enabled", false},
-      {optionToStringName(DailyLimit), 0},
-      {optionToStringName(WeekDayLimit), weekDays}
+      {optionToStringName(LimitType::DailyLimit), 0},
+      {optionToStringName(LimitType::WeekDayLimit), weekDays}
    };
-   writeSettings(user, QJsonDocument(settings));
+   writeSettings(user, settings);
 }
 

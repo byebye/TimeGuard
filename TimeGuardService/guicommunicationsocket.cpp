@@ -78,6 +78,8 @@ bool GUICommunicationSocket::createIndividualChannel(const QString &individualCh
    }
    QPointer<IndividualCommunicationChannel> channel(new IndividualCommunicationChannel(individualChannel, this));
    connect(channel, SIGNAL(noActiveConnections(QString)), this, SLOT(removeIndividualChannel(QString)));
+   connect(channel, SIGNAL(packageReceived(QStringList,QVariant)),
+                           this, SLOT(passReceivedPackage(QStringList,QVariant)));
    individualChannels->insert(individualChannelName, channel);
    QLOG_INFO() << "Individual communication channel created:" << individualChannelName;
    return true;
@@ -87,5 +89,10 @@ void GUICommunicationSocket::removeIndividualChannel(const QString &individualCh
 {
    individualChannels->take(individualChannelName)->deleteLater();
    QLOG_INFO() << "Individual communication channel removed:" << individualChannelName;
+}
+
+void GUICommunicationSocket::passReceivedPackage(const QStringList &users, const QVariant &values)
+{
+   emit settingsPackageReceived(users, values);
 }
 

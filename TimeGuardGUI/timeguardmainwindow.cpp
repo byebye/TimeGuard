@@ -35,13 +35,15 @@ void TimeGuardMainWindow::initializeConnectionWithService()
 
 void TimeGuardMainWindow::on_dailyLimitSaveButton_clicked()
 {
-    QVariantMap dailyLimitPackage {
-       {"command", "daily_limit"},
-       {"username", SystemInfo::getUserName()},
-       {"value", ui->dailyLimitEdit->time()}
-    };
-    if (communicationSocket->sendPackage(dailyLimitPackage))
-       QMessageBox::information(this, tr("Daily limit - success"), tr("Daily limit successfully changed"));
-    else
+   int limitMinutes = QTime(0, 0).secsTo(ui->dailyLimitEdit->time()) / 60;
+   QVariantMap dailyLimitPackage {
+      {"command", "settings"},
+      {"username", SystemInfo::getUserName()},
+      {"users", QStringList{SystemInfo::getUserName()}},
+      {"values", QList<QVariant>{ QList<QVariant>{"daily_limit", limitMinutes}}}
+   };
+   if (communicationSocket->sendPackage(dailyLimitPackage))
+      QMessageBox::information(this, tr("Daily limit - success"), tr("Daily limit successfully changed"));
+   else
       QMessageBox::critical(this, tr("Daily limit - fail"), tr("Daily limit failed to be set - try again"));
 }
