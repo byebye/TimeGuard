@@ -1,10 +1,10 @@
 #include "servicecommunicationsocket.h"
 #include <QVariantMap>
-#include "windows.h"
-#include "wtsapi32.h"
+#include "systeminfo.h"
 #include "QsLog.h"
 
-ServiceCommunicationSocket::ServiceCommunicationSocket(QObject *parent) : QObject(parent)
+ServiceCommunicationSocket::ServiceCommunicationSocket(QObject *parent) : QObject(parent),
+   userName(SystemInfo::getUserName()), sessionId(SystemInfo::getSessionId())
 {
    socket = new QLocalSocket(this);
 }
@@ -19,7 +19,8 @@ bool ServiceCommunicationSocket::createIndividualCommunicationChannel()
    int connectionAttempts = 3;
    bool connected = false;
    while(!connected && --connectionAttempts >= 0) {
-      individualChannelName = CommunicationSocket::pipeNamePrefix + generateIndividualChannelName(getSessionId());
+      individualChannelName = CommunicationSocket::pipeNamePrefix
+                              + generateIndividualChannelName(sessionId);
       if (sendIndividualChannelName()) {
          socket->disconnectFromServer();
          socket->connectToServer(individualChannelName);
@@ -52,7 +53,7 @@ bool ServiceCommunicationSocket::sendPackage(QLocalSocket *socket, const QVarian
       if (socketStream.status() != QDataStream::Ok)
          return false;
       // TODO - action when package is not adressed to me
-      if (feedback["command"] == "feedback" && feedback["username"] == getUserName())
+      if (feedback["command"] == "feedback" && feedback["username"] == userName)
          return feedback["success"].toBool();
    }
    return false;
@@ -66,8 +67,8 @@ bool ServiceCommunicationSocket::sendIndividualChannelName()
       QVariantMap createChannelPackage{
          {"command", "create_channel"},
          {"channel_name", individualChannelName},
-         {"username", getUserName()},
-         {"session_id", static_cast<qint32>(getSessionId())}
+         {"username", userName},
+         {"session_id", static_cast<qint32>(sessionId)}
       };
       return sendPackage(globalSocket, createChannelPackage);
    }
@@ -79,42 +80,6 @@ QString ServiceCommunicationSocket::generateIndividualChannelName(ulong sessionI
 {
    QUuid uuid = QUuid::createUuid();
    return "TimeGuard_s" + QString::number(sessionId) + uuid.toString();
-}
-
-ulong ServiceCommunicationSocket::getSessionId()
-{
-   ulong sessionId = 0;
-   LPTSTR data = nullptr;
-   DWORD bytesReturned = 0;
-   if (WTSQuerySessionInformation(WTS_CURRENT_SERVER_HANDLE,
-                              WTS_CURRENT_SESSION,
-                              WTSSessionId,
-                              &data,
-                              &bytesReturned)) {
-      sessionId = *data;
-      WTSFreeMemory(data);
-   }
-   else
-      QLOG_FATAL() << "Unable to retrieve current session id";
-   return sessionId;
-}
-
-QString ServiceCommunicationSocket::getUserName()
-{
-   QString userName;
-   LPTSTR data = nullptr;
-   DWORD bytesReturned = 0;
-   if (WTSQuerySessionInformation(WTS_CURRENT_SERVER_HANDLE,
-                              WTS_CURRENT_SESSION,
-                              WTSUserName,
-                              &data,
-                              &bytesReturned)) {
-      userName = QString::fromWCharArray(data);
-      WTSFreeMemory(data);
-   }
-   else
-      QLOG_ERROR() << "Unable to retrieve current user name";
-   return userName;
 }
 
 QString ServiceCommunicationSocket::getChannelName() const

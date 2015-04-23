@@ -13,10 +13,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         timeguardmainwindow.cpp \
-    servicecommunicationsocket.cpp
+    servicecommunicationsocket.cpp \
+    systeminfo.cpp
 
 HEADERS  += timeguardmainwindow.h \
-    servicecommunicationsocket.h
+    servicecommunicationsocket.h \
+    systeminfo.h
 
 FORMS    += timeguardmainwindow.ui
 

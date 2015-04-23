@@ -21,10 +21,10 @@ public slots:
 private:
    QLocalSocket *socket;
    QString individualChannelName;
+   const QString userName;
+   const ulong sessionId;
 
    QString generateIndividualChannelName(ulong sessionId);
-   ulong getSessionId();
-   QString getUserName();
    bool sendIndividualChannelName();
    bool sendPackage(QLocalSocket *socket, const QVariantMap &package);
 };

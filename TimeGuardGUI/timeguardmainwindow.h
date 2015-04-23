@@ -18,6 +18,8 @@ public:
 
 private slots:
    void on_connectWithService_clicked();
+   void on_dailyLimitSaveButton_clicked();
+
 private:
    Ui::TimeGuardMainWindow *ui;
    ServiceCommunicationSocket *communicationSocket;
