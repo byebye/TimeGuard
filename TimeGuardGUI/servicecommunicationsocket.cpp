@@ -4,9 +4,10 @@
 #include "QsLog.h"
 
 ServiceCommunicationSocket::ServiceCommunicationSocket(QObject *parent) : QObject(parent),
-   userName(SystemInfo::getUserName()), sessionId(SystemInfo::getSessionId())
+   userName{SystemInfo::getUserName()}, sessionId{SystemInfo::getSessionId()},
+   socket{new QLocalSocket{this}}
 {
-   socket = new QLocalSocket(this);
+
 }
 
 ServiceCommunicationSocket::~ServiceCommunicationSocket()
@@ -44,18 +45,25 @@ bool ServiceCommunicationSocket::sendPackage(const QVariantMap &package)
 
 bool ServiceCommunicationSocket::sendPackage(QLocalSocket *socket, const QVariantMap &package)
 {
-   QDataStream socketStream(socket);
-   socketStream.setVersion(QDataStream::Qt_5_4);
-   socketStream << package;
+   if (!socket->isOpen())
+      return false;
+   QDataStream dataStream(socket);
+   dataStream.setVersion(QDataStream::Qt_5_4);
+   dataStream << package;
    if (socket->waitForReadyRead(500)) {
       QVariantMap feedback;
-      socketStream >> feedback;
-      if (socketStream.status() != QDataStream::Ok)
+      dataStream >> feedback;
+      if (dataStream.status() != QDataStream::Ok) {
+         QLOG_ERROR() << "Received data package corrupted";
          return false;
-      // TODO - action when package is not adressed to me
-      if (feedback["command"] == "feedback" && feedback["username"] == userName)
-         return feedback["success"].toBool();
+      }
+      if (feedback["command"] != "feedback") {
+         QLOG_ERROR() << "Unexpected command" << feedback["command"] << " - should be 'feedback'";
+         return false;
+      }
+      return feedback["success"].toBool();
    }
+   QLOG_ERROR() << "No feedback received";
    return false;
 }
 
