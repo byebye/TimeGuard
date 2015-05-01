@@ -3,6 +3,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "QsLog.h"
+#include <QFileInfo>
 
 LimitSettingsManager::LimitSettingsManager(QObject *parent) : QObject(parent)
 {
@@ -53,6 +54,12 @@ bool LimitSettingsManager::isLimitEnabled(const User &user)
 {
    QJsonObject settings = readSettings(user);
    return settings["limit_enabled"].toBool();
+}
+
+bool LimitSettingsManager::settingsFileExist(const User &user)
+{
+   QFileInfo settingsFile(generateSettingsFileName(user.getName()));
+   return settingsFile.exists() && settingsFile.isFile();
 }
 
 QJsonObject LimitSettingsManager::readSettings(const User &user)

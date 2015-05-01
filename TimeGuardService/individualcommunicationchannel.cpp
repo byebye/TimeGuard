@@ -1,11 +1,12 @@
 #include "individualcommunicationchannel.h"
 #include "QsLog.h"
+#include <QMutexLocker>
 
 IndividualCommunicationChannel::IndividualCommunicationChannel(QLocalServer *channel, QObject *parent)
-   : QObject(parent), channel(channel), clientConnection(nullptr)
+   : QObject{parent}, channel{channel}, clientConnection{nullptr}, feedbackStatus{Communication::Unknown},
+     waitForConnectionTimer{new QTimer{this}}
 {
    connect(this->channel, SIGNAL(newConnection()), this, SLOT(clientConnected()));
-   waitForConnectionTimer = new QTimer(this);
    connect(waitForConnectionTimer, SIGNAL(timeout()), this, SLOT(noActiveConnections()));
    waitForConnectionTimer->start(5000);
 }
@@ -14,6 +15,26 @@ IndividualCommunicationChannel::~IndividualCommunicationChannel()
 {
    channel->close();
    delete channel;
+}
+
+bool IndividualCommunicationChannel::sendPackage(const QVariantMap &package)
+{
+   if (!clientConnection->isOpen())
+      return false;
+   QDataStream dataStream{clientConnection};
+   dataStream.setVersion(QDataStream::Qt_5_4);
+   dataStream << package;
+   return waitForFeedback(500);
+}
+
+bool IndividualCommunicationChannel::waitForFeedback(ulong timeout)
+{
+   QMutexLocker locker(&mutex);
+   while (feedbackStatus == Communication::Unknown)
+      feedbackReceived.wait(&mutex, timeout);
+   const bool status = (feedbackStatus == Communication::Success);
+   feedbackStatus = Communication::Unknown;
+   return status;
 }
 
 void IndividualCommunicationChannel::clientConnected()
@@ -47,8 +68,11 @@ bool IndividualCommunicationChannel::collectData()
       QLOG_ERROR() << "Received data package corrupted";
       success = false;
    }
+   else if (package["command"] == "feedback")
+      return processFeedback(package["success"].toBool());
    else
       success = processDataPackage(package);
+
    QVariantMap feedback{
       {"command", "feedback"},
       {"username", package["username"]},
@@ -61,10 +85,16 @@ bool IndividualCommunicationChannel::collectData()
 bool IndividualCommunicationChannel::processDataPackage(const QVariantMap &package)
 {
    QLOG_DEBUG() << "Process received data package";
-   if (package["command"] == "settings") {
-      emit packageReceived(package["users"].toStringList(), package["values"]);
-      return true;
-   }
-   return false;
+   emit packageReceived(package["users"].toStringList(), package["values"]);
+   return true;
 }
+
+bool IndividualCommunicationChannel::processFeedback(bool status)
+{
+   QMutexLocker locker(&mutex);
+   feedbackStatus = status ? Communication::Success : Communication::Fail;
+   feedbackReceived.wakeOne();
+   return status;
+}
+
 

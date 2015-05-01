@@ -21,6 +21,7 @@ public:
    bool enableLimit(const User &user);
    bool disableLimit(const User &user);
    bool isLimitEnabled(const User &user);
+   bool settingsFileExist(const User &user);
    void generateDefaultSettingsFile(const User &user);
 signals:
 
