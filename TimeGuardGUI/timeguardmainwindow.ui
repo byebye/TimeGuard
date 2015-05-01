@@ -31,14 +31,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QLCDNumber" name="timeRemainingDisplay"/>
+       <widget class="LimitTimer" name="timeRemainingDisplay"/>
       </item>
      </layout>
     </item>
     <item>
      <widget class="QTabWidget" name="optionsTabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="userTab">
        <attribute name="title">
@@ -101,7 +101,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QTimeEdit" name="timeEdit"/>
+          <widget class="QTimeEdit" name="dailyLimitEdit"/>
          </item>
          <item>
           <widget class="QPushButton" name="dailyLimitSaveButton">
@@ -138,6 +138,13 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>LimitTimer</class>
+   <extends>QLCDNumber</extends>
+   <header>limittimer.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

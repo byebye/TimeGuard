@@ -35,7 +35,8 @@ void TimeGuardMainWindow::initializeConnectionWithService()
 
 void TimeGuardMainWindow::on_dailyLimitSaveButton_clicked()
 {
-   int limitMinutes = QTime(0, 0).secsTo(ui->dailyLimitEdit->time()) / 60;
+   const int limitMinutes = QTime(0, 0).secsTo(ui->dailyLimitEdit->time()) / 60;
+   ui->timeRemainingDisplay->setTime(limitMinutes * 60);
    QVariantMap dailyLimitPackage {
       {"command", "settings"},
       {"username", SystemInfo::getUserName()},
